@@ -20,29 +20,45 @@ function newGame() {
     function showXY(event) {
         var x = event.offsetX;
         var y = event.offsetY;
-
-        if(y>19 && y < 515 && ((x>19 && x < 345)||(x > 375 && x < 700))) {
+        var selectedArrayPosition = 0;
+        if (y > 19 && y < 515 && ((x > 19 && x < 345) || (x > 375 && x < 700))) {
 
             if (y < canvas.height / 2) {
                 y = 19;
+                selectedArrayPosition = 0;
             } else {
-                y = canvas.height / 2 ;
+                y = canvas.height / 2;
+                selectedArrayPosition = 23;
             }
-            if(x>19 && x < 345)  {
-                x =  Math.floor((x-19) / 54);
-                x = (x*54) + 19;
+            if (x > 19 && x < 345) {
+                x = Math.floor((x - 19) / 54);
+                if (selectedArrayPosition == 0) {
+                    selectedArrayPosition += x;
+                }
+                else {
+                    selectedArrayPosition -= x;
+                }
+                x = (x * 54) + 19;
 
             }
-           if(x > 375 && x < 700)  {
-            x =  Math.floor((x-375) / 54);
-                x = (x*54) + 375;
+            if (x > 375 && x < 700) {
+                x = Math.floor((x - 375) / 54);
+                if (selectedArrayPosition == 0) {
+                    selectedArrayPosition += (6 + x);
+                }
+                else {
+                    selectedArrayPosition -= (6 + x);
+                }
+                x = (x * 54) + 375;
 
             }
             ctx.beginPath();
             ctx.strokeStyle = 'red';
-            ctx.strokeRect(x, y, 54, (canvas.height / 2)-19);
+            ctx.strokeRect(x, y, 54, (canvas.height / 2) - 19);
             ctx.closePath();
             ctx.stroke();
+
+            alert("Selected element of the array : " + selectedArrayPosition);
         }
     }
 }
