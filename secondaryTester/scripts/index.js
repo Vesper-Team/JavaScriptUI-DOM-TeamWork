@@ -25,14 +25,14 @@ function newGame() {
 
             if (y < canvas.height / 2) {
                 y = 19;
-                selectedArrayPosition = 0;
+                selectedArrayPosition = 12;
             } else {
                 y = canvas.height / 2;
-                selectedArrayPosition = 23;
+                selectedArrayPosition = 11;
             }
             if (x > 19 && x < 345) {
                 x = Math.floor((x - 19) / 54);
-                if (selectedArrayPosition == 0) {
+                if (selectedArrayPosition == 12) {
                     selectedArrayPosition += x;
                 }
                 else {
@@ -43,7 +43,7 @@ function newGame() {
             }
             if (x > 375 && x < 700) {
                 x = Math.floor((x - 375) / 54);
-                if (selectedArrayPosition == 0) {
+                if (selectedArrayPosition == 12) {
                     selectedArrayPosition += (6 + x);
                 }
                 else {
