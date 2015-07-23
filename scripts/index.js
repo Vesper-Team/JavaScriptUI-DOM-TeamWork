@@ -12,6 +12,86 @@ var canvas,
     keystate;
 
 // DEFINING GAME OBJECTS - player, checker(backgammon ???), dice, board(not if it is just a background) ...
+var player = (function() {
+    var player = {
+        init: function (name, color) {
+            this.name = name;
+            this.color = color;
+            this.currentCheckersCount = 15;
+            this.hasHitChecker = false;
+            this.hitCheckersCount = 0;
+            this.canTakeChecker = false;
+            return this;
+        },
+        takeChecker: function(){
+            // TODO: Validate depending on call.
+            this.currentCheckersCount -= 1;
+        }
+    };
+
+    Object.defineProperty(player, 'name', {
+        get:function(){
+            return this._name;
+        },
+        set:function(value){
+            //TODO: Validate
+            this._name = value;
+        }
+    });
+
+    Object.defineProperty(player, 'currentCheckersCount',{
+       get:function(){
+           return this._currentCheckersCount;
+       },
+        set: function(value){
+            //TODO: Validate
+            this._currentCheckersCount = value;
+        }
+    });
+
+    Object.defineProperty(player, 'color', {
+        get: function(){
+            return this._color;
+        },
+        set: function(value){
+            // TODO: Validate
+            this._color = value;
+        }
+    });
+
+    Object.defineProperty(player, 'hasHitChecker', {
+        get: function(){
+            return this._hasHitChecker;
+        },
+        set: function(value){
+            // TODO: Validate
+            this._hasHitChecker = value;
+        }
+    });
+
+    Object.defineProperty(player, 'hitCheckersCount', {
+        get: function(){
+            return this._hitCheckersCount;
+        },
+        set: function(value){
+            // TODO: Validate
+            this._hitCheckersCount = value;
+        }
+    });
+
+    Object.defineProperty(player, 'canTakeChecker', {
+        get: function(){
+            return this._canTakeChecker;
+        },
+        set: function(value){
+            // TODO: Validate
+            this._canTakeChecker = value;
+        }
+    });
+
+    return player;
+}());
+
 var field = function () { // the board is filled with 24 fields
     var field = {
         init: function (x, y) {
