@@ -325,13 +325,13 @@ var dice = (function () {
 
     Object.defineProperty(dice, 'generateNewNumber', {
         value: function () {
-            return this.number = Math.floor(Math.random() * 6) + 1;
+            return this.number = Math.round(Math.random() * 5) + 1;
         }
     });
 
     function checkIfDiceValueIsValid(number) {
         if (isNaN(number) || number % 1 != 0 || number < 1 || number > 6) {
-            // throw new Error('Dice number is invalid!');
+            throw new Error('Dice number is invalid!');
         }
     }
 
