@@ -7,16 +7,21 @@ var fieldWidth = 54, // the width of every of the 24 fields
     checkerHeight = 42, // the height of the checker after being fully drawn in pixels
     checkerRadius = 21, // full width = 44; outer stroke 1px
     checkerInnerCircleRadius = 10,
-    currentPlayer = 0,
-    playerLooper = -1,
-    INITIALDICEVALUE = 6,
-    firstDice,
-    secondDice;
+    initialDiceValue = 6;
 
-// GAME ELEMENTS - canvas, ctx, keystate
+// GAME ELEMENTS - canvas, ctx, keystate, etc.
 var canvas,
     ctx,
-    clickedField;
+    diceCanvas,
+    diceCtx,
+    clickedField,
+    firstPlayer,
+    secondPlayer,
+    firstDice,
+    secondDice,
+    firstDiceThrow,
+    firstPlayerOnTurn,
+    mustThrowDices;
 
 // DEFINING GAME OBJECTS - player, checker, dice, board(not if it is just a background) ...
 var player = (function () {
@@ -99,7 +104,7 @@ var player = (function () {
     return player;
 }());
 
-var field = function () { /* the board is filled with 24 fields,
+var field = (function () { /* the board is filled with 24 fields,
  IT IS A RESPONSIBILITY OF THE FIELDS TO GIVE COORDINATES TO THE CHECKERS, WITH RESPECT TO THEIR OWN X,Y COORDINATES
  IN THIS WAY WE DON'T CARE HOW TO STACK CHECKERS AND TO TAKE INTO ACCOUNT THEIR Xs AND Ys,
  THE FIELD JUST STACKS THEM DEPENDING ON THE COUNT IT IS HOLDING, GIVING HIS OWN X, Y */
@@ -135,8 +140,9 @@ var field = function () { /* the board is filled with 24 fields,
                 } else {
                     if (this.y < canvas.height / 2) { // if field is in the upper half of the board, should stack them up to bottom
                         fieldCenter = this.x + (fieldWidth / 2); // x coordinate for the checker center
-                        this.checkers[i].draw(fieldCenter, this.y + i * checkerHeight + checkerRadius + 2); /* +2 just to look better,
-                                                                                                        the checker from the board frame */
+                        this.checkers[i].draw(fieldCenter, this.y + i * checkerHeight + checkerRadius + 2);
+                        /* +2 just to look better,
+                         the checker from the board frame */
                     } else { // when the field is in the lower part, should stack them from bottom to up
                         fieldCenter = this.x + (fieldWidth / 2); // x coordinate for the checker center
                         this.checkers[i].draw(fieldCenter, this.y - i * checkerHeight + checkerRadius - 2); // -2 just to look better
@@ -174,9 +180,9 @@ var field = function () { /* the board is filled with 24 fields,
     });
 
     return field;
-}();
+}());
 
-var checker = function () {
+var checker = (function () {
     var checker = {
         init: function (color) {
             this.color = color; // can be only 'black' or 'white'
@@ -216,9 +222,9 @@ var checker = function () {
     });
 
     return checker;
-}();
+}());
 
-var board = function () {
+var board = (function () {
     var bottomSideAllSet, // flag to indicate that we must start with a field having 5 checkers in it(the 12th field)
     // at bottom we start with  12. 5 3 5 2 .23
     // at top we start with     11. 5 3 5 2 .0
@@ -297,18 +303,15 @@ var board = function () {
     }
 
     return gameboard;
-}();
+}());
 
 var dice = (function () {
-
-    var dice = Object.create({});
-
-    Object.defineProperty(dice, 'init', {
-        value: function () {
-            this.number = INITIALDICEVALUE;
+    var dice = {
+        init: function () {
+            this.number = initialDiceValue;
             return this;
         }
-    });   // DICE SHOULD BE CREATED WHEN THE BOARD IS CREATED  !!!!!!!!!
+    };
 
     Object.defineProperty(dice, 'number', {
         get: function () {
@@ -320,91 +323,77 @@ var dice = (function () {
         }
     });
 
-    Object.defineProperty(dice, 'drawNewNumber', {
+    Object.defineProperty(dice, 'generateNewNumber', {
         value: function () {
-            this.number = Math.round(Math.random() * 5) + 1;
+            return this.number = Math.floor(Math.random() * 6) + 1;
         }
     });
+
+    function checkIfDiceValueIsValid(number) {
+        if (isNaN(number) || number % 1 != 0 || number < 1 || number > 6) {
+            // throw new Error('Dice number is invalid!');
+        }
+    }
 
     return dice;
 }());
 
 
-function checkIfDiceValueIsValid(number) {
-    if (isNaN(number) || number % 1 != 0 || number < 1 || number > 6) {
-        throw new Error('Dice number is invalid!');
-    }
-
-
-}
 // function newGame() or main()
 // create initiate and append game canvas
-// keep track of keyboard presses
 // INITIATE GAME OBJECTS;
-// GAME LOOP, STARTS THE ANIMATION;
-
-
-
-
-
 function newGame() {
     canvas = document.getElementById('board-canvas');
     ctx = canvas.getContext('2d');
 
     // INIT GAME OBJECTS, SETS UP GAME
     board.init();
+    firstDice = Object.create(dice).init();
+    secondDice = Object.create(dice).init();
+    firstDiceThrow = true;
 }
 newGame();
-// canvas.addEventListener('click', findPressedField);
 
 function play() {
     // GAME LOOP - game logic, updating the fields, players turns, dices etc. Update update update
     // change fields depending on how the player interact(key presses)
     canvas.addEventListener('click', findPressedField);
-    firstDice = Object.create(dice).init();
-    secondDice = Object.create(dice).init();
 
-    while (true) {
-
-        // CHANGE PLAYER
-        playerLooper++;
-        currentPlayer = (playerLooper % 2) + 1;    //if   playerLooper % 2 ===0 -> currentPlayer = 1     , else current player = 2
-        //LOGIC NEEDS TO BE IMPLEMENTED FOR CURRENT PLAYER
+    //LOGIC NEEDS TO BE IMPLEMENTED FOR CURRENT PLAYER
 
 
-
-
-        //THROW DISE
-        firstDice.drawNewNumber();
-        secondDice.drawNewNumber();
-        //ANIMATION SHOULD BE IMPLEMENTED
-
-
-
-        //CHECK IF ANY POSSIBLE MOVE
-        //TODO
-
-        //IF ANY POSSIBLE MOVES AVALIABLE  -->  CHECK FOR NEW CLICKS AND CATCH START POSITION , else change player
-        //IF ANY POSSIBLE MOVES AVALIABLE  -->  CHECK IF NEW SET/CLICKED POSITION IS CORRECT AND MOVE PULL , else try again
-
-
-        break;   //JUST NOT TO CRASH IT ALL YET 
-
-
-
+    //THROW DICE - at first time, throw to see who will be playing first
+    if (firstDiceThrow) {
+        firstDiceThrow = false;
+        firstDice.generateNewNumber();
+        secondDice.generateNewNumber();
+        if (firstDice.number > secondDice.number) {
+            firstPlayerOnTurn = true;
+        } else if (firstDice.number < secondDice.number) {
+            firstPlayerOnTurn = false;
+        } else {
+            firstDiceThrow = true;
+            play();
+        }
+    } else {
+        firstDice.generateNewNumber();
+        secondDice.generateNewNumber();
     }
 
-    draw();
-    requestAnimationFrame(play);
+    //CHECK IF ANY POSSIBLE MOVE
 
-    // calls function update()
-    // checkForWinner etc... this all should go here
+    //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK FOR NEW CLICKS AND CATCH START POSITION , else change player
+    //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK IF NEW SET/CLICKED POSITION IS CORRECT AND MOVE PULL , else try again
 
+    // DRAW
     // draws every time and if we have changes its ok
+    draw();
 
+    // CHANGE PLAYER
+    firstPlayerOnTurn ? firstPlayerOnTurn = false : firstPlayerOnTurn = true;
 
+    requestAnimationFrame(play);
 }
-
 play();
 
 function findPressedField(event) {
