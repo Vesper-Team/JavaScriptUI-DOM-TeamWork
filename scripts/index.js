@@ -6,7 +6,10 @@ var fieldWidth = 54, // the width of every of the 24 fields
     boardFrameOffset = 18, // the offset in the corners between the board itself and the frame in pixels
     checkerHeight = 42, // the height of the checker after being fully drawn in pixels
     checkerRadius = 21, // full width = 44; outer stroke 1px
-    checkerInnerCircleRadius = 10;
+    checkerInnerCircleRadius = 10,
+    currentPlayer = 0,
+    playerLooper = -1,
+    INITIALDICEVALUE = 6;
 
 // GAME ELEMENTS - canvas, ctx, keystate
 var canvas,
@@ -294,11 +297,54 @@ var board = function () {
     return gameboard;
 }();
 
+var dice = (function () {
+
+    var dice = Object.create({});
+
+    Object.defineProperty(dice, 'init', {
+        value: function () {
+            this.number = INITIALDICEVALUE;
+            return this;
+        }
+    });   // DICE SHOULD BE CREATED WHEN THE BOARD IS CREATED  !!!!!!!!!
+
+    Object.defineProperty(dice, 'number', {
+        get: function () {
+            return this._number;
+        },
+        set: function (value) {
+            checkIfDiceValueIsValid(value);
+            this._number = value;
+        }
+    });
+
+    Object.defineProperty(dice, 'drawNewNumber', {
+        value: function () {
+            this.number = Math.round(Math.random() * 5) + 1;
+        }
+    });
+
+    return dice;
+}());
+
+
+function checkIfDiceValueIsValid(number) {
+    if (isNaN(number) || number % 1 != 0 || number < 1 || number > 6) {
+        throw new Error('Dice number is invalid!');
+    }
+
+
+}
 // function newGame() or main()
 // create initiate and append game canvas
 // keep track of keyboard presses
 // INITIATE GAME OBJECTS;
 // GAME LOOP, STARTS THE ANIMATION;
+
+
+
+
+
 function newGame() {
     canvas = document.getElementById('board-canvas');
     ctx = canvas.getContext('2d');
@@ -312,15 +358,40 @@ newGame();
 function play() {
     // GAME LOOP - game logic, updating the fields, players turns, dices etc. Update update update
     // change fields depending on how the player interact(key presses)
-    canvas.addEventListener('click', findPressedField);
 
-    // calls function update()
-    // checkForWinner etc... this all should go here
 
-    // draws every time and if we have changes its ok
-    draw();
-    requestAnimationFrame(play);
+    while (true) {
+
+        // CHANGE PLAYER
+        playerLooper++;
+        currentPlayer = (playerLooper % 2) + 1;    //if   playerLooper % 2 ===0 -> currentPlayer = 1     , else current player = 2
+        //LOGIC NEEDS TO BE IMPLEMENTED FOR PLAYER
+        //--------------------------------------------------------------
+
+
+
+        //THROW DISE
+
+
+        //CHECK IF ANY POSSIBLE MOVE
+        //EXPECT ONLY THE POSSIBLE MOVES AND LOOK FOR POSSIBLE PLACES TO START THEM FROM AND HIGHLIGHT
+        //CHECK FOR NEW CLICKS AND CATCH START POSITION
+        //CHECK IF NEW SET POSITION IS CORRECT
+        //MOVE PULL
+
+        canvas.addEventListener('click', findPressedField);
+
+        // calls function update()
+        // checkForWinner etc... this all should go here
+
+        // draws every time and if we have changes its ok
+        draw();
+        requestAnimationFrame(play);
+
+    }
+
 }
+
 play();
 
 function findPressedField(event) {
@@ -380,7 +451,7 @@ function findPressedField(event) {
 }
 
 function draw() {
-    ctx.clearRect(0,0,canvas.width,canvas.height); // refresh canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // refresh canvas
 
     board.fields.forEach(function (field) {
         field.draw(); // redraw every field again
