@@ -130,10 +130,11 @@ var field = function () { /* the board is filled with 24 fields,
                 } else {
                     if (this.y < canvas.height / 2) { // if field is in the upper half of the board, should stack them up to bottom
                         fieldCenter = this.x + (fieldWidth / 2); // x coordinate for the checker center
-                        this.checkers[i].draw(fieldCenter, this.y + i * checkerHeight + checkerRadius);
+                        this.checkers[i].draw(fieldCenter, this.y + i * checkerHeight + checkerRadius + 2); /* +2 just to look better,
+                                                                                                        the checker from the board frame */
                     } else { // when the field is in the lower part, should stack them from bottom to up
                         fieldCenter = this.x + (fieldWidth / 2); // x coordinate for the checker center
-                        this.checkers[i].draw(fieldCenter, this.y - i * checkerHeight + checkerRadius)
+                        this.checkers[i].draw(fieldCenter, this.y - i * checkerHeight + checkerRadius - 2); // -2 just to look better
                     }
                 }
             }
@@ -379,7 +380,9 @@ function findPressedField(event) {
 }
 
 function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height); // refresh canvas
+
     board.fields.forEach(function (field) {
-        field.draw(); // we redraw every field again
+        field.draw(); // redraw every field again
     });
 }
