@@ -123,7 +123,7 @@ var field = function () { /* the board is filled with 24 fields,
                     ctx.save();
                     ctx.fillStyle = 'red';
                     ctx.font = "12px Verdana";
-                    ctx.fillText('x' + (i - 3), (this.x-6) + fieldWidth / 2, this.y + checkerRadius + 4);
+                    ctx.fillText('x' + (i - 3), (this.x - 6) + fieldWidth / 2, this.y + checkerRadius + 4);
                     // x2 for the 6th checker because it represents how many checkers are stacked
                     // 6 and 4 are just a magic numbers to position the text in the center of the checker, because the text has also its own offset
                     ctx.restore();
@@ -213,18 +213,19 @@ var checker = function () {
 }();
 
 var board = function () {
-    var bottomSideAllSet = false, // flag to indicate that we must start with a field having 5 checkers in it(the 12th field)
+    var bottomSideAllSet, // flag to indicate that we must start with a field having 5 checkers in it(the 12th field)
     // at bottom we start with  12. 5 3 5 2 .23
     // at top we start with     11. 5 3 5 2 .0
         patternToPutColors = []; // colors are inverted in the opposite sides of the field, sorry it truly looks ugly..
-    patternToPutColors[0] = 1;
-    patternToPutColors[5] = 0;
-    patternToPutColors[7] = 0;
-    patternToPutColors[11] = 1;
 
     var gameboard = {
         init: function () {
             this.fields = [];
+            bottomSideAllSet = false;
+            patternToPutColors[0] = 1;
+            patternToPutColors[5] = 0;
+            patternToPutColors[7] = 0;
+            patternToPutColors[11] = 1;
             var self = this;
             setupHalfGameBoard(self, bottomSideAllSet);
             bottomSideAllSet = true;
@@ -297,95 +298,88 @@ var board = function () {
 // keep track of keyboard presses
 // INITIATE GAME OBJECTS;
 // GAME LOOP, STARTS THE ANIMATION;
-
 function newGame() {
     canvas = document.getElementById('board-canvas');
     ctx = canvas.getContext('2d');
-    canvas.addEventListener('click', findPressedField);
 
     // INIT GAME OBJECTS, SETS UP GAME
     board.init();
-
-
-    function findPressedField(event) {
-        var x = event.offsetX;
-        var y = event.offsetY;
-        if (((x < canvas.width - boardFrameOffset && x > boardFrameOffset + boardSide + boardBar) ||
-            (x < boardFrameOffset + boardSide && x > boardFrameOffset)) &&
-            (y < canvas.height - boardFrameOffset && y > boardFrameOffset)) { // ignoring every piece of the frame
-            var i = 0,
-                len,
-                foundField,
-                upperSide = false;
-            // determining in which quadrant are we exactly
-            if (y < canvas.height / 2 && y > boardFrameOffset) {
-                i = 12; // last field of the upper side, last because if we take the first our condition in the for-loop will be achieved every time
-                upperSide = true;
-            } else {
-                i = 0; // first field of the lower side
-            }
-            if (x < boardSide + boardFrameOffset && x > boardFrameOffset) { // left side of the board
-                if (i === 0) { // bottom left side
-                    i = 6;
-                } else { // upper left side
-                    i = 12;
-                }
-            } else { // right side of the board
-                if (i === 0) { // bottom right side
-                    i = 0;
-                } else { // upper left side
-                    i = 18; // again last of the array
-                }
-            }
-            for (len = i + 6; i < len; i += 1) {
-                var currentField = gameBoard.fields[i];
-                if (upperSide) { /* its all because of the fields..
-                 the start position of the lower side is most-right and it starts from 0,
-                 while the start position of the upper side is the most-left which confuses the algorithm */
-                    var previousField = gameBoard.fields[i - 1];
-                    if (currentField.x > x) {
-                        foundField = previousField;
-                        break;
-                    }
-                } else {
-                    if (x > currentField.x) {
-                        foundField = currentField;
-                        break;
-                    }
-                }
-            }
-            if (typeof foundField === 'undefined') { // when we are going out of the for-in and the condition for the upperSide is not met,
-                // because we take the previous field element we could not get to check the last one
-                foundField = gameBoard.fields[len - 1];
-            }
-            clickedField = foundField;
-            console.log(clickedField); // testing purposes
-        }
-    }
 }
 newGame();
+// canvas.addEventListener('click', findPressedField);
 
 function play() {
-    // GAME LOOP
-    // game logic, updating the fields, players turns, dices etc. Update update update
+    // GAME LOOP - game logic, updating the fields, players turns, dices etc. Update update update
     // change fields depending on how the player interact(key presses)
+    canvas.addEventListener('click', findPressedField);
 
     // calls function update()
+    // checkForWinner etc... this all should go here
 
     // draws every time and if we have changes its ok
-        draw();
-        requestAnimationFrame(play);
+    draw();
+    requestAnimationFrame(play);
 }
 play();
 
-// function update()
-// maybe it should listen for the clickedField
-
+function findPressedField(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    if (((x < canvas.width - boardFrameOffset && x > boardFrameOffset + boardSide + boardBar) ||
+        (x < boardFrameOffset + boardSide && x > boardFrameOffset)) &&
+        (y < canvas.height - boardFrameOffset && y > boardFrameOffset)) { // ignoring every piece of the frame
+        var i = 0,
+            len,
+            foundField,
+            upperSide = false;
+        // determining in which quadrant are we exactly
+        if (y < canvas.height / 2 && y > boardFrameOffset) {
+            i = 12; // last field of the upper side, last because if we take the first our condition in the for-loop will be achieved every time
+            upperSide = true;
+        } else {
+            i = 0; // first field of the lower side
+        }
+        if (x < boardSide + boardFrameOffset && x > boardFrameOffset) { // left side of the board
+            if (i === 0) { // bottom left side
+                i = 6;
+            } else { // upper left side
+                i = 12;
+            }
+        } else { // right side of the board
+            if (i === 0) { // bottom right side
+                i = 0;
+            } else { // upper left side
+                i = 18; // again last of the array
+            }
+        }
+        for (len = i + 6; i < len; i += 1) {
+            var currentField = board.fields[i];
+            if (upperSide) { /* its all because of the fields..
+             the start position of the lower side is most-right and it starts from 0,
+             while the start position of the upper side is the most-left which confuses the algorithm */
+                var previousField = board.fields[i - 1];
+                if (currentField.x > x) {
+                    foundField = previousField;
+                    break;
+                }
+            } else {
+                if (x > currentField.x) {
+                    foundField = currentField;
+                    break;
+                }
+            }
+        }
+        if (typeof foundField === 'undefined') { // when we are going out of the for-in and the condition for the upperSide is not met,
+            // because we take the previous field element we could not get to check the last one
+            foundField = board.fields[len - 1];
+        }
+        clickedField = foundField;
+        console.log(clickedField); // testing purposes
+    }
+}
 
 function draw() {
     board.fields.forEach(function (field) {
         field.draw(); // we redraw every field again
     });
 }
-
-window.onload = newGame();
