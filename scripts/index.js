@@ -9,7 +9,9 @@ var fieldWidth = 54, // the width of every of the 24 fields
     checkerInnerCircleRadius = 10,
     currentPlayer = 0,
     playerLooper = -1,
-    INITIALDICEVALUE = 6;
+    INITIALDICEVALUE = 6,
+    firstDice,
+    secondDice;
 
 // GAME ELEMENTS - canvas, ctx, keystate
 var canvas,
@@ -358,37 +360,48 @@ newGame();
 function play() {
     // GAME LOOP - game logic, updating the fields, players turns, dices etc. Update update update
     // change fields depending on how the player interact(key presses)
-
+    canvas.addEventListener('click', findPressedField);
+    firstDice = Object.create(dice).init();
+    secondDice = Object.create(dice).init();
 
     while (true) {
 
         // CHANGE PLAYER
         playerLooper++;
         currentPlayer = (playerLooper % 2) + 1;    //if   playerLooper % 2 ===0 -> currentPlayer = 1     , else current player = 2
-        //LOGIC NEEDS TO BE IMPLEMENTED FOR PLAYER
-        //--------------------------------------------------------------
+        //LOGIC NEEDS TO BE IMPLEMENTED FOR CURRENT PLAYER
+
 
 
 
         //THROW DISE
+        firstDice.drawNewNumber();
+        secondDice.drawNewNumber();
+        //ANIMATION SHOULD BE IMPLEMENTED
+
 
 
         //CHECK IF ANY POSSIBLE MOVE
-        //EXPECT ONLY THE POSSIBLE MOVES AND LOOK FOR POSSIBLE PLACES TO START THEM FROM AND HIGHLIGHT
-        //CHECK FOR NEW CLICKS AND CATCH START POSITION
-        //CHECK IF NEW SET POSITION IS CORRECT
-        //MOVE PULL
+        //TODO
 
-        canvas.addEventListener('click', findPressedField);
+        //IF ANY POSSIBLE MOVES AVALIABLE  -->  CHECK FOR NEW CLICKS AND CATCH START POSITION , else change player
+        //IF ANY POSSIBLE MOVES AVALIABLE  -->  CHECK IF NEW SET/CLICKED POSITION IS CORRECT AND MOVE PULL , else try again
 
-        // calls function update()
-        // checkForWinner etc... this all should go here
 
-        // draws every time and if we have changes its ok
-        draw();
-        requestAnimationFrame(play);
+        break;   //JUST NOT TO CRASH IT ALL YET 
+
+
 
     }
+
+    draw();
+    requestAnimationFrame(play);
+
+    // calls function update()
+    // checkForWinner etc... this all should go here
+
+    // draws every time and if we have changes its ok
+
 
 }
 
