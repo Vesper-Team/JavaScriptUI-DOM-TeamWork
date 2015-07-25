@@ -345,8 +345,8 @@ var dice = (function () {
 function newGame() {
     canvas = document.getElementById('board-canvas');
     ctx = canvas.getContext('2d');
-    firstPlayer = Object.create(player).init('GOSHO', 'white'); //DA HVANEM USER INPUTA
-    secondPlayer = Object.create(player).init('Pesho', 'black'); //DA HVANEM USER INPUTA
+    firstPlayer = Object.create(player).init('GOSHO','white'); //DA HVANEM USER INPUTA
+    secondPlayer = Object.create(player).init('Pesho','black'); //DA HVANEM USER INPUTA
 
     // INIT GAME OBJECTS, SETS UP GAME
     board.init();
@@ -399,154 +399,282 @@ function play() {
 
     //IF HAS HIT CHECKERS
     while (currentActivePlayer.hasHitChecker) {
-
+       
         if (currentActivePlayer.currentCheckersCount === 0) {
             currentActivePlayer.hasHitChecker = false;
             break;
         }
         if (currentActivePlayer === firstPlayer) {
             startSearchPosition = 0;
-            if (board.fields[startSearchPosition - 1 + firstDice.number].length >= 2 &&
+            if(board.fields[startSearchPosition - 1  + firstDice.number].length >= 2 && 
                board.fields[startSearchPosition - 1 + firstDice.number][0].color === 'black') {
                 currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
             }
-            else if (board.fields[startSearchPosition - 1 + firstDice.number].length === 1 &&
-               board.fields[startSearchPosition - 1 + firstDice.number][0].color === 'black') {
+            
+            if (board.fields[startSearchPosition - 1 + secondDice.number].length >= 2 &&
+               board.fields[startSearchPosition - 1 + secondDice.number][0].color === 'black') {
+                currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
+            }
+            
+            if(board.fields[startSearchPosition - 1  + firstDice.number].length === 1 && 
+                board.fields[startSearchPosition - 1 + firstDice.number][0].color === 'black') {
                 secondPlayer.canTakeChecker = false;
                 secondPlayer.currentCheckersCount++;
                 currentPlayerMoves++;
                 currentPlayer.currentCheckersCount--;
                 //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
             }
-            else {
+         
+
+            if (board.fields[startSearchPosition - 1 + secondDice.number].length === 1 &&
+             board.fields[startSearchPosition - 1 + secondDice.number][0].color === 'black') {
+                secondPlayer.canTakeChecker = false;
+                secondPlayer.currentCheckersCount++;
                 currentPlayerMoves++;
                 currentPlayer.currentCheckersCount--;
-                //DRAW THE PULL ON THE NEW SPOT
+                //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
             }
 
+            if (board.fields[startSearchPosition - 1 + firstDice.number].length === 0) {
+                currentPlayerMoves++;
+                currentPlayer.currentCheckersCount--;
+                //PUSH?                                          /WTF MISSED?/
+                //DRAW THE PULL ON THE NEW SPOT
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
+            }
+
+            if (board.fields[startSearchPosition - 1 + secondDice.number].length === 0) {
+                currentPlayerMoves++;
+                currentPlayer.currentCheckersCount--;
+                //PUSH?                                          /WTF MISSED?/
+                //DRAW THE PULL ON THE NEW SPOT
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
+            }
+            
         }
         else { //if second player           
             startSearchPosition = 23;
-            if (board.fields[startSearchPosition + 1 - firstDice.number].length >= 2 &&
-              board.fields[startSearchPosition - 1 + firstDice.number][0].color === 'white') {
+            if(board.fields[startSearchPosition + 1  - firstDice.number].length >= 2 && 
+             board.fields[startSearchPosition + 1  - firstDice.number][0].color === 'white') {
                 currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
             }
-            else if (board.fields[startSearchPosition + 1 - firstDice.number].length >= 1 &&
-              board.fields[startSearchPosition - 1 + firstDice.number][0].color === 'white') {
+            
+            if (board.fields[startSearchPosition + 1  - firstDice.number].length >= 2 &&
+               board.fields[startSearchPosition + 1  - firstDice.number][0].color === 'white') {
+                currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
+            }
+            
+            if(board.fields[startSearchPosition + 1  - firstDice.number].length === 1 && 
+                board.fields[startSearchPosition + 1  - firstDice.number][0].color === 'white') {
                 firstPlayer.canTakeChecker = false;
                 firstPlayer.currentCheckersCount++;
                 currentPlayerMoves++;
                 currentPlayer.currentCheckersCount--;
                 //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
             }
-            else {
+         
+
+            if (board.fields[startSearchPosition + 1  - firstDice.number].length === 1 &&
+             board.fields[startSearchPosition + 1  - firstDice.number][0].color === 'white') {
+                firstPlayer.canTakeChecker = false;
+                firstPlayer.currentCheckersCount++;
                 currentPlayerMoves++;
                 currentPlayer.currentCheckersCount--;
-                //DRAW THE PULL ON THE NEW SPOT
+                //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
             }
 
+            if (board.fields[startSearchPosition + 1  - firstDice.number].length === 0) {
+                currentPlayerMoves++;
+                currentPlayer.currentCheckersCount--;
+                //PUSH?                                          /WTF MISSED?/
+                //DRAW THE PULL ON THE NEW SPOT
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
+            }
+
+            if (board.fields[startSearchPosition + 1  - firstDice.number].length === 0) {
+                currentPlayerMoves++;
+                currentPlayer.currentCheckersCount--;
+                //PUSH?                                          /WTF MISSED?/
+                //DRAW THE PULL ON THE NEW SPOT
+                if (currentPlayerMoves === 2) {
+                    hasNoMoves = true;
+                    break;
+                }
+            }
+            
         }
 
+        if (hasNoMoves) {
+            firstPlayerOnTurn = !firstPlayerOnTurn;   //this will repeat a few times !!!!!!!!!!!!!!!!!!!!!!!!!!!
+            play();
+        }
+
+
+        //CHECK IF PLAYER IS CURRENTLY TAKING CHECKERS
+        var from = 0;
+        var to = 0;
+        var sum = 0,
+            searcher = 0;
+        if (currentActivePlayer === firstPlayer) {
+            from = 18;
+            to = 23;
+        }
+        else {
+            from = 0;
+            to = 5;
+        }
+        //CHECK IF ALL 15 CHECKERS ARE IN THE ZONE,WHICH WILL INDICATE THAT THE PLAYER CAN EXTRACT THEM
+        for (searcher = from ; searcher <= to; searcher += 1) {
+            if (board.fields[searcher].length > 0 || board.fields[searcher][0].color === currentActivePlayer.color) {
+                sum += board.fields[searcher].length;
+            }
+        }
+        if (sum < 15-currentActivePlayer.currentCheckersCount) {
+            currentActivePlayer.canTakeChecker = false;
+        }
+        else if (sym === (15 - currentActivePlayer.currentCheckersCount)) {
+            currentActivePlayer.canTakeChecker = true;
+        }
+        else {
+            throw new Error('invalid number of checkers of a player on the field');
+        }
+
+
+        while (currentActivePlayer.canTakeChecker) {
+            if (currentPlayerMoves === 2) {
+                break;
+            }
+            //if white player
+        
+            //TODO
+
+            //if black player
+
+
+        }
 
         if (currentPlayerMoves === 2) {
-            hasNoMoves = true;
-            break;
+            firstPlayerOnTurn = !firstPlayerOnTurn;   //this will repeat a few times !!!!!!!!!!!!!!!!!!!!!!!!!!!
+            play();
         }
+        //JUST MOVE CHECKER
 
+
+        //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK FOR NEW CLICKS AND CATCH START POSITION , else change player
+        //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK IF NEW SET/CLICKED POSITION IS CORRECT AND MOVE PULL , else try again
+
+        // DRAW
+        // draws every time and if we have changes its ok
+        draw();
+
+        // CHANGE PLAYER
+        firstPlayerOnTurn ? firstPlayerOnTurn = false : firstPlayerOnTurn = true;
+
+        requestAnimationFrame(play);
     }
+    play();
 
-    if (hasNoMoves) {
-        play();
-    }
-
-    if (currentPlayerMoves === 2) {
-        //CHANGE PLAYER  OR CALL PLAY AGAIN
-    }
-
-    if (currentActivePlayer.canTakeChecker) {
-
-    }
-
-    //CHECK IF PLAYERS HAS ANY HIT PULLS ATM
-
-    //CHECK IF PLAYER CAN TAKE PULLS
-
-    //CHECK IF ANY POSSIBLE MOVE
-
-    //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK FOR NEW CLICKS AND CATCH START POSITION , else change player
-    //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK IF NEW SET/CLICKED POSITION IS CORRECT AND MOVE PULL , else try again
-
-    // DRAW
-    // draws every time and if we have changes its ok
-    draw();
-
-    // CHANGE PLAYER
-    firstPlayerOnTurn ? firstPlayerOnTurn = false : firstPlayerOnTurn = true;
-
-    requestAnimationFrame(play);
-}
-play();
-
-function findPressedField(event) {
-    var x = event.offsetX;
-    var y = event.offsetY;
-    if (((x < canvas.width - boardFrameOffset && x > boardFrameOffset + boardSide + boardBar) ||
-        (x < boardFrameOffset + boardSide && x > boardFrameOffset)) &&
-        (y < canvas.height - boardFrameOffset && y > boardFrameOffset)) { // ignoring every piece of the frame
-        var i = 0,
-            len,
-            foundField,
-            upperSide = false;
-        // determining in which quadrant are we exactly
-        if (y < canvas.height / 2 && y > boardFrameOffset) {
-            i = 12; // last field of the upper side, last because if we take the first our condition in the for-loop will be achieved every time
-            upperSide = true;
-        } else {
-            i = 0; // first field of the lower side
-        }
-        if (x < boardSide + boardFrameOffset && x > boardFrameOffset) { // left side of the board
-            if (i === 0) { // bottom left side
-                i = 6;
-            } else { // upper left side
-                i = 12;
+    function findPressedField(event) {
+        var x = event.offsetX;
+        var y = event.offsetY;
+        if (((x < canvas.width - boardFrameOffset && x > boardFrameOffset + boardSide + boardBar) ||
+            (x < boardFrameOffset + boardSide && x > boardFrameOffset)) &&
+            (y < canvas.height - boardFrameOffset && y > boardFrameOffset)) { // ignoring every piece of the frame
+            var i = 0,
+                len,
+                foundField,
+                upperSide = false;
+            // determining in which quadrant are we exactly
+            if (y < canvas.height / 2 && y > boardFrameOffset) {
+                i = 12; // last field of the upper side, last because if we take the first our condition in the for-loop will be achieved every time
+                upperSide = true;
+            } else {
+                i = 0; // first field of the lower side
             }
-        } else { // right side of the board
-            if (i === 0) { // bottom right side
-                i = 0;
-            } else { // upper left side
-                i = 18; // again last of the array
+            if (x < boardSide + boardFrameOffset && x > boardFrameOffset) { // left side of the board
+                if (i === 0) { // bottom left side
+                    i = 6;
+                } else { // upper left side
+                    i = 12;
+                }
+            } else { // right side of the board
+                if (i === 0) { // bottom right side
+                    i = 0;
+                } else { // upper left side
+                    i = 18; // again last of the array
+                }
             }
-        }
-        for (len = i + 6; i < len; i += 1) {
-            var currentField = board.fields[i];
-            if (upperSide) { /* its all because of the fields..
+            for (len = i + 6; i < len; i += 1) {
+                var currentField = board.fields[i];
+                if (upperSide) { /* its all because of the fields..
              the start position of the lower side is most-right and it starts from 0,
              while the start position of the upper side is the most-left which confuses the algorithm */
-                var previousField = board.fields[i - 1];
-                if (currentField.x > x) {
-                    foundField = previousField;
-                    break;
-                }
-            } else {
-                if (x > currentField.x) {
-                    foundField = currentField;
-                    break;
+                    var previousField = board.fields[i - 1];
+                    if (currentField.x > x) {
+                        foundField = previousField;
+                        break;
+                    }
+                } else {
+                    if (x > currentField.x) {
+                        foundField = currentField;
+                        break;
+                    }
                 }
             }
+            if (typeof foundField === 'undefined') { // when we are going out of the for-in and the condition for the upperSide is not met,
+                // because we take the previous field element we could not get to check the last one
+                foundField = board.fields[len - 1];
+            }
+            clickedField = foundField;
+            console.log(clickedField); // testing purposes
         }
-        if (typeof foundField === 'undefined') { // when we are going out of the for-in and the condition for the upperSide is not met,
-            // because we take the previous field element we could not get to check the last one
-            foundField = board.fields[len - 1];
-        }
-        clickedField = foundField;
-        console.log(clickedField); // testing purposes
     }
-}
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // refresh canvas
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // refresh canvas
 
-    board.fields.forEach(function (field) {
-        field.draw(); // redraw every field again
-    });
-}
+        board.fields.forEach(function (field) {
+            field.draw(); // redraw every field again
+        });
+    }
