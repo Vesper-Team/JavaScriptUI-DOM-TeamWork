@@ -77,7 +77,10 @@ var GameDraw = ( function () {
                 y: 10,
                 image: imageObjBoard,
                 width: 800,
-                height: 600
+                height: 600,
+                shadowOffsetX: 20,
+                shadowOffsetY: 20,
+                shadowBlur: 30,
             } );
 
             backgroundLayer.add( imageBoard );
