@@ -18,8 +18,8 @@ var GameDraw = ( function () {
 
     stage = new Kinetic.Stage( {
         container: 'kinetic-container',
-        width: 1680,
-        height: 1050,
+        width: 1359,
+        height: 639
     } );
 
     backgroundLayer = new Kinetic.Layer();
@@ -91,7 +91,7 @@ var GameDraw = ( function () {
             
         
         imageObjBackground.src = 'Images/wood_background_BlackNWhite_1920x1080.jpg';
-        imageObjBoard.src = 'Images/niceTry_Board.jpg';
+        imageObjBoard.src = 'Images/Board800x600.png';
     };
 
     function createCircle( x, y, color ) {
