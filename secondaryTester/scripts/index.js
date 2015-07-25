@@ -415,12 +415,12 @@ function play() {
                 secondPlayer.canTakeChecker = false;
                 secondPlayer.currentCheckersCount++;
                 currentPlayerMoves++;
-                currentPlayer._hitCheckersCount--;
+                currentPlayer.currentCheckersCount--;
                 //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
             }
             else {
                 currentPlayerMoves++;
-                currentPlayer._hitCheckersCount--;
+                currentPlayer.currentCheckersCount--;
                 //DRAW THE PULL ON THE NEW SPOT
             }
 
@@ -436,12 +436,12 @@ function play() {
                 firstPlayer.canTakeChecker = false;
                 firstPlayer.currentCheckersCount++;
                 currentPlayerMoves++;
-                currentPlayer._hitCheckersCount--;
+                currentPlayer.currentCheckersCount--;
                 //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
             }
             else {
                 currentPlayerMoves++;
-                currentPlayer._hitCheckersCount--;
+                currentPlayer.currentCheckersCount--;
                 //DRAW THE PULL ON THE NEW SPOT
             }
 
