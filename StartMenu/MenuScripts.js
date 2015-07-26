@@ -1,96 +1,180 @@
 var mustSlowCircles = false,
-    gameExited = false;
+    gameExited = false,
+    playButton = false,
+    goingRight = false,
+    menusAreOut = false,
+    mustRemoveMenus = false;
 
 window.onload = toLoad();
 
 function toLoad() {
-    var svg = document.getElementById('theSvg');
+    var svg = document.getElementById('theSvg'),
 
-    var outside1 = createOutsideChecker(-1 * generateRandomNumber(), 20, 30, 'grey', 'black'); // updateVal = 6
-    var inside1 = createInsideChecker(outside1.getAttribute('cx'), 20, 15, 'grey', 'black', 2);
-    var speedOfCircle1 = 6;
+        outside1 = createOutsideChecker(-1 * generateRandomNumber(), 20, 30, 'grey', 'black'), // updateVal = 6
+        inside1 = createInsideChecker(outside1.getAttribute('cx'), 20, 15, 'grey', 'black', 2),
+        speedOfChecker1 = 6,
 
-    var outside2 = createOutsideChecker(-1 * generateRandomNumber(), 80, 30, 'grey', 'white'); // updateVal = 4
-    var inside2 = createInsideChecker(outside2.getAttribute('cx'), 80, 15, 'grey', 'white', 2);
-    var speedOfCircle2 = 4;
+        outside2 = createOutsideChecker(-1 * generateRandomNumber(), 80, 30, 'grey', 'white'), // updateVal = 4
+        inside2 = createInsideChecker(outside2.getAttribute('cx'), 80, 15, 'grey', 'white', 2),
+        speedOfChecker2 = 4,
 
-    var outside3 = createOutsideChecker(-1 * generateRandomNumber(), 140, 30, 'grey', 'black'); // updateVal = 8
-    var inside3 = createInsideChecker(outside3.getAttribute('cx'), 140, 15, 'grey', 'black', 2);
-    var speedOfCircle3 = 8;
+        outside3 = createOutsideChecker(-1 * generateRandomNumber(), 140, 30, 'grey', 'black'), // updateVal = 8
+        inside3 = createInsideChecker(outside3.getAttribute('cx'), 140, 15, 'grey', 'black', 2),
+        speedOfChecker3 = 8,
 
-    var outside4 = createOutsideChecker(-1 * generateRandomNumber(), 200, 30, 'grey', 'white'); // updateVal = 6
-    var inside4 = createInsideChecker(outside4.getAttribute('cx'), 200, 15, 'grey', 'white', 2);
-    var speedOfCircle4 = 6;
+        outside4 = createOutsideChecker(-1 * generateRandomNumber(), 200, 30, 'grey', 'white'), // updateVal = 6
+        inside4 = createInsideChecker(outside4.getAttribute('cx'), 200, 15, 'grey', 'white', 2),
+        speedOfChecker4 = 6,
 
-    var outside5 = createOutsideChecker(-1 * generateRandomNumber(), 272, 30, 'grey', 'black');
-    var inside5 = createInsideChecker(outside5.getAttribute('cx'), 272, 15, 'grey', 'black', 2);
-    var speedOfCircle5 = 5;
+        outside5 = createOutsideChecker(-1 * generateRandomNumber(), 272, 30, 'grey', 'black'),
+        inside5 = createInsideChecker(outside5.getAttribute('cx'), 272, 15, 'grey', 'black', 2),
+        speedOfChecker5 = 5,
 
-    var outside6 = createOutsideChecker(-1 * generateRandomNumber(), 334, 30, 'grey', 'white');
-    var inside6 = createInsideChecker(outside6.getAttribute('cx'), 334, 15, 'grey', 'white', 2);
-    var speedOfCircle6 = 9;
+        outside6 = createOutsideChecker(-1 * generateRandomNumber(), 334, 30, 'grey', 'white'),
+        inside6 = createInsideChecker(outside6.getAttribute('cx'), 334, 15, 'grey', 'white', 2),
+        speedOfChecker6 = 9,
 
-    var outside7 = createOutsideChecker(-1 * generateRandomNumber(), 396, 30, 'grey', 'black');
-    var inside7 = createInsideChecker(outside7.getAttribute('cx'), 396, 15, 'grey', 'black', 2);
-    var speedOfCircle7 = 6;
+        outside7 = createOutsideChecker(-1 * generateRandomNumber(), 396, 30, 'grey', 'black'),
+        inside7 = createInsideChecker(outside7.getAttribute('cx'), 396, 15, 'grey', 'black', 2),
+        speedOfChecker7 = 6,
 
-    var outside8 = createOutsideChecker(-1 * generateRandomNumber(), 460, 30, 'grey', 'white');
-    var inside8 = createInsideChecker(outside8.getAttribute('cx'), 460, 15, 'grey', 'white', 2);
-    var speedOfCircle8 = 3;
+        outside8 = createOutsideChecker(-1 * generateRandomNumber(), 460, 30, 'grey', 'white'),
+        inside8 = createInsideChecker(outside8.getAttribute('cx'), 460, 15, 'grey', 'white', 2),
+        speedOfChecker8 = 3,
 
-    var outside9 = createOutsideChecker(-1 * generateRandomNumber(), 520, 30, 'grey', 'black');
-    var inside9 = createInsideChecker(outside9.getAttribute('cx'), 520, 15, 'grey', 'black', 2);
-    var speedOfCircle9 = 8;
+        outside9 = createOutsideChecker(-1 * generateRandomNumber(), 520, 30, 'grey', 'black'),
+        inside9 = createInsideChecker(outside9.getAttribute('cx'), 520, 15, 'grey', 'black', 2),
+        speedOfChecker9 = 8,
 
-    function loop() {
+        outside10 = createOutsideChecker(-1 * generateRandomNumber(), 600, 30, 'grey', 'white'),
+        inside10 = createInsideChecker(outside10.getAttribute('cx'), 600, 15, 'grey', 'white', 2),
+        speedOfChecker10 = 7;
+
+
+    function loopRollingCircles() {
         if (mustSlowCircles) {
-            speedOfCircle1 -= 1;
-            speedOfCircle2 -= 1;
-            speedOfCircle3 -= 1;
-            speedOfCircle4 -= 1;
-            speedOfCircle5 -= 1;
-            speedOfCircle6 -= 1;
-            speedOfCircle7 -= 1;
-            speedOfCircle8 -= 1;
-            speedOfCircle9 -= 1;
+            speedOfChecker1 -= 1;
+            speedOfChecker2 -= 1;
+            speedOfChecker3 -= 1;
+            speedOfChecker4 -= 1;
+            speedOfChecker5 -= 1;
+            speedOfChecker6 -= 1;
+            speedOfChecker7 -= 1;
+            speedOfChecker8 -= 1;
+            speedOfChecker9 -= 1;
+            speedOfChecker10 -= 1;
+        }
+        if (playButton) {
+            if (areSpeedsZero()) {
+                goingRight = true;
+            }
+            if (goingRight) { // going fast right
+                speedOfChecker1 += 1;
+                speedOfChecker2 += 1;
+                speedOfChecker3 += 1;
+                speedOfChecker4 += 1;
+                speedOfChecker5 += 1;
+                speedOfChecker6 += 1;
+                speedOfChecker7 += 1;
+                speedOfChecker8 += 1;
+                speedOfChecker9 += 1;
+                speedOfChecker10 += 1;
+            } else { // slow them down
+                speedOfChecker1 -= 1;
+                speedOfChecker2 -= 1;
+                speedOfChecker3 -= 1;
+                speedOfChecker4 -= 1;
+                speedOfChecker5 -= 1;
+                speedOfChecker6 -= 1;
+                speedOfChecker7 -= 1;
+                speedOfChecker8 -= 1;
+                speedOfChecker9 -= 1;
+                speedOfChecker10 -= 1;
+            }
+            if (allCirclesAreOut()) {
+                if(mustRemoveMenus) {
+                    $('.button').animate({opacity: "0.0001"}, 800);
+                    menusAreOut = true;
+                    return;
+                }
+                mustRemoveMenus = true;
+            }
         }
 
-        outside1 = updateChecker(outside1, speedOfCircle1);
-        inside1 = updateChecker(inside1, speedOfCircle1);
+        outside1 = updateChecker(outside1, speedOfChecker1);
+        inside1 = updateChecker(inside1, speedOfChecker1);
 
-        outside2 = updateChecker(outside2, speedOfCircle2);
-        inside2 = updateChecker(inside2, speedOfCircle2);
+        outside2 = updateChecker(outside2, speedOfChecker2);
+        inside2 = updateChecker(inside2, speedOfChecker2);
 
-        outside3 = updateChecker(outside3, speedOfCircle3);
-        inside3 = updateChecker(inside3, speedOfCircle3);
+        outside3 = updateChecker(outside3, speedOfChecker3);
+        inside3 = updateChecker(inside3, speedOfChecker3);
 
-        outside4 = updateChecker(outside4, speedOfCircle4);
-        inside4 = updateChecker(inside4, speedOfCircle4);
+        outside4 = updateChecker(outside4, speedOfChecker4);
+        inside4 = updateChecker(inside4, speedOfChecker4);
 
-        outside5 = updateChecker(outside5, speedOfCircle5);
-        inside5 = updateChecker(inside5, speedOfCircle5);
+        outside5 = updateChecker(outside5, speedOfChecker5);
+        inside5 = updateChecker(inside5, speedOfChecker5);
 
-        outside6 = updateChecker(outside6, speedOfCircle6);
-        inside6 = updateChecker(inside6, speedOfCircle6);
+        outside6 = updateChecker(outside6, speedOfChecker6);
+        inside6 = updateChecker(inside6, speedOfChecker6);
 
-        outside7 = updateChecker(outside7, speedOfCircle7);
-        inside7 = updateChecker(inside7, speedOfCircle7);
+        outside7 = updateChecker(outside7, speedOfChecker7);
+        inside7 = updateChecker(inside7, speedOfChecker7);
 
-        outside8 = updateChecker(outside8, speedOfCircle8);
-        inside8 = updateChecker(inside8, speedOfCircle8);
+        outside8 = updateChecker(outside8, speedOfChecker8);
+        inside8 = updateChecker(inside8, speedOfChecker8);
 
-        outside9 = updateChecker(outside9, speedOfCircle9);
-        inside9 = updateChecker(inside9, speedOfCircle9);
+        outside9 = updateChecker(outside9, speedOfChecker9);
+        inside9 = updateChecker(inside9, speedOfChecker9);
 
-        mustSlowCircles = false;
-        if (speedOfCircle9 === 0) { // speedOfCircle9 is the greatest speed - 9 so we stop the animation
+        outside10 = updateChecker(outside10, speedOfChecker10);
+        inside10 = updateChecker(inside10, speedOfChecker10);
+
+        if (areSpeedsZero() && !goingRight && !playButton) { // speedOfCircle9 is the greatest speed - 9 so we stop the animation
             gameExited = true;
             return;
         }
-        requestAnimationFrame(loop);
+        mustSlowCircles = false;
+        requestAnimationFrame(loopRollingCircles);
     }
 
-    loop();
+    loopRollingCircles();
+
+    function allCirclesAreOut() {
+        return +outside1.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside2.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside3.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside4.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside5.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside6.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside7.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside8.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside9.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside1.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside2.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside3.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside4.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside5.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside6.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside7.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside8.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside9.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +inside10.getAttribute('cx') > +svg.getAttribute('width') + 25;
+    }
+
+    function areSpeedsZero() {
+        return speedOfChecker1 <= 0 &&
+            speedOfChecker2 <= 0 &&
+            speedOfChecker3 <= 0 &&
+            speedOfChecker4 <= 0 &&
+            speedOfChecker5 <= 0 &&
+            speedOfChecker6 <= 0 &&
+            speedOfChecker7 <= 0 &&
+            speedOfChecker8 <= 0 &&
+            speedOfChecker9 <= 0 &&
+            speedOfChecker10 <= 0;
+    }
 
     function updateChecker(checker, moveIndex) {
         var checker = checker;
@@ -99,9 +183,13 @@ function toLoad() {
         if (cx > +svg.getAttribute('width') - 25) {
             checker.firstAppearance = false;
         }
-        if (cx > (+svg.getAttribute('width') - 25) || cx < 20 && !checker.firstAppearance) {
+        if (cx > (+svg.getAttribute('width') - 25) || cx < 20 && !checker.firstAppearance && !goingRight) {
             checker.goingRight *= -1;
         }
+        if (goingRight) {
+            checker.goingRight = 1;
+        }
+
 
         if (moveIndex > 0) {
             checker.setAttribute('cx', cx + checker.goingRight * moveIndex);
@@ -147,11 +235,19 @@ function toLoad() {
     }
 }
 
-function startGame(href) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", href, false);
-    xmlhttp.send();
-    return xmlhttp.responseText;
+function play() {
+    //var xmlhttp = new XMLHttpRequest();
+    //xmlhttp.open("GET", href, false);
+    //xmlhttp.send();
+    //return xmlhttp.responseText;
+    playButton = true;
+    var removeMenusInterval = setInterval(function() {
+        if(menusAreOut) {
+            stopInterval(removeMenusInterval);
+        }
+        mustRemoveMenus = true;
+    }, 500);
+
 }
 
 function getHelp() {
@@ -164,14 +260,13 @@ function exitGame() {
     document.getElementById("textPlay").style.visibility = "hidden";
     document.getElementById("textHelp").style.visibility = "hidden";
     document.getElementById("textExit").style.visibility = "hidden";
-    var interval = setInterval(function () {
+    var gameExitInterval = setInterval(function () {
         if (gameExited) {
-            stopInterval();
+            stopInterval(gameExitInterval);
         }
         mustSlowCircles = true;
     }, 250);
-
-    function stopInterval() {
-        clearInterval(interval);
-    }
+}
+function stopInterval(interval) {
+    clearInterval(interval);
 }

@@ -12,37 +12,34 @@ svg text {
     font-family: fantasy;
 }
 
-#textPlay{
+#textPlay {
     font-size: 120px;
-    stroke-width:1;
-    fill:blue;
-    stroke:black;
+    stroke-width: 1;
+    fill: blue;
+    stroke: black;
 }
 
-#textHelp{
+#textHelp {
     font-size: 90px;
-    fill:blue;
-    stroke:black;
+    fill: blue;
+    stroke: black;
     stroke-width: 1px;
 }
 
-#textExit{
+#textExit {
     font-size: 70px;
-    fill:blue;
-    stroke:black;
+    fill: blue;
+    stroke: black;
     stroke-width: 1px;
 }
 
-.textGoodBye{
+.textGoodBye {
     font-size: 80px;
-    stroke:black;
+    stroke: black;
     stroke-width: 2;
 }
 
 .button:hover {
-    cursor:pointer;
-}
-
-text:hover {
+    cursor: pointer;
     opacity: 0.5;
 }
