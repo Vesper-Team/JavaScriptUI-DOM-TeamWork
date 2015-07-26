@@ -1,258 +1,121 @@
-window.addEventListener('load', toLoad(), false);
-
+window.onload = toLoad();
+document.getElementById('textPlay').style.position = 100;
 function toLoad() {
     var svg = document.getElementById('theSvg');
 
-    var moveInside1 = 1,
-        moveOutside1 = 1;
-    var outside1 = createOutsideChecker(28, 24, 30, 'grey', 'black');
-    var inside1 = createInsideChecker(28, 24, 15, 'grey', 'black', 2);
-    function animFrame1() {
-        var cxInside = +inside1.getAttribute('cx'),
-            cxOutside = +outside1.getAttribute('cx');
+    var outside1 = createOutsideChecker(-1*generateRandomNumber(), 20, 30, 'grey', 'black'); // updateVal = 6
+    var inside1 = createInsideChecker(outside1.getAttribute('cx'), 20, 15, 'grey', 'black', 2);
 
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside1 *= -1;
-        }
+    var outside2 = createOutsideChecker(-1*generateRandomNumber(), 80, 30, 'grey', 'white'); // updateVal = 4
+    var inside2 = createInsideChecker(outside2.getAttribute('cx'), 80, 15, 'grey', 'white', 2);
 
-        inside1.setAttribute('cx', cxInside + moveInside1 * 6);
+    var outside3 = createOutsideChecker(-1*generateRandomNumber(), 140, 30, 'grey', 'black'); // updateVal = 8
+    var inside3 = createInsideChecker(outside3.getAttribute('cx'), 140, 15, 'grey', 'black', 2);
 
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside1 *= -1;
-        }
+    var outside4 = createOutsideChecker(-1*generateRandomNumber(), 200, 30, 'grey', 'white'); // updateVal = 6
+    var inside4 = createInsideChecker(outside4.getAttribute('cx'), 200, 15, 'grey', 'white', 2);
 
-        outside1.setAttribute('cx', cxOutside + moveOutside1 * 6);
+    var outside5 = createOutsideChecker(-1*generateRandomNumber(), 272, 30, 'grey', 'black');
+    var inside5 = createInsideChecker(outside5.getAttribute('cx'), 272, 15, 'grey', 'black', 2);
 
-        window.requestAnimationFrame(animFrame1);
+    var outside6 = createOutsideChecker(-1*generateRandomNumber(), 334, 30, 'grey', 'white');
+    var inside6 = createInsideChecker(outside6.getAttribute('cx'), 334, 15, 'grey', 'white', 2);
+
+    var outside7 = createOutsideChecker(-1*generateRandomNumber(), 396, 30, 'grey', 'black');
+    var inside7 = createInsideChecker(outside7.getAttribute('cx'), 396, 15, 'grey', 'black', 2);
+
+    var outside8 = createOutsideChecker(-1*generateRandomNumber(), 460, 30, 'grey', 'white');
+    var inside8 = createInsideChecker(outside8.getAttribute('cx'), 460, 15, 'grey', 'white', 2);
+
+    var outside9 = createOutsideChecker(-1*generateRandomNumber(), 520, 30, 'grey', 'black');
+    var inside9 = createInsideChecker(outside9.getAttribute('cx'), 520, 15, 'grey', 'black', 2);
+
+    function loop() {
+        outside1 = updateChecker(outside1, 6);
+        inside1 = updateChecker(inside1, 6);
+
+        outside2 = updateChecker(outside2, 4);
+        inside2 = updateChecker(inside2, 4);
+
+        outside3 = updateChecker(outside3, 8);
+        inside3 = updateChecker(inside3, 8);
+
+        outside4 = updateChecker(outside4, 6);
+        inside4 = updateChecker(inside4, 6);
+
+        outside5 = updateChecker(outside5, 5);
+        inside5 = updateChecker(inside5, 5);
+
+        outside6 = updateChecker(outside6, 9);
+        inside6 = updateChecker(inside6, 9);
+
+        outside7 = updateChecker(outside7, 6);
+        inside7 = updateChecker(inside7, 6);
+
+        outside8 = updateChecker(outside8, 3);
+        inside8 = updateChecker(inside8, 3);
+
+        outside9 = updateChecker(outside9, 8);
+        inside9 = updateChecker(inside9, 8);
+
+
+        requestAnimationFrame(loop);
     }
-    animFrame1();
+    loop();
 
-    var moveInside2 = 1,
-        moveOutside2 = 1;
-    var outside2 = createOutsideChecker(28, 86, 30, 'grey', 'white');
-    var inside2 = createInsideChecker(28, 86, 15, 'grey', 'white', 2);
-    function animFrame2() {
-        var cxInside = +inside2.getAttribute('cx'),
-            cxOutside = +outside2.getAttribute('cx');
+    function updateChecker(checker, moveIndex) {
+        var checker = checker;
+        var cx = +checker.getAttribute('cx');
 
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside2 *= -1;
+        if(cx > +svg.getAttribute('width') - 25) {
+            checker.firstAppearance = false;
+        }
+        if (cx > (+svg.getAttribute('width') - 25) || cx < 20 && !checker.firstAppearance) {
+            checker.goingRight *= -1;
         }
 
-        inside2.setAttribute('cx', cxInside + moveInside2 * 4);
+        checker.setAttribute('cx', cx + checker.goingRight * moveIndex);
 
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside2 *= -1;
-        }
-
-        outside2.setAttribute('cx', cxOutside + moveOutside2 * 4);
-
-        window.requestAnimationFrame(animFrame2);
+        return checker;
     }
-    animFrame2();
 
-    var moveInside3 = 1,
-        moveOutside3 = 1;
-    var outside3 = createOutsideChecker(28, 150, 30, 'grey', 'black');
-    var inside3 = createInsideChecker(28, 150, 15, 'grey', 'black', 2);
-    function animFrame3() {
-        var cxInside = +inside3.getAttribute('cx'),
-            cxOutside = +outside3.getAttribute('cx');
+    function createOutsideChecker(cx, cy, r, stroke, fill) {
+        var svg = document.getElementById('theSvg');
+        var svgNms = 'http://www.w3.org/2000/svg';
 
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside3 *= -1;
-        }
-
-        inside3.setAttribute('cx', cxInside + moveInside3 * 8);
-
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside3 *= -1;
-        }
-
-        outside3.setAttribute('cx', cxOutside + moveOutside3 * 8);
-
-        window.requestAnimationFrame(animFrame3);
+        var outsideCircle = document.createElementNS(svgNms, 'circle');
+        outsideCircle.setAttribute('cx', cx);
+        outsideCircle.setAttribute('cy', cy);
+        outsideCircle.setAttribute('r', r);
+        outsideCircle.setAttribute('stroke', stroke);
+        outsideCircle.setAttribute('fill', fill);
+        svg.appendChild(outsideCircle);
+        outsideCircle.goingRight = 1;
+        outsideCircle.firstAppearance = true;
+        return outsideCircle;
     }
-    animFrame3();
 
-    var moveInside4 = 1,
-        moveOutside4 = 1;
-    var outside4 = createOutsideChecker(28, 210, 30, 'grey', 'white');
-    var inside4 = createInsideChecker(28, 210, 15, 'grey', 'white', 2);
-    function animFrame4() {
-        var cxInside = +inside4.getAttribute('cx'),
-            cxOutside = +outside4.getAttribute('cx');
+    function createInsideChecker(cx, cy, r, stroke, fill, strokeWidth) {
+        var svg = document.getElementById('theSvg');
+        var svgNms = 'http://www.w3.org/2000/svg';
 
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside4 *= -1;
-        }
-
-        inside4.setAttribute('cx', cxInside + moveInside4 * 7);
-
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside4 *= -1;
-        }
-
-        outside4.setAttribute('cx', cxOutside + moveOutside4 * 7);
-
-        window.requestAnimationFrame(animFrame4);
+        var insideCircle = document.createElementNS(svgNms, 'circle');
+        insideCircle.setAttribute('cx', cx);
+        insideCircle.setAttribute('cy', cy);
+        insideCircle.setAttribute('r', r);
+        insideCircle.setAttribute('stroke', stroke);
+        insideCircle.setAttribute('fill', fill);
+        insideCircle.setAttribute('stroke-width', strokeWidth);
+        svg.appendChild(insideCircle);
+        insideCircle.goingRight = 1;
+        insideCircle.firstAppearance = true;
+        return insideCircle;
     }
-    animFrame4();
 
-    var moveInside5 = 1,
-        moveOutside5 = 1;
-    var outside5 = createOutsideChecker(28, 272, 30, 'grey', 'black');
-    var inside5 = createInsideChecker(28, 272, 15, 'grey', 'black', 2);
-    function animFrame5() {
-        var cxInside = +inside5.getAttribute('cx'),
-            cxOutside = +outside5.getAttribute('cx');
-
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside5 *= -1;
-        }
-
-        inside5.setAttribute('cx', cxInside + moveInside5 * 5);
-
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside5 *= -1;
-        }
-
-        outside5.setAttribute('cx', cxOutside + moveOutside5 * 5);
-
-        window.requestAnimationFrame(animFrame5);
+    function generateRandomNumber() {
+        return Math.floor(Math.random() * 1000);
     }
-    animFrame5();
-
-    var moveInside6 = 1,
-        moveOutside6 = 1;
-    var outside6 = createOutsideChecker(28, 334, 30, 'grey', 'white');
-    var inside6 = createInsideChecker(28, 334, 15, 'grey', 'white', 2);
-    function animFrame6() {
-        var cxInside = +inside6.getAttribute('cx'),
-            cxOutside = +outside6.getAttribute('cx');
-
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside6 *= -1;
-        }
-
-        inside6.setAttribute('cx', cxInside + moveInside6 * 9);
-
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside6 *= -1;
-        }
-
-        outside6.setAttribute('cx', cxOutside + moveOutside6 * 9);
-
-        window.requestAnimationFrame(animFrame6);
-    }
-    animFrame6();
-
-    var moveInside7 = 1,
-        moveOutside7 = 1;
-    var outside7 = createOutsideChecker(28, 396, 30, 'grey', 'black');
-    var inside7 = createInsideChecker(28, 396, 15, 'grey', 'black', 2);
-    function animFrame7() {
-        var cxInside = +inside7.getAttribute('cx'),
-            cxOutside = +outside7.getAttribute('cx');
-
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside7 *= -1;
-        }
-
-        inside7.setAttribute('cx', cxInside + moveInside7 * 6);
-
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside7 *= -1;
-        }
-
-        outside7.setAttribute('cx', cxOutside + moveOutside7 * 6);
-
-        window.requestAnimationFrame(animFrame7);
-    }
-    animFrame7();
-
-    var moveInside8 = 1,
-        moveOutside8 = 1;
-    var outside8 = createOutsideChecker(28, 460, 30, 'grey', 'white');
-    var inside8 = createInsideChecker(28, 460, 15, 'grey', 'white', 2);
-    function animFrame8() {
-        var cxInside = +inside8.getAttribute('cx'),
-            cxOutside = +outside8.getAttribute('cx');
-
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside8 *= -1;
-        }
-
-        inside8.setAttribute('cx', cxInside + moveInside8 * 3);
-
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside8 *= -1;
-        }
-
-        outside8.setAttribute('cx', cxOutside + moveOutside8 * 3);
-
-        window.requestAnimationFrame(animFrame8);
-    }
-    animFrame8();
-
-    var moveInside9 = 1,
-        moveOutside9 = 1;
-    var outside9 = createOutsideChecker(28, 520, 30, 'grey', 'black');
-    var inside9 = createInsideChecker(28, 520, 15, 'grey', 'black', 2);
-    function animFrame9() {
-        var cxInside = +inside9.getAttribute('cx'),
-            cxOutside = +outside9.getAttribute('cx');
-
-        if (cxInside > (+svg.getAttribute('width') - 25) || cxInside < 20) {
-            moveInside9 *= -1;
-        }
-
-        inside9.setAttribute('cx', cxInside + moveInside9 * 8);
-
-        if (cxOutside > (+svg.getAttribute('width') - 25) || cxOutside < 20) {
-            moveOutside9 *= -1;
-        }
-
-        outside9.setAttribute('cx', cxOutside + moveOutside9 * 8);
-
-        window.requestAnimationFrame(animFrame9);
-    }
-    animFrame9();
 }
-
-
-function createOutsideChecker(cx, cy, r, stroke, fill) {
-    var svg = document.getElementById('theSvg');
-    var svgNms = 'http://www.w3.org/2000/svg';
-
-    var outsideCircle1 = document.createElementNS(svgNms, 'circle');
-    outsideCircle1.setAttribute('cx', cx);
-    outsideCircle1.setAttribute('cy', cy);
-    outsideCircle1.setAttribute('r', r);
-    outsideCircle1.setAttribute('stroke', stroke);
-    outsideCircle1.setAttribute('fill', fill);
-    svg.appendChild(outsideCircle1);
-
-    return outsideCircle1;
-}
-
-function createInsideChecker(cx, cy, r, stroke, fill, strokeWidth) {
-    var svg = document.getElementById('theSvg');
-    var svgNms = 'http://www.w3.org/2000/svg';
-
-    var outsideCircle1 = document.createElementNS(svgNms, 'circle');
-    outsideCircle1.setAttribute('cx', cx);
-    outsideCircle1.setAttribute('cy', cy);
-    outsideCircle1.setAttribute('r', r);
-    outsideCircle1.setAttribute('stroke', stroke);
-    outsideCircle1.setAttribute('fill', fill);
-    outsideCircle1.setAttribute('stroke-width', strokeWidth);
-    svg.appendChild(outsideCircle1);
-
-    return outsideCircle1;
-}
-
-
 function startGame(href) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", href, false);
@@ -270,6 +133,4 @@ function exitGame() {
     document.getElementById("textPlay").style.visibility = "hidden";
     document.getElementById("textHelp").style.visibility = "hidden";
     document.getElementById("textExit").style.visibility = "hidden";
-
 }
-

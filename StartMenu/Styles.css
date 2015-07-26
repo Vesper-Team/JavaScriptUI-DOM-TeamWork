@@ -1,6 +1,11 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: dimgrey;
+}
+
 svg {
     background-image: url("../Images/wood_background_BlackNWhite_1920x1080.jpg");
-    border: 3px black solid;
 }
 
 svg text {
