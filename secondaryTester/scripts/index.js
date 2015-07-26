@@ -385,8 +385,21 @@ function play() {
 
 
     //canvas.removeEventListener('click', findPressedField,false);
-    canvas.addEventListener('click', findPressedField, false);
+   // canvas.addEventListener('click', findPressedField, false);
 
+    if (firstDiceThrow) {
+        firstDiceThrow = false;
+        firstDice.generateNewNumber();
+        secondDice.generateNewNumber();
+        if (firstDice.number > secondDice.number) {
+            firstPlayerOnTurn = true;
+        } else if (firstDice.number < secondDice.number) {
+            firstPlayerOnTurn = false;
+        } else {
+            firstDiceThrow = true;
+            play();
+        }
+    }
 
     //USING THE CURRENT PLAYER ON TURN
     if (firstPlayerOnTurn) {
@@ -405,22 +418,10 @@ function play() {
 
 
     //THROW DICE - at first time, throw to see who will be playing first
-    if (firstDiceThrow) {
-        firstDiceThrow = false;
-        firstDice.generateNewNumber();
-        secondDice.generateNewNumber();
-        if (firstDice.number > secondDice.number) {
-            firstPlayerOnTurn = true;
-        } else if (firstDice.number < secondDice.number) {
-            firstPlayerOnTurn = false;
-        } else {
-            firstDiceThrow = true;
-            play();
-        }
-    } else {
-        firstDice.generateNewNumber();
-        secondDice.generateNewNumber();
-    }
+  
+    firstDice.generateNewNumber();
+    secondDice.generateNewNumber();
+   
 
     //ANIMATE DICE THROW HERE!
 
