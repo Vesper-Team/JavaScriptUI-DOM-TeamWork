@@ -1,81 +1,110 @@
+var mustSlowCircles = false,
+    gameExited = false;
 window.onload = toLoad();
-document.getElementById('textPlay').style.position = 100;
+
 function toLoad() {
     var svg = document.getElementById('theSvg');
 
-    var outside1 = createOutsideChecker(-1*generateRandomNumber(), 20, 30, 'grey', 'black'); // updateVal = 6
+    var outside1 = createOutsideChecker(-1 * generateRandomNumber(), 20, 30, 'grey', 'black'); // updateVal = 6
     var inside1 = createInsideChecker(outside1.getAttribute('cx'), 20, 15, 'grey', 'black', 2);
+    var speedOfCircle1 = 6;
 
-    var outside2 = createOutsideChecker(-1*generateRandomNumber(), 80, 30, 'grey', 'white'); // updateVal = 4
+    var outside2 = createOutsideChecker(-1 * generateRandomNumber(), 80, 30, 'grey', 'white'); // updateVal = 4
     var inside2 = createInsideChecker(outside2.getAttribute('cx'), 80, 15, 'grey', 'white', 2);
+    var speedOfCircle2 = 4;
 
-    var outside3 = createOutsideChecker(-1*generateRandomNumber(), 140, 30, 'grey', 'black'); // updateVal = 8
+    var outside3 = createOutsideChecker(-1 * generateRandomNumber(), 140, 30, 'grey', 'black'); // updateVal = 8
     var inside3 = createInsideChecker(outside3.getAttribute('cx'), 140, 15, 'grey', 'black', 2);
+    var speedOfCircle3 = 8;
 
-    var outside4 = createOutsideChecker(-1*generateRandomNumber(), 200, 30, 'grey', 'white'); // updateVal = 6
+    var outside4 = createOutsideChecker(-1 * generateRandomNumber(), 200, 30, 'grey', 'white'); // updateVal = 6
     var inside4 = createInsideChecker(outside4.getAttribute('cx'), 200, 15, 'grey', 'white', 2);
+    var speedOfCircle4 = 6;
 
-    var outside5 = createOutsideChecker(-1*generateRandomNumber(), 272, 30, 'grey', 'black');
+    var outside5 = createOutsideChecker(-1 * generateRandomNumber(), 272, 30, 'grey', 'black');
     var inside5 = createInsideChecker(outside5.getAttribute('cx'), 272, 15, 'grey', 'black', 2);
+    var speedOfCircle5 = 5;
 
-    var outside6 = createOutsideChecker(-1*generateRandomNumber(), 334, 30, 'grey', 'white');
+    var outside6 = createOutsideChecker(-1 * generateRandomNumber(), 334, 30, 'grey', 'white');
     var inside6 = createInsideChecker(outside6.getAttribute('cx'), 334, 15, 'grey', 'white', 2);
+    var speedOfCircle6 = 9;
 
-    var outside7 = createOutsideChecker(-1*generateRandomNumber(), 396, 30, 'grey', 'black');
+    var outside7 = createOutsideChecker(-1 * generateRandomNumber(), 396, 30, 'grey', 'black');
     var inside7 = createInsideChecker(outside7.getAttribute('cx'), 396, 15, 'grey', 'black', 2);
+    var speedOfCircle7 = 6;
 
-    var outside8 = createOutsideChecker(-1*generateRandomNumber(), 460, 30, 'grey', 'white');
+    var outside8 = createOutsideChecker(-1 * generateRandomNumber(), 460, 30, 'grey', 'white');
     var inside8 = createInsideChecker(outside8.getAttribute('cx'), 460, 15, 'grey', 'white', 2);
+    var speedOfCircle8 = 3;
 
-    var outside9 = createOutsideChecker(-1*generateRandomNumber(), 520, 30, 'grey', 'black');
+    var outside9 = createOutsideChecker(-1 * generateRandomNumber(), 520, 30, 'grey', 'black');
     var inside9 = createInsideChecker(outside9.getAttribute('cx'), 520, 15, 'grey', 'black', 2);
+    var speedOfCircle9 = 8;
 
     function loop() {
-        outside1 = updateChecker(outside1, 6);
-        inside1 = updateChecker(inside1, 6);
+        if (mustSlowCircles) {
+            speedOfCircle1 -= 1;
+            speedOfCircle2 -= 1;
+            speedOfCircle3 -= 1;
+            speedOfCircle4 -= 1;
+            speedOfCircle5 -= 1;
+            speedOfCircle6 -= 1;
+            speedOfCircle7 -= 1;
+            speedOfCircle8 -= 1;
+            speedOfCircle9 -= 1;
+        }
 
-        outside2 = updateChecker(outside2, 4);
-        inside2 = updateChecker(inside2, 4);
+        outside1 = updateChecker(outside1, speedOfCircle1);
+        inside1 = updateChecker(inside1, speedOfCircle1);
 
-        outside3 = updateChecker(outside3, 8);
-        inside3 = updateChecker(inside3, 8);
+        outside2 = updateChecker(outside2, speedOfCircle2);
+        inside2 = updateChecker(inside2, speedOfCircle2);
 
-        outside4 = updateChecker(outside4, 6);
-        inside4 = updateChecker(inside4, 6);
+        outside3 = updateChecker(outside3, speedOfCircle3);
+        inside3 = updateChecker(inside3, speedOfCircle3);
 
-        outside5 = updateChecker(outside5, 5);
-        inside5 = updateChecker(inside5, 5);
+        outside4 = updateChecker(outside4, speedOfCircle4);
+        inside4 = updateChecker(inside4, speedOfCircle4);
 
-        outside6 = updateChecker(outside6, 9);
-        inside6 = updateChecker(inside6, 9);
+        outside5 = updateChecker(outside5, speedOfCircle5);
+        inside5 = updateChecker(inside5, speedOfCircle5);
 
-        outside7 = updateChecker(outside7, 6);
-        inside7 = updateChecker(inside7, 6);
+        outside6 = updateChecker(outside6, speedOfCircle6);
+        inside6 = updateChecker(inside6, speedOfCircle6);
 
-        outside8 = updateChecker(outside8, 3);
-        inside8 = updateChecker(inside8, 3);
+        outside7 = updateChecker(outside7, speedOfCircle7);
+        inside7 = updateChecker(inside7, speedOfCircle7);
 
-        outside9 = updateChecker(outside9, 8);
-        inside9 = updateChecker(inside9, 8);
+        outside8 = updateChecker(outside8, speedOfCircle8);
+        inside8 = updateChecker(inside8, speedOfCircle8);
 
+        outside9 = updateChecker(outside9, speedOfCircle9);
+        inside9 = updateChecker(inside9, speedOfCircle9);
 
+        mustSlowCircles = false;
+        if (speedOfCircle9 === 0) { // speedOfCircle9 is the greatest speed - 9 so we stop the animation
+            gameExited = true;
+            return;
+        }
         requestAnimationFrame(loop);
     }
+
     loop();
 
     function updateChecker(checker, moveIndex) {
         var checker = checker;
         var cx = +checker.getAttribute('cx');
 
-        if(cx > +svg.getAttribute('width') - 25) {
+        if (cx > +svg.getAttribute('width') - 25) {
             checker.firstAppearance = false;
         }
         if (cx > (+svg.getAttribute('width') - 25) || cx < 20 && !checker.firstAppearance) {
             checker.goingRight *= -1;
         }
 
-        checker.setAttribute('cx', cx + checker.goingRight * moveIndex);
-
+        if (moveIndex > 0) {
+            checker.setAttribute('cx', cx + checker.goingRight * moveIndex);
+        }
         return checker;
     }
 
@@ -116,6 +145,7 @@ function toLoad() {
         return Math.floor(Math.random() * 1000);
     }
 }
+
 function startGame(href) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", href, false);
@@ -133,4 +163,14 @@ function exitGame() {
     document.getElementById("textPlay").style.visibility = "hidden";
     document.getElementById("textHelp").style.visibility = "hidden";
     document.getElementById("textExit").style.visibility = "hidden";
+    var interval = setInterval(function () {
+        if (gameExited) {
+            stopInterval();
+        }
+        mustSlowCircles = true;
+    }, 250);
+
+    function stopInterval() {
+        clearInterval(interval);
+    }
 }
