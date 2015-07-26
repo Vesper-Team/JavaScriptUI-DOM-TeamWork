@@ -3,44 +3,19 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Start menu</title>
-    <script src="MenuScripts.js"></script>
-    <style type="text/css">
-        svg {
-            background-image: url("Images/wood_background_BlackNWhite_1920x1080.jpg");
-            border: 3px black solid;
-        }
-
-        svg text {
-            font-size: 40px;
-            font-family: fantasy;
-        }
-
-        svg .button:hover {
-            font-size: 70px;
-            stroke: black;
-            stroke-width: 3px;
-            transform: translateY(-50%) translateX(-50%) scale(1);
-            cursor:pointer;
-        }
-        #textPlay{
-            transform: translateY(-50%) translateX(-50%) scale(1);
-        }
-
-        .textGoodBye{
-            font-size: 80px;
-            stroke:black;
-            stroke-width: 2;
-        }
-
-    </style>
+    <link href="Styles.css" rel="stylesheet">
 </head>
 <body>
 <svg width="923" height="551" id="theSvg">
     <text class="textGoodBye" id="textThanks" x="200" y="300" fill="blue"></text>
-    <text class="textGoodBye" id="textGoodbye" x="300" y="400" fill="blue"></text>
-    <text onclick="startGame('index.html')" class="button" id="textPlay" x="403" y="260" fill="blue" stroke="black" stroke-width="1">Play</text>
-    <text onclick="getHelp()"  class="button"id="textHelp" x="403" y="320" fill="blue" stroke="black" stroke-width="1">Help</text>
-    <text onclick="exitGame()"  class="button" id="textExit" x="403" y="380" fill="blue" stroke="black" stroke-width="1">Exit</text>
+    <text class="textGoodBye" id="textGoodbye" x="330" y="400" fill="blue"></text>
+    <text onclick="startGame('index.html')" class="button" id="textPlay" x="403" y="245">Play</text>
+    <text onclick="getHelp()" class="button" id="textHelp" x="403" y="305">Help</text>
+    <text onclick="exitGame()" class="button" id="textExit" x="403" y="365">Exit</text>
 </svg>
+<script src="MenuScripts.js"></script>
 </body>
 </html>
+
+
+
