@@ -600,6 +600,7 @@ function play() {
                     if (currentPlayerMoves === 2) {
                         break;
                     }
+                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                 }
                 //if second dice spot is not empty
                 if (board.fields[23 + 1 - secondDice.number].length > 0 &&
@@ -610,6 +611,7 @@ function play() {
                     if (currentPlayerMoves === 2) {
                         break;
                     }
+                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                 }
                 var moveOptions = 0;
                 //if first dice spot IS empty
@@ -629,6 +631,7 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                     else {
                         //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
@@ -638,6 +641,7 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                 }
                 //if second dice sport IS empty
@@ -656,6 +660,7 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                     else {
                         //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
@@ -665,6 +670,7 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                 }
 
@@ -679,9 +685,10 @@ function play() {
                     if (currentPlayerMoves === 2) {
                         break;
                     }
+                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                 }
                 //if second dice spot is not empty
-                if (board.fields[0 - 1 + secondDice.number].length > 0 &&
+                if (board.fields[0-1 + secondDice.number].length > 0 &&
                     board.fields[0 - 1 + secondDice.number][0].color === currentActivePlayer.color) {
                     currentActivePlayer.currentCheckersCount--;
                     currentPlayerMoves++;
@@ -689,6 +696,7 @@ function play() {
                     if (currentPlayerMoves === 2) {
                         break;
                     }
+                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                 }
                 var moveOptions = 0;
                 //if first dice spot IS empty
@@ -708,6 +716,7 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                     else {
                         //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
@@ -717,6 +726,7 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                 }
                 //if second dice spot IS empty
@@ -735,6 +745,7 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                     else {
                         //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
@@ -744,15 +755,16 @@ function play() {
                         if (currentPlayerMoves === 2) {
                             break;
                         }
+                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
                     }
                 }
-
+           
 
 
             }
 
             if (currentPlayerMoves === 2) {
-                firstPlayerOnTurn = !firstPlayerOnTurn;
+                firstPlayerOnTurn = !firstPlayerOnTurn;   
                 play();
             }
             //JUST MOVE CHECKER
@@ -836,4 +848,3 @@ function play() {
             });
         }
     }
-}
