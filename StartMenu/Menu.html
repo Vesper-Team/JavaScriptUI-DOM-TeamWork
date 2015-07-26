@@ -7,6 +7,15 @@
 </head>
 <body>
 <svg width="1359" height="639" id="theSvg">
+    <radialGradient id="blackCircleGradient" cy="60%" fx="45%" fy="45%" r="2">
+        <stop offset="0%" stop-color="grey" />
+        <stop offset="25%" stop-color="black" />
+    </radialGradient>
+    <radialGradient id="whiteCircleGradient" cy="60%" fx="45%" fy="45%" r="2">
+        <stop offset="0%" stop-color="grey" />
+        <stop offset="25%" stop-color="white" />
+    </radialGradient>
+    <image id="boardImage" style="visibility: hidden" xlink:href="../JavaScriptUI-DOM-TeamWork-Kinetic/Images/Board800x600.png" x="10" y="10" width="800" height="600"/>
     <text class="textGoodBye" id="textThanks" x="375" y="300" fill="blue"></text>
     <text class="textGoodBye" id="textGoodbye" x="530" y="400" fill="blue"></text>
     <text onclick="play()" class="button" id="textPlay" x="579" y="206">Play</text>
