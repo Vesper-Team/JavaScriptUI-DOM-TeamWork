@@ -9,31 +9,25 @@ svg {
 }
 
 svg text {
-    font-size: 40px;
     font-family: fantasy;
 }
 
-svg .button:hover {
-    font-size: 70px;
-    stroke: black;
-    stroke-width: 3px;
-    transform: translateY(-50%) translateX(-50%) scale(1);
-    cursor:pointer;
-}
 #textPlay{
-    transform: translateY(-50%) translateX(-50%) scale(1);
+    font-size: 120px;
     stroke-width:1;
     fill:blue;
     stroke:black;
 }
 
 #textHelp{
+    font-size: 90px;
     fill:blue;
     stroke:black;
     stroke-width: 1px;
 }
 
 #textExit{
+    font-size: 70px;
     fill:blue;
     stroke:black;
     stroke-width: 1px;
@@ -43,4 +37,12 @@ svg .button:hover {
     font-size: 80px;
     stroke:black;
     stroke-width: 2;
+}
+
+.button:hover {
+    cursor:pointer;
+}
+
+text:hover {
+    opacity: 0.5;
 }

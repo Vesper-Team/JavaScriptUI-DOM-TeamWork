@@ -1,5 +1,6 @@
 var mustSlowCircles = false,
     gameExited = false;
+
 window.onload = toLoad();
 
 function toLoad() {
