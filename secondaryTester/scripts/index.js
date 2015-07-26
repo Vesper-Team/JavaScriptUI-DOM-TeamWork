@@ -33,6 +33,7 @@ var player = (function () {
             this.hasHitChecker = false;
             this.hitCheckersCount = 0;
             this.canTakeChecker = false;
+            this.hasMovesAvailable = true;
             return this;
         },
         tookChecker: function () {
@@ -98,6 +99,16 @@ var player = (function () {
         set: function (value) {
             // TODO: Validate
             this._canTakeChecker = value;
+        }
+    });
+
+    Object.defineProperty(player, 'hasMovesAvailable', {
+        get: function () {
+            return this._hasMovesAvailable;
+        },
+        set: function (value) {
+            // TODO: Validate
+            this._hasMovesAvailable = value;
         }
     });
 
@@ -360,9 +371,38 @@ function newGame() {
 newGame();
 
 function play() {
+
+    var maximumAllowedMovesInTurn;
+    var currentActivePlayer;
+    var inactivePlayer;
+    var currentPlayerMoves = 0;   // DA SE IZNESAT TEZI PROMENLIVI GORE POSLE
+    var startSearchPosition = 0;
+    var hasNoMoves = false;
+
     // GAME LOOP - game logic, updating the fields, players turns, dices etc. Update update update
     // change fields depending on how the player interact(key presses)
-    canvas.addEventListener('click', findPressedField);
+
+
+
+    //canvas.removeEventListener('click', findPressedField,false);
+    canvas.addEventListener('click', findPressedField, false);
+
+
+    //USING THE CURRENT PLAYER ON TURN
+    if (firstPlayerOnTurn) {
+        currentActivePlayer = firstPlayer;
+        inactivePlayer = secondPlayer;
+    }
+    else {
+        currentActivePlayer = secondPlayer;
+        inactivePlayer = firstPlayer;
+    }
+    //IF NO MOVES AVAILABLE SWITCH PLAYERS WITHOUT THROWING DICE
+    if (!currentActivePlayer.hasMovesAvailable) {
+        firstPlayerOnTurn = !firstPlayerOnTurn;
+        play();
+    }
+
 
     //THROW DICE - at first time, throw to see who will be playing first
     if (firstDiceThrow) {
@@ -382,12 +422,7 @@ function play() {
         secondDice.generateNewNumber();
     }
 
-
-    var maximumAllowedMovesInTurn;
-    var currentActivePlayer;
-    var currentPlayerMoves = 0;   // DA SE IZNESAT TEZI PROMENLIVI GORE POSLE
-    var startSearchPosition = 0;
-    var hasNoMoves = false;
+    //ANIMATE DICE THROW HERE!
 
     if (firstDice.number === secondDice.number) {
         maximumAllowedMovesInTurn = 4;
@@ -396,13 +431,9 @@ function play() {
         maximumAllowedMovesInTurn = 2;
     }
 
-    //USING THE CURRENT PLAYER ON TURN
-    if (firstPlayerOnTurn) {
-        currentActivePlayer = firstPlayer;
-    }
-    else {
-        currentActivePlayer = secondPlayer;
-    }
+    //DO TUK E PRERABOTENO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
     //FINDING IF THIS CURRENT PLAYER HAS ANY HIT CHECKERS
     if (currentActivePlayer.currentCheckersCount > 0 && !currentActivePlayer.canTakeChecker) {
         currentActivePlayer.hasHitChecker = true;

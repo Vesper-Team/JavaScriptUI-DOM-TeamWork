@@ -41,15 +41,17 @@ while (any player pieces.pieces.Length != 0) {
 		draw 2 dices
 	}
 	
-	while (has dice to play) {	
+	while (has dice to play) {
+
+        if // check if player has pinned piece {
+		add flag to all player's pieces - collectable = false;
+	}	
 	
 	if // check if all player's pieces are in his home quarter {
 		add flag to all player's pieces - collectable = true;
 	}
 	
-	if // check if player has pinned piece {
-		add flag to all player's pieces - collectable = false;
-	}
+	
 	
 	??????have to think out a bit on collecting mechanism
 	
