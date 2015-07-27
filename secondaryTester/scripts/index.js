@@ -31,14 +31,9 @@ var player = (function () {
             this.color = color;
             this.currentCheckersCount = 15;
             this.hasHitChecker = false;
-            this.hitCheckersCount = 0;
             this.canTakeChecker = false;
             this.hasMovesAvailable = true;
             return this;
-        },
-        tookChecker: function () {
-            // TODO: Validate depending on call.
-            this.currentCheckersCount -= 1;
         }
     };
 
@@ -370,38 +365,24 @@ function newGame() {
 }
 newGame();
 
-function play() {
+function checkIfDiceHaveBeenThrownBefore(firstDiceThrow) {
+    return !firstDiceThrow;
+}
 
-    var maximumAllowedMovesInTurn;
-    var currentActivePlayer;
-    var inactivePlayer;
-    var currentPlayerMoves = 0;   // DA SE IZNESAT TEZI PROMENLIVI GORE POSLE
-    var startSearchPosition = 0;
-    var hasNoMoves = false;
-
-    // GAME LOOP - game logic, updating the fields, players turns, dices etc. Update update update
-    // change fields depending on how the player interact(key presses)
-
-
-
-    //canvas.removeEventListener('click', findPressedField,false);
-   // canvas.addEventListener('click', findPressedField, false);
-
-    if (firstDiceThrow) {
-        firstDiceThrow = false;
-        firstDice.generateNewNumber();
-        secondDice.generateNewNumber();
-        if (firstDice.number > secondDice.number) {
-            firstPlayerOnTurn = true;
-        } else if (firstDice.number < secondDice.number) {
-            firstPlayerOnTurn = false;
-        } else {
-            firstDiceThrow = true;
-            play();
-        }
+function throwFirstDiceToDeterminePlayer() {
+    firstDice.generateNewNumber();
+    secondDice.generateNewNumber();
+    if (firstDice.number > secondDice.number) {
+        firstPlayerOnTurn = true;
+    } else if (firstDice.number < secondDice.number) {
+        firstPlayerOnTurn = false;
+    } else {
+        firstDiceThrow = true;
+        play();
     }
+}
 
-    //USING THE CURRENT PLAYER ON TURN
+function setCurrentPlayerOnTurn(firstPlayerOnTurn) {
     if (firstPlayerOnTurn) {
         currentActivePlayer = firstPlayer;
         inactivePlayer = secondPlayer;
@@ -410,426 +391,219 @@ function play() {
         currentActivePlayer = secondPlayer;
         inactivePlayer = firstPlayer;
     }
-    //IF NO MOVES AVAILABLE SWITCH PLAYERS WITHOUT THROWING DICE
-    if (!currentActivePlayer.hasMovesAvailable) {
-        firstPlayerOnTurn = !firstPlayerOnTurn;
-        play();
-    }
+}
 
-
-    //THROW DICE - at first time, throw to see who will be playing first
-  
+function throwDiceAndCheckMaxMovesForTurn() {
     firstDice.generateNewNumber();
     secondDice.generateNewNumber();
-   
-
-    //ANIMATE DICE THROW HERE!
-
+    //ANIMATE 
     if (firstDice.number === secondDice.number) {
         maximumAllowedMovesInTurn = 4;
     }
     else {
         maximumAllowedMovesInTurn = 2;
     }
+}
 
-    //DO TUK E PRERABOTENO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//function checkIfWhitePlayerCanSetCheckerThere(diceNumber) {
+//    if (board.fields[1 + diceNumber].length === 0 ||
+//                     (board.fields[1 + diceNumber].length === 1 && board.fields[1 + diceNumber][0].color === inactivePlayer.color) ||
+//                    (board.fields[1 + diceNumber].length > 0 && board.fields[1 + diceNumber][0].color === currentActivePlayer.color)) { 
+//        return true;
+//    }
+//    return false;
+//}
 
+function play() {
 
-    //FINDING IF THIS CURRENT PLAYER HAS ANY HIT CHECKERS
-    if (currentActivePlayer.currentCheckersCount > 0 && !currentActivePlayer.canTakeChecker) {
-        currentActivePlayer.hasHitChecker = true;
+    var maximumAllowedMovesInTurn;
+    var currentActivePlayer;
+    var inactivePlayer;
+    var currentPlayerMoves = 0;   // DA SE IZNESAT TEZI PROMENLIVI GORE POSLE
+
+    //FIRST DICE ROLL CHECK
+    if (!checkIfDiceHaveBeenThrownBefore(firstDiceThrow)) {
+        throwFirstDiceToDeterminePlayer();
     }
-    else {
-        currentActivePlayer.hasHitChecker = false;
+    
+    setCurrentPlayerOnTurn(firstPlayerOnTurn); //Will create the current player on turn
+    //value,and have a inactivePlayer  value for the one that isnt  on turn at the moment
+    
+    //IF NO MOVES AVAILABLE SWITCH PLAYERS WITHOUT THROWING DICE (player hit and all his 6 spaces are currently closed by enemy)
+        if (!currentActivePlayer.hasMovesAvailable) {  //LOGIC NEEDS TO BE ADDED,WHEN  HAS MOVES AVAILABLE BECOMES FALSE- IT'S TRUE ON START,BUT CHANGES
+        firstPlayerOnTurn = !firstPlayerOnTurn;
+        play();
     }
+
+    //THROW DICE
+    throwDiceAndCheckMaxMovesForTurn();
+
 
     //IF HAS HIT CHECKERS
     while (currentActivePlayer.hasHitChecker) {
 
-        if (currentActivePlayer.currentCheckersCount === 0) {
-            currentActivePlayer.hasHitChecker = false;
+        if (!currentActivePlayer.hasHitChecker) {
             break;
         }
-        if (currentActivePlayer === firstPlayer) {
-            startSearchPosition = 0;
-            if (board.fields[startSearchPosition - 1 + firstDice.number].length >= 2 &&
-               board.fields[startSearchPosition - 1 + firstDice.number][0].color === 'black') {
-                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
+       
+        //WHITE PLAYER - player 1
+        if (currentActivePlayer.color === 'white') {
+            //check if first dice number field is available
+            if (board.fields[firstDice.number].availableForWhite)
+            {
+                if (board.fields[firstDice.number].length > 0 && board.fields[firstDice.number][0].color === inactivePlayer.color) {
+                    //HIT HIS CHECKER AND PLACE YOUR OWN
                 }
-            }
-
-            if (board.fields[startSearchPosition - 1 + secondDice.number].length >= 2 &&
-               board.fields[startSearchPosition - 1 + secondDice.number][0].color === 'black') {
-                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
+                else {
+                    //TODO JUST ADD YOUR CHECKER
                 }
-            }
-
-            if (board.fields[startSearchPosition - 1 + firstDice.number].length === 1 &&
-                board.fields[startSearchPosition - 1 + firstDice.number][0].color === 'black') {
-                secondPlayer.canTakeChecker = false;
-                secondPlayer.currentCheckersCount++;
+                //CHANGE THE STATE OF THAT BOARD SPOT
                 currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
+                if(board.fields[25].length ===0) { 
+                    currentActivePlayer.hasHitChecker = false;
                     break;
                 }
-            }
-
-
-            if (board.fields[startSearchPosition - 1 + secondDice.number].length === 1 &&
-             board.fields[startSearchPosition - 1 + secondDice.number][0].color === 'black') {
-                secondPlayer.canTakeChecker = false;
-                secondPlayer.currentCheckersCount++;
-                currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
                 if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
+                    firstPlayerOnTurn = !firstPlayerOnTurn;
                     break;
                 }
-            }
 
-            if (board.fields[startSearchPosition - 1 + firstDice.number].length === 0) {
-                currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //PUSH?                                          /WTF MISSED?/
-                //DRAW THE PULL ON THE NEW SPOT
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-            if (board.fields[startSearchPosition - 1 + secondDice.number].length === 0) {
-                currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //PUSH?                                          /WTF MISSED?/
-                //DRAW THE PULL ON THE NEW SPOT
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-        }
-        else { //if second player           
-            startSearchPosition = 23;
-            if (board.fields[startSearchPosition + 1 - firstDice.number].length >= 2 &&
-             board.fields[startSearchPosition + 1 - firstDice.number][0].color === 'white') {
-                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-            if (board.fields[startSearchPosition + 1 - firstDice.number].length >= 2 &&
-               board.fields[startSearchPosition + 1 - firstDice.number][0].color === 'white') {
-                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-            if (board.fields[startSearchPosition + 1 - firstDice.number].length === 1 &&
-                board.fields[startSearchPosition + 1 - firstDice.number][0].color === 'white') {
-                firstPlayer.canTakeChecker = false;
-                firstPlayer.currentCheckersCount++;
-                currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
-
-                //TODO MAKE THE SWITCH !!!!
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-
-            if (board.fields[startSearchPosition + 1 - firstDice.number].length === 1 &&
-             board.fields[startSearchPosition + 1 - firstDice.number][0].color === 'white') {
-                firstPlayer.canTakeChecker = false;
-                firstPlayer.currentCheckersCount++;
-                currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //DRAW THE PULL ON THAT SPOT AND REMOVE THE LAST ONE
-
-                //TODO MAKE THE SWITCH !!!!
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-            if (board.fields[startSearchPosition + 1 - firstDice.number].length === 0) {
-                currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //PUSH?                                          /WTF MISSED?/
-                //DRAW THE PULL ON THE NEW SPOT
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-            if (board.fields[startSearchPosition + 1 - firstDice.number].length === 0) {
-                currentPlayerMoves++;
-                currentPlayer.currentCheckersCount--;
-                //PUSH?                                          /WTF MISSED?/
-                //DRAW THE PULL ON THE NEW SPOT
-                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
-                    break;
-                }
-            }
-
-        }
-
-        //IF NO MORE MOVES LEFT AFTER ENTERING BOTH OF HIS HIT CHECKERS CHANGE TURN
-        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-            firstPlayerOnTurn = !firstPlayerOnTurn;
-            play();
-        }
-
-
-        //CHECK IF PLAYER IS CURRENTLY TAKING CHECKERS
-        var from = 0;
-        var to = 0;
-        var sum = 0,
-            searcher = 0;
-        if (currentActivePlayer === firstPlayer) {
-            from = 18;
-            to = 23;
-        }
-        else {
-            from = 0;
-            to = 5;
-        }
-        //CHECK IF ALL 15 CHECKERS ARE IN THE ZONE,WHICH WILL INDICATE THAT THE PLAYER CAN EXTRACT THEM
-        for (searcher = from ; searcher <= to; searcher += 1) {
-            if (board.fields[searcher].length > 0 || board.fields[searcher][0].color === currentActivePlayer.color) {
-                sum += board.fields[searcher].length;
-            }
-        }
-        if (sum < 15 - currentActivePlayer.currentCheckersCount) {
-            currentActivePlayer.canTakeChecker = false;
-        }
-        else if (sym === (15 - currentActivePlayer.currentCheckersCount)) {  //THIS WILL MOST LIKELY BLOW UP..FURTHER DISCUSSION NEEDED
-            currentActivePlayer.canTakeChecker = true;
-        }
-        else {
-            throw new Error('invalid number of checkers of a player on the field');
-        }
-
-        //TAKING CHECKERS ON TURN
-        while (currentActivePlayer.canTakeChecker) {
-            if (currentPlayerMoves === 2) {
-                break;
-            }
-            //if white player
-            if (currentActivePlayer === firstPlayer) {
-                //if first dice spot is not empty and has this players' checkers
-                if (board.fields[23 + 1 - firstDice.number].length > 0 &&
-                    board.fields[23 + 1 - firstDice.number][0].color === currentActivePlayer.color) {
-                    currentActivePlayer.currentCheckersCount--;
-                    currentPlayerMoves++;
-                    board.fields[23 + 1 - firstDice.number].pop();
-                    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                        break;
-                    }
-                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                }
-                //if second dice spot is not empty
-                if (board.fields[23 + 1 - secondDice.number].length > 0 &&
-                    board.fields[23 + 1 - secondDice.number][0].color === currentActivePlayer.color) {
-                    currentActivePlayer.currentCheckersCount--;
-                    currentPlayerMoves++;
-                    board.fields[23 + 1 - secondDice.number].pop();
-                    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                        break;
-                    }
-                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                }
-                var moveOptions = 0;
-                //if first dice spot IS empty
-                //LOOKING FOR POSSIBLE SHUFFLE OPTIONS
-                if (board.fields[23 + 1 - firstDice.number].length === 0 ||
-                    board.fields[23 + 1 - firstDice.number][0].color !== currentActivePlayer.color) {
-                    for (var i = 18; i <= 23; i += 1) {
-                        if (i === (23 + 1 - firstDice.number)) {
-                            continue;
-                        }
-                        if (i + firstDice.number <= 23) {
-                            moveOptions++;
-                        }
-                    }
-                    if (moveOptions === 0) {
-                        currentPlayerMoves++;
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
-                    else {
-                        //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
-                        //WAIT FOR PLAYER ONE PICK CHOICE WITH MOUSE DRAG
-                        //IF MOVE POSSIBLE DRAW IT
-                        currentPlayerMoves++ //IF THE MOUSE MOVE IS POSSIBLE /CLICKED ON THE RIGHT THINGS
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
-                }
-                //if second dice sport IS empty
-                if (board.fields[23 + 1 - secondDice.number].length === 0 ||
-                 board.fields[23 + 1 - secondDice.number][0].color !== currentActivePlayer.color) {
-                    for (var i = 18; i <= 23; i += 1) {
-                        if (i === (23 + 1 - secondDice.number)) {
-                            continue;
-                        }
-                        if (i + secondDice.number <= 23) {
-                            moveOptions++;
-                        }
-                    }
-                    if (moveOptions === 0) {
-                        currentPlayerMoves++;
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
-                    else {
-                        //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
-                        //WAIT FOR PLAYER ONE PICK CHOICE WITH MOUSE DRAG
-                        //IF MOVE POSSIBLE DRAW IT
-                        currentPlayerMoves++ //IF THE MOUSE MOVE IS POSSIBLE /CLICKED ON THE RIGHT THINGS
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENT PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
-                }
-
-            }
-                //if black player
+            } 
             else {
-                if (board.fields[0 - 1 + firstPlayer.number].length > 0 &&
-                                 board.fields[0 - 1 + firstPlayer.number][0].color === currentActivePlayer.color) {
-                    currentActivePlayer.currentCheckersCount--;
-                    currentPlayerMoves++;
-                    board.fields[0 - 1 + firstPlayer.number].pop();
-                    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                        break;
-                    }
-                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
+                currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+                    firstPlayerOnTurn = !firstPlayerOnTurn;
+                    break;
                 }
-                //if second dice spot is not empty
-                if (board.fields[0 - 1 + secondDice.number].length > 0 &&
-                    board.fields[0 - 1 + secondDice.number][0].color === currentActivePlayer.color) {
-                    currentActivePlayer.currentCheckersCount--;
-                    currentPlayerMoves++;
-                    board.fields[0 - 1 + secondDice.number].pop();
-                    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                        break;
-                    }
-                    //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
+            }
+            if (board.fields[secondDice.number].availableForWhite) {
+                if (board.fields[secondDice.number].length > 0 && board.fields[secondDice.number][0].color === inactivePlayer.color) {
+                    //HIT HIS CHECKER AND PLACE YOUR OWN
                 }
-                var moveOptions = 0;
-                //if first dice spot IS empty
-                //LOOKING FOR POSSIBLE SHUFFLE OPTIONS
-                if (board.fields[0 - 1 + firstDice.number].length === 0 ||
-                    board.fields[0 - 1 + firstDice.number][0].color !== currentActivePlayer.color) {
-                    for (var i = 0; i <= 5; i += 1) {
-                        if (i === (0 - 1 + firstDice.number)) {
-                            continue;
-                        }
-                        if (i - firstDice.number >= 0) {
-                            moveOptions++;
-                        }
-                    }
-                    if (moveOptions === 0) {
-                        currentPlayerMoves++;
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
-                    else {
-                        //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
-                        //WAIT FOR PLAYER ONE PICK CHOICE WITH MOUSE DRAG
-                        //IF MOVE POSSIBLE DRAW IT
-                        currentPlayerMoves++ //IF THE MOUSE MOVE IS POSSIBLE /CLICKED ON THE RIGHT THINGS
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
+                else {
+                    //TODO JUST ADD YOUR CHECKER
                 }
-                //if second dice spot IS empty
-                if (board.fields[0 - 1 + secondDice.number].length === 0 ||
-                     board.fields[0 - 1 + secondDice.number][0].color !== currentActivePlayer.color) {
-                    for (var i = 0; i <= 5; i += 1) {
-                        if (i === (0 - 1 + secondDice.number)) {
-                            continue;
-                        }
-                        if (i - firstDice.number >= 0) {
-                            moveOptions++;
-                        }
-                    }
-                    if (moveOptions === 0) {
-                        currentPlayerMoves++;
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
-                    else {
-                        //SHOW WHICH MOVES ARE POSSIBLE,SINCE THERE ARE
-                        //WAIT FOR PLAYER ONE PICK CHOICE WITH MOUSE DRAG
-                        //IF MOVE POSSIBLE DRAW IT
-                        currentPlayerMoves++ //IF THE MOUSE MOVE IS POSSIBLE /CLICKED ON THE RIGHT THINGS
-                        if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                            break;
-                        }
-                        //IF CURRENY PLAYER HAS NO MORE HIT CHECKERS -> break
-                    }
+                //CHANGE THE STATE OF THAT BOARD SPOT
+                currentPlayerMoves++;
+                if(board.fields[25].length ===0) { 
+                    currentActivePlayer.hasHitChecker = false;
+                    break;
                 }
-
-
+                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+                    firstPlayerOnTurn = !firstPlayerOnTurn;
+                    break;
+                }
 
             }
-
-            if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                firstPlayerOnTurn = !firstPlayerOnTurn;
-                play();
+            else {
+                currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+                    hasNoMoves = true;
+                    break;
+                }
             }
-            //JUST MOVE CHECKER
-
-
-            //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK FOR NEW CLICKS AND CATCH START POSITION , else change player
-            //IF ANY POSSIBLE MOVES AVAILABLE  -->  CHECK IF NEW SET/CLICKED POSITION IS CORRECT AND MOVE PULL , else try again
-
-            // DRAW
-            // draws every time and if we have changes its ok
-            draw();
-
-            // CHANGE PLAYER
-
-
-
-            requestAnimationFrame(play);
+               
         }
+       
+        
+
+            //IF BLACK PLAYER - player 2
+        
+
+        else {
+            //check if first dice number field is available
+            if (board.fields[firstDice.number].availableForBlack)
+            {
+                if (board.fields[firstDice.number].length > 0 && board.fields[firstDice.number][0].color === inactivePlayer.color) {
+                    //HIT HIS CHECKER AND PLACE YOUR OWN
+                }
+                else {
+                    //TODO JUST ADD YOUR CHECKER
+                }
+                //CHANGE THE STATE OF THAT BOARD SPOT
+                currentPlayerMoves++;
+                if(board.fields[0].length ===0) { 
+                    currentActivePlayer.hasHitChecker = false;
+                    break;
+                }
+                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+                    firstPlayerOnTurn = !firstPlayerOnTurn;
+                    break;
+                }
+
+            } 
+            else {
+                currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+                    firstPlayerOnTurn = !firstPlayerOnTurn;
+                    break;
+                }
+            }
+            if (board.fields[secondDice.number].availableForBlack) {
+                if (board.fields[secondDice.number].length > 0 && board.fields[secondDice.number][0].color === inactivePlayer.color) {
+                    //HIT HIS CHECKER AND PLACE YOUR OWN
+                }
+                else {
+                    //TODO JUST ADD YOUR CHECKER
+                }
+                //CHANGE THE STATE OF THAT BOARD SPOT
+                currentPlayerMoves++;
+                if(board.fields[0].length ===0) { 
+                    currentActivePlayer.hasHitChecker = false;
+                    break;
+                }
+                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+                    firstPlayerOnTurn = !firstPlayerOnTurn;
+                    break;
+                }
+
+            }
+            else {
+                currentPlayerMoves++; //you lose a move,because u cant set your pull there
+                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+                    hasNoMoves = true;
+                    break;
+                }
+            }
+               
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+        
+      
+
+    //CHECK IF PLAYER IS CURRENTLY TAKING CHECKERS
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    //JUST MOVE CHECKER
+
+
+    draw();
+    requestAnimationFrame(play);
+
+}
+
         play();
 
         function findPressedField(event) {
@@ -895,5 +669,3 @@ function play() {
                 field.draw(); // redraw every field again
             });
         }
-    }
-}
