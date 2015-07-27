@@ -3,7 +3,8 @@ var mustSlowCircles = false,
     playButton = false,
     goingRight = false,
     menusAreOut = false,
-    mustRemoveMenus = false;
+    mustRemoveMenus = false,
+    boardAllSet = false;
 
 window.onload = toLoad();
 
@@ -181,10 +182,11 @@ function toLoad() {
         return outsideCircle;
     }
 
+    // mnou stranna rekursiq.. vupreki che mu iskam novo chislo to vrushta purvoto greshno..
     function generateRandomNegativeNumber() {
         var number = -Math.floor(Math.random() * 1000);
-        if (number > -60) {
-            generateRandomNegativeNumber();
+        while(number > -150) {
+            number = -Math.floor(Math.random() * 1000);
         }
         return number;
     }
@@ -233,11 +235,12 @@ function toLoad() {
 
         function drawSetup() {
             now = new Date().getTime();
-            if (now - then >= 80) {
+            if (now - then >= 1) {
                 anotherCheckerStarted = false;
             }
             if (white1.startedRolling || !white1.arrived) {
                 white1 = updatePosition(white1);
+                anotherCheckerStarted = true;
             }
             white2 = shouldUpdate(white2);
             white3 = shouldUpdate(white3);
@@ -268,6 +271,11 @@ function toLoad() {
             black15 = shouldUpdate(black15);
             white14 = shouldUpdate(white14);
             white15 = shouldUpdate(white15);
+
+            if (shouldStopBoardSetupAnimation()) {
+                return;
+            }
+
             requestAnimationFrame(drawSetup);
         }
 
@@ -284,13 +292,46 @@ function toLoad() {
             var cx = +checker.getAttribute('cx');
             if (checker.col + 25 <= cx) {
                 checker.startedRolling = true;
-                checker.setAttribute('cx', cx - 45);
+                checker.setAttribute('cx', cx - 55);
             } else {
                 checker.arrived = true;
                 checker.startedRolling = false;
             }
             then = new Date().getTime();
             return checker;
+        }
+
+        function shouldStopBoardSetupAnimation() {
+            return white1.arrived &&
+                white2.arrived &&
+                white3.arrived &&
+                white4.arrived &&
+                white5.arrived &&
+                white6.arrived &&
+                white7.arrived &&
+                white8.arrived &&
+                white9.arrived &&
+                white10.arrived &&
+                white11.arrived &&
+                white12.arrived &&
+                white13.arrived &&
+                white14.arrived &&
+                white15.arrived &&
+                black1.arrived &&
+                black2.arrived &&
+                black3.arrived &&
+                black4.arrived &&
+                black5.arrived &&
+                black6.arrived &&
+                black7.arrived &&
+                black8.arrived &&
+                black9.arrived &&
+                black10.arrived &&
+                black11.arrived &&
+                black12.arrived &&
+                black13.arrived &&
+                black14.arrived &&
+                black15.arrived;
         }
 
         drawSetup();
