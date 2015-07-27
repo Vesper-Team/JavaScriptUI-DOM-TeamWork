@@ -119,7 +119,8 @@ function toLoad() {
             +outside6.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
             +outside7.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
             +outside8.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
-            +outside9.getAttribute('cx') > +svg.getAttribute('width') + 25;
+            +outside9.getAttribute('cx') > +svg.getAttribute('width') + 25 &&
+            +outside10.getAttribute('cx') > +svg.getAttribute('width') + 25;
     }
 
     function areSpeedsZero() {
@@ -182,10 +183,9 @@ function toLoad() {
         return outsideCircle;
     }
 
-    // mnou stranna rekursiq.. vupreki che mu iskam novo chislo to vrushta purvoto greshno..
     function generateRandomNegativeNumber() {
         var number = -Math.floor(Math.random() * 1000);
-        while(number > -150) {
+        while (number > -150) {
             number = -Math.floor(Math.random() * 1000);
         }
         return number;
@@ -196,38 +196,43 @@ function toLoad() {
         // when editing them must replace the Y parameter(the second one) with the same ROW number
 
         //black player checkers
-        var black1 = createChecker((+svg.getAttribute('width')) + 26, 263, 25, 'black', 58, 263),
-            black2 = createChecker((+svg.getAttribute('width')) + 26, 214, 25, 'black', 58, 214),
-            black3 = createChecker((+svg.getAttribute('width')) + 26, 159, 25, 'black', 58, 159),
-            black4 = createChecker((+svg.getAttribute('width')) + 26, 107, 25, 'black', 58, 107),
-            black5 = createChecker((+svg.getAttribute('width')) + 26, 56, 25, 'black', 58, 56),
+        var black1 = createChecker((+svg.getAttribute('width')) + 26, 265, 25, 'black', 61, 265),
+            black2 = createChecker((+svg.getAttribute('width')) + 26, 213, 25, 'black', 61, 213),
+            black3 = createChecker((+svg.getAttribute('width')) + 26, 161, 25, 'black', 61, 161),
+            black4 = createChecker((+svg.getAttribute('width')) + 26, 109, 25, 'black', 61, 109),
+            black5 = createChecker((+svg.getAttribute('width')) + 26, 57, 25, 'black', 61, 57),
 
-            black6 = createChecker((+svg.getAttribute('width')) + 26, 456, 25, 'black', 298, 456),
-            black7 = createChecker((+svg.getAttribute('width')) + 26, 512, 25, 'black', 298, 512),
-            black8 = createChecker((+svg.getAttribute('width')) + 26, 562, 25, 'black', 298, 562),
-            black9 = createChecker((+svg.getAttribute('width')) + 26, 562, 25, 'black', 458, 562),
-            black10 = createChecker((+svg.getAttribute('width')) + 26, 512, 25, 'black', 458, 512),
-            black11 = createChecker((+svg.getAttribute('width')) + 26, 456, 25, 'black', 458, 456),
-            black12 = createChecker((+svg.getAttribute('width')) + 26, 407, 25, 'black', 458, 407),
-            black13 = createChecker((+svg.getAttribute('width')) + 26, 353, 25, 'black', 458, 353),
-            black14 = createChecker((+svg.getAttribute('width')) + 26, 56, 25, 'black', 759, 56),
-            black15 = createChecker((+svg.getAttribute('width')) + 26, 108, 25, 'black', 759, 108);
+            black6 = createChecker((+svg.getAttribute('width')) + 26, 459, 25, 'black', 301, 459),
+            black7 = createChecker((+svg.getAttribute('width')) + 26, 511, 25, 'black', 301, 511),
+            black8 = createChecker((+svg.getAttribute('width')) + 26, 563, 25, 'black', 301, 563),
+
+            black9 = createChecker((+svg.getAttribute('width')) + 26, 563, 25, 'black', 460, 563),
+            black10 = createChecker((+svg.getAttribute('width')) + 26, 511, 25, 'black', 460, 511),
+            black11 = createChecker((+svg.getAttribute('width')) + 26, 459, 25, 'black', 460, 459),
+            black12 = createChecker((+svg.getAttribute('width')) + 26, 407, 25, 'black', 460, 407),
+            black13 = createChecker((+svg.getAttribute('width')) + 26, 355, 25, 'black', 460, 355),
+
+            black14 = createChecker((+svg.getAttribute('width')) + 26, 57, 25, 'black', 760, 57),
+            black15 = createChecker((+svg.getAttribute('width')) + 26, 109, 25, 'black', 760, 109);
         // white player checkers
-        var white1 = createChecker((+svg.getAttribute('width')) + 26, 561, 25, 'white', 58, 562),
-            white2 = createChecker((+svg.getAttribute('width')) + 26, 512, 25, 'white', 58, 512),
-            white3 = createChecker((+svg.getAttribute('width')) + 26, 456, 25, 'white', 58, 456),
-            white4 = createChecker((+svg.getAttribute('width')) + 26, 407, 25, 'white', 58, 407),
-            white5 = createChecker((+svg.getAttribute('width')) + 26, 353, 25, 'white', 58, 353),
-            white6 = createChecker((+svg.getAttribute('width')) + 26, 58, 25, 'white', 298, 58),
-            white7 = createChecker((+svg.getAttribute('width')) + 26, 108, 25, 'white', 298, 108),
-            white8 = createChecker((+svg.getAttribute('width')) + 26, 159, 25, 'white', 298, 159),
-            white9 = createChecker((+svg.getAttribute('width')) + 26, 263, 25, 'white', 458, 263),
-            white10 = createChecker((+svg.getAttribute('width')) + 26, 214, 25, 'white', 458, 214),
-            white11 = createChecker((+svg.getAttribute('width')) + 26, 159, 25, 'white', 458, 159),
-            white12 = createChecker((+svg.getAttribute('width')) + 26, 108, 25, 'white', 458, 108),
-            white13 = createChecker((+svg.getAttribute('width')) + 26, 56, 25, 'white', 458, 56),
-            white14 = createChecker((+svg.getAttribute('width')) + 26, 512, 25, 'white', 759, 512),
-            white15 = createChecker((+svg.getAttribute('width')) + 26, 562, 25, 'white', 759, 562);
+        var white1 = createChecker((+svg.getAttribute('width')) + 26, 563, 25, 'white', 61, 563),
+            white2 = createChecker((+svg.getAttribute('width')) + 26, 511, 25, 'white', 61, 511),
+            white3 = createChecker((+svg.getAttribute('width')) + 26, 459, 25, 'white', 61, 459),
+            white4 = createChecker((+svg.getAttribute('width')) + 26, 407, 25, 'white', 61, 407),
+            white5 = createChecker((+svg.getAttribute('width')) + 26, 355, 25, 'white', 61, 355),
+
+            white6 = createChecker((+svg.getAttribute('width')) + 26, 57, 25, 'white', 301, 57),
+            white7 = createChecker((+svg.getAttribute('width')) + 26, 109, 25, 'white', 301, 109),
+            white8 = createChecker((+svg.getAttribute('width')) + 26, 161, 25, 'white', 301, 161),
+
+            white9 = createChecker((+svg.getAttribute('width')) + 26, 265, 25, 'white', 460, 265),
+            white10 = createChecker((+svg.getAttribute('width')) + 26, 213, 25, 'white', 460, 213),
+            white11 = createChecker((+svg.getAttribute('width')) + 26, 161, 25, 'white', 460, 161),
+            white12 = createChecker((+svg.getAttribute('width')) + 26, 109, 25, 'white', 460, 109),
+            white13 = createChecker((+svg.getAttribute('width')) + 26, 57, 25, 'white', 460, 57),
+
+            white14 = createChecker((+svg.getAttribute('width')) + 26, 511, 25, 'white', 760, 511),
+            white15 = createChecker((+svg.getAttribute('width')) + 26, 563, 25, 'white', 760, 563);
 
         var now,
             then,
@@ -240,7 +245,11 @@ function toLoad() {
             }
             if (white1.startedRolling || !white1.arrived) {
                 white1 = updatePosition(white1);
-                anotherCheckerStarted = true;
+                if(+white1.getAttribute('cx') <= window.outerWidth/2) {
+                    anotherCheckerStarted = false;
+                } else {
+                    anotherCheckerStarted = true;
+                }
             }
             white2 = shouldUpdate(white2);
             white3 = shouldUpdate(white3);
@@ -282,7 +291,11 @@ function toLoad() {
         function shouldUpdate(checker) {
             if (checker.startedRolling || !checker.arrived && !anotherCheckerStarted) {
                 checker = updatePosition(checker);
-                anotherCheckerStarted = true;
+                if(+checker.getAttribute('cx') <= window.outerWidth/2) {
+                    anotherCheckerStarted = false;
+                } else {
+                    anotherCheckerStarted = true;
+                }
             }
             return checker;
         }
@@ -290,9 +303,14 @@ function toLoad() {
         function updatePosition(checker) {
             var checker = checker;
             var cx = +checker.getAttribute('cx');
-            if (checker.col + 25 <= cx) {
+            if (checker.col <= cx) {
                 checker.startedRolling = true;
-                checker.setAttribute('cx', cx - 55);
+                if (checker.col + 60 >= cx) {
+                    debugger;
+                    checker.setAttribute('cx', cx - 1);
+                } else {
+                    checker.setAttribute('cx', cx - 55);
+                }
             } else {
                 checker.arrived = true;
                 checker.startedRolling = false;
