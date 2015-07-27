@@ -18,7 +18,7 @@
 
         lengthBoard = board.length;
 
-        for (i = 0; i < lengthBoard; i += 1) {
+        for (i = 1; i < lengthBoard - 1; i += 1) {
             lengthField = board[i].length;
 
             for (j = 0; j < lengthField; j += 1) {
