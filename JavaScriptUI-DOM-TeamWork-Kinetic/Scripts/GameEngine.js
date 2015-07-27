@@ -22,7 +22,7 @@
             lengthField = board[i].length;
 
             for (j = 0; j < lengthField; j += 1) {
-                x = i;
+                x = i-1;
                 y = j;
                 color = board[i][j].color;
 
