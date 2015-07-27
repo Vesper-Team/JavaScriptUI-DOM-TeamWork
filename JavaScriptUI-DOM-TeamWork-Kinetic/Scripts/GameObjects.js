@@ -25,7 +25,7 @@
         // Inner helper functions.
         function putBoardFields(self) {
             var i,
-                boardLength = 24;
+                boardLength = 26;
 
             for (i = 0; i < boardLength; i += 1) {
                 self.push(Object.create(BoardField).init());
@@ -42,17 +42,17 @@
         }
 
         function putPlayerOnePieces(self) {
-            addPiecesToBoard(self, 'white', 2, 0);
-            addPiecesToBoard(self, 'white', 5, 11);
-            addPiecesToBoard(self, 'white', 3, 16);
-            addPiecesToBoard(self, 'white', 5, 18);
+            addPiecesToBoard(self, 'white', 2, 1);
+            addPiecesToBoard(self, 'white', 5, 12);
+            addPiecesToBoard(self, 'white', 3, 17);
+            addPiecesToBoard(self, 'white', 5, 19);
         }
 
         function putPlayerTwoPieces(self) {
-            addPiecesToBoard(self, 'black', 2, 23);
-            addPiecesToBoard(self, 'black', 5, 12);
-            addPiecesToBoard(self, 'black', 3, 7);
-            addPiecesToBoard(self, 'black', 5, 5);
+            addPiecesToBoard(self, 'black', 2, 24);
+            addPiecesToBoard(self, 'black', 5, 13);
+            addPiecesToBoard(self, 'black', 3, 8);
+            addPiecesToBoard(self, 'black', 5, 6);
         }
 
         Object.defineProperty(board, 'init', {
