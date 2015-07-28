@@ -164,7 +164,6 @@ var GameObjects = ( function () {
             value: function ( color ) {
                 this.color = color;
                 this.isChosen = false;
-
                 return this;
             }
         } );

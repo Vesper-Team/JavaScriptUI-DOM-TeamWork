@@ -110,7 +110,7 @@ var GameDraw = ( function () {
         imageObjBoard.src = 'Images/Board800x600.png';
     };
 
-    function createCircle( x, y, color ) {
+    function createCircle( x, y, color, isChosen) {
         var radius,
             pos,
             posX,
@@ -131,15 +131,14 @@ var GameDraw = ( function () {
             strokeColor = 'black';
         } else if ( color === 'black' ) {
             strokeColor = 'white';
-        } else {
-            strokeColor = 'purple';
+        } else if ( isChosen ) {
+            strokeColor = 'yellowgreen';
         }
 
         var circle = new Kinetic.Circle( {
             x: posX,
             y: posY,
             radius: radius,
-            stroke: strokeColor,
             stroke: strokeColor,
             fillRadialGradientStartRadius: 0,
             fillRadialGradientEndRadius: radius,
@@ -199,7 +198,7 @@ var GameDraw = ( function () {
         //    }
         //}
 
-        updatePlayGround( board );        
+        updatePlayGround( board );
 
         stage.add( positionLayer );
         stage.add( playGroundLayer );
@@ -213,7 +212,8 @@ var GameDraw = ( function () {
         var x,
             y,
             lengthBoard,
-            lengthField;
+            lengthField,
+            currentPiece;
 
         lengthBoard = board.length;
 
@@ -221,9 +221,8 @@ var GameDraw = ( function () {
             lengthField = board[x].pieces.length;
 
             for ( y = 0; y < lengthField; y += 1 ) {
-
-                color = board[x].pieces[y].color;
-                createCircle( x, y, color );
+                currentPiece = board[x].pieces[y];
+                createCircle( x, y, currentPiece.color, currentPiece.isChosen);
             }
         }
 

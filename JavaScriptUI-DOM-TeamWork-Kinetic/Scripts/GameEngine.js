@@ -14,11 +14,11 @@ var GameEngine = ( function () {
             lengthField;
 
         var players = [];
-        players.push( Object.create( GameObjects.Player ).init( 'First', 'white' ) );
-        players.push( Object.create( GameObjects.Player ).init( 'Second', 'black' ) );
+        players.push(Object.create(GameObjects.Player).init('First', 'white'));
+        players.push(Object.create(GameObjects.Player).init('Second', 'black'));
 
         //TODO check 
-        board = GameObjects.Board.init( );
+        board = GameObjects.Board.init();
 
         // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
         dices = GameObjects.Dices.init();
@@ -34,11 +34,11 @@ var GameEngine = ( function () {
         //console.log(dices.numbers);
         // END OF TEST;
 
-        GameDraw.initGame( board );
+        GameDraw.initGame(board);
     }
-    
+
     function updatePlayGround() {
-        GameDraw.updatePlayGround( board );
+        GameDraw.updatePlayGround(board);
     }
 
 
@@ -61,17 +61,31 @@ var GameEngine = ( function () {
         // if current player has no pieces on the board -> He wins.
 
         // if (playerMoves === allowedMoves) -> change player, hasThrownDice = false
+        function addListenersToPossibleGameFields(gameFields) {
+            var i,
+                len;
+            for (i = 0, len = gameFields.length; i < len; i += 1) {
+                var currentField = gameFields[i];
+                currentField.addEventListener('click', selectAndPaintLastPiece(currentField));
+            }
+        }
+
+        function selectAndPaintLastPiece(gameField) {
+            var len = gameField.pieces.length;
+            gameField.pieces[len - 1].isChosen = true;
+        }
     }
 
 
     /////////////
-    function test( x, y ) {
+    function test(x, y) {
         //alert( x + ' ' + y );
-       
-        board.movePiece( 6, 7 );
+
+        board.movePiece(6, 7);
 
         updatePlayGround();
     }
+
     /////////////
 
     return {
