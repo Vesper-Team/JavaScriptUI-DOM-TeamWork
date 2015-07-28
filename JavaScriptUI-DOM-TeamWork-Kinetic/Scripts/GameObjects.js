@@ -234,6 +234,10 @@ var GameObjects = ( function () {
             value: function () {
                 this.numbers.push( firstDice.rollDice() );
                 this.numbers.push( secondDice.rollDice() );
+                if(this.numbers[0] === this.numbers[1]) {
+                    this.numbers.push(this.numbers[0]);
+                    this.numbers.push(this.numbers[0]);
+                }
             }
         } );
 
