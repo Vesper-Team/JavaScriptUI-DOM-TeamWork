@@ -65,7 +65,7 @@
 }());
 
 function setAvailabilityOfFields () {
-    for (i = 1; i <= boardLength - 1; i += 1) {
+    for (i = 1; i < GameObjects.boardLength - 1; i += 1) {
         GameObjects.Board[i].availableForBlack === true;
         GameObjects.Board[i].availableForWhite === true;
 
