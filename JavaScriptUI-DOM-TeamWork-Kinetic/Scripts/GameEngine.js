@@ -16,10 +16,20 @@
 
         //TODO check 
         board = GameObjects.Board.init(players);
-        
-        var dices = [];
-        dices.push(Object.create(GameObjects.Dice).init());
-        dices.push(Object.create(GameObjects.Dice).init());
+
+        // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
+         dices = GameObjects.Dices.init();
+
+         // TESTING Dices:
+         //dices.rollDices();
+         //console.log('dices.rollDices() - [' + dices.numbers + ']');
+         //console.log('dices.removeNumber(' + dices.numbers[0] + ') - ');
+         //dices.usedNumber(dices.numbers[0]);
+         //console.log(dices.numbers);
+         //console.log('dices.clearNumbers() - ');
+         //dices.clearNumbers();
+         //console.log(dices.numbers);
+         // END OF TEST;
 
         GameDraw.initGame (board);
     }
