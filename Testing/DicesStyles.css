@@ -1,0 +1,7 @@
+img{
+    width:40px; /*not sure how big the dices should be*/
+}
+
+img:hover{
+    cursor:pointer;
+}

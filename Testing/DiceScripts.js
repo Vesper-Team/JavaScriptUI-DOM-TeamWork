@@ -16,52 +16,52 @@ var tm1 = 1,
     secondDiceResult;
 
 function startUp() {
-    var firstDice = setInterval(drawDices1, 700),
-        secondDice = setInterval(drawDices2, 1100);
+    var firstDice = setInterval(drawDices1, 600),
+        secondDice = setInterval(drawDices2, 750);
 
     stopDices(firstDice, secondDice);
 }
 
 function drawDices1() {
     tm1 = setTimeout(function () {
-        $('#dice1').attr('src', 'dieWhite1.png').attr('width', 40);
-    }, 100);
+        $('#dice1').attr('src', 'dieWhite1.png');
+    }, 50);
     tm2 = setTimeout(function () {
-        $('#dice1').attr('src', 'dieWhite2.png').attr('width', 40);
-    }, 200);
+        $('#dice1').attr('src', 'dieWhite2.png');
+    }, 150);
     tm3 = setTimeout(function () {
-        $('#dice1').attr('src', 'dieWhite3.png').attr('width', 40);
-    }, 300);
+        $('#dice1').attr('src', 'dieWhite3.png');
+    }, 250);
     tm4 = setTimeout(function () {
-        $('#dice1').attr('src', 'dieWhite4.png').attr('width', 40);
-    }, 400);
+        $('#dice1').attr('src', 'dieWhite4.png');
+    }, 350);
     tm5 = setTimeout(function () {
-        $('#dice1').attr('src', 'dieWhite5.png').attr('width', 40);
-    }, 500);
+        $('#dice1').attr('src', 'dieWhite5.png');
+    }, 450);
     tm6 = setTimeout(function () {
-        $('#dice1').attr('src', 'dieWhite6.png').attr('width', 40);
-    }, 600);
+        $('#dice1').attr('src', 'dieWhite6.png');
+    }, 550);
 }
 
 function drawDices2() {
     tm7 = setTimeout(function () {
-        $('#dice2').attr('src', 'dieWhite1.png').attr('width', 40);
-    }, 150);
+        $('#dice2').attr('src', 'dieWhite1.png');
+    }, 100);
     tm8 = setTimeout(function () {
-        $('#dice2').attr('src', 'dieWhite2.png').attr('width', 40);
-    }, 300);
+        $('#dice2').attr('src', 'dieWhite2.png');
+    }, 220);
     tm9 = setTimeout(function () {
-        $('#dice2').attr('src', 'dieWhite3.png').attr('width', 40);
-    }, 450);
+        $('#dice2').attr('src', 'dieWhite3.png');
+    }, 340);
     tm10 = setTimeout(function () {
-        $('#dice2').attr('src', 'dieWhite4.png').attr('width', 40);
-    }, 600);
+        $('#dice2').attr('src', 'dieWhite4.png');
+    }, 460);
     tm11 = setTimeout(function () {
-        $('#dice2').attr('src', 'dieWhite5.png').attr('width', 40);
-    }, 750);
+        $('#dice2').attr('src', 'dieWhite5.png');
+    }, 580);
     tm12 = setTimeout(function () {
-        $('#dice2').attr('src', 'dieWhite6.png').attr('width', 40);
-    }, 1000);
+        $('#dice2').attr('src', 'dieWhite6.png');
+    }, 700);
 }
 
 
@@ -83,6 +83,7 @@ function stopDices(timer1, timer2) {
         stopTimeout(tm12);
         return getDicesResults();
     });
+
     $('#dice2').on("click", function () {
         clearInterval(timer1);
         stopTimeout(tm1);
@@ -133,6 +134,7 @@ function getDicesResults() {
         default:
             throw new Error('Invalid first dice result!');
     }
+
     switch ($second) {
         case 'dieWhite1.png':
             results[1] = 1;
@@ -160,4 +162,12 @@ function getDicesResults() {
 
     return results;
 }
+
+
+
+
+
+
+
+
 
