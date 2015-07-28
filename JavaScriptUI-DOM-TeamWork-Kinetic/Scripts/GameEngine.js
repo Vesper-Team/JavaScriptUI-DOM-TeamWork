@@ -46,6 +46,7 @@ var GameEngine = ( function () {
         // finding his possible moves
         var possibleStartMoves = getFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
         if (possibleStartMoves.length === 0) {
+            clickedToRollDices();
             // TODO: show that there are no more moves, next player -> calling clickedToRollDices or telling to roll again
         }
 
@@ -79,7 +80,8 @@ var GameEngine = ( function () {
         var i,
             len;
         for (i = 0, len = gameFields.length; i < len; i += 1) {
-            var currentField = gameFields[i];
+            var currentFieldIndex = gameFields[i],
+                currentField = board[currentFieldIndex];
             currentField.addEventListener('mousedown', selectAndPaintLastPiece(currentField));
         }
         function selectAndPaintLastPiece(gameField) {
@@ -130,7 +132,6 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
         color = player.color;
 
     color = color.substring(0, 1).toUpperCase() + color.substring(1);
-
     if (color.toLowerCase() === 'white') {
         direction = 1;
         if (board[0].pieces.length) {
