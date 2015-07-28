@@ -155,7 +155,6 @@ var GameDraw = ( function () {
             y: posY,
             radius: radius,
             stroke: strokeColor,
-            draggable: isChosen,
             fillRadialGradientStartRadius: 0,
             fillRadialGradientEndRadius: radius,
             fillRadialGradientColorStops: [0, 'gray', 1, color],
@@ -179,6 +178,39 @@ var GameDraw = ( function () {
         }
     };
 
+<<<<<<< HEAD
+=======
+    function createRectangleListener( x, y ) {
+
+        var pos = transformPositionFromBoardDataToBoardCanvas( x, y );
+        var posX = Math.floor( pos.x );
+        var posY = Math.floor( pos.y );
+        var height = x < 13 ? ( -CONSTANTS.OBJ_SIZE_Y ) : CONSTANTS.OBJ_SIZE_Y;
+
+        var rect = new Kinetic.Rect( {
+            x: posX,
+            y: posY,
+            width: CONSTANTS.OBJ_SIZE_X,
+            height: ( height * 5 ),
+           // fill:'yellow',
+        } );
+
+        positionLayer.add( rect );
+
+        rect.addEventListener( 'click', function () {
+            var x,
+                y,
+                pos;
+
+            pos = transformPositionFromBoardCanvasToBoardData( rect.getAbsolutePosition().x,
+                rect.getAbsolutePosition().y );
+
+            playGroundLayer.destroyChildren();
+
+            GameEngine.update( pos.x );
+        } );
+    };
+>>>>>>> origin/master
     ///Dice
     function createDicesButton( diceImg ) {
         debugger;
@@ -187,20 +219,42 @@ var GameDraw = ( function () {
                 x: 950,
                 y: 280,
                 image: diceImg,
+<<<<<<< HEAD
                 width: 80,
                 height: 80,
+=======
+                width: 120,
+                height: 120,
+>>>>>>> origin/master
             } );
 
             diceLayer.add( diceImage );
 
             stage.add( diceLayer );
             diceLayer.setZIndex( 20 );
+
+            diceImage.addEventListener( 'click', function () {
+                fadeOut( diceImage );
+                
+                fadeIn( diceImage );
+               
+                //GameEngine.test();
+            } );
         };
+<<<<<<< HEAD
         diceImg.src = 'Images/dice2.png';
     }
     
     
     function initGame( board, diceImg ) {
+=======
+
+        diceImg.src = 'Images/DicesNoBackground.jpg';
+    }
+
+    function initGame( board ) {
+
+>>>>>>> origin/master
         initBackground();
         updatePlayGround( board );
         createDicesButton( diceImg );
@@ -233,9 +287,38 @@ var GameDraw = ( function () {
         playGroundLayer.draw();
     }
 
+    function updateDice() {
+        diceLayer.draw();
+    }
+
+    var fadeIn = function ( shape ) {
+        var op = shape.getOpacity();
+        op = op + 0.1 >= 1 ? 1 : op + 0.1;
+        shape.setOpacity( op );
+        shape.getLayer().draw();
+        if ( op !== 1 ) {
+            setTimeout( function () {
+                fadeIn( shape );
+            }, 120 );
+        }
+    };
+
+    var fadeOut = function ( shape ) {
+        var op = shape.getOpacity();
+        op = op - 0.1 <= 0.1 ? 0.1 : op - 0.1;
+        shape.setOpacity( op );
+        shape.getLayer().draw();
+        if ( op !== 0.1 ) {
+            setTimeout( function () {
+                fadeOut( shape );
+            }, 120 );
+        }
+    };
+
     return {
         initGame: initGame,
         updatePlayGround: updatePlayGround,
+        updateDice: updateDice,
         //renderBoard: renderBoard,
     }
 }() );
