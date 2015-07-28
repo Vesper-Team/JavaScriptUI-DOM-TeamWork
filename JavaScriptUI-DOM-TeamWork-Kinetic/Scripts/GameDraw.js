@@ -33,15 +33,15 @@ var GameDraw = ( function () {
             y,
             middleBoard = 0;
 
-        if ( objX < 6 || ( 11 < objX && 17 < objX ) ) {
+        if ( objX < 7 || ( 12 < objX && 18 < objX ) ) {
             middleBoard = 39;
         }
 
-        if ( 12 <= objX && objX < 24 ) {
-            x = CONSTANTS.TOP_START_POS_X + ( ( objX - 12 ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
+        if ( 13 <= objX && objX < 25 ) {
+            x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
-        } else if ( 0 <= objX && objX < 12 ) {
-            x = CONSTANTS.BOTTOM_START_POS_X + ( ( 11 - objX ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
+        } else if ( 1 <= objX && objX < 13 ) {
+            x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.BOTTOM_START_POS_Y - ( objY * CONSTANTS.OBJ_SIZE_Y );
         }
 

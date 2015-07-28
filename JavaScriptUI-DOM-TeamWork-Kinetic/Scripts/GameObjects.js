@@ -1,4 +1,5 @@
-﻿var GameObjects = ( function () {
+var boardLength = 26;
+var GameObjects = ( function () {
     var Board,
         Piece,
         Player,
@@ -7,10 +8,14 @@
 
     // pole ot igralnoto pole
     BoardField = (function () {
-        var boardField = Object.create([]);
+        var boardField = Object.create({});
 
         Object.defineProperty(boardField, 'init', {
             value: function () {
+                this.availableForBlack = true,
+                this.availableForWhite = true,
+                this.pieces = [];
+
                 return this;
             }
         });
@@ -24,12 +29,15 @@
 
         // Inner helper functions.
         function putBoardFields(self) {
-            var i,
-                boardLength = 26;
+            var i;
 
             for (i = 0; i < boardLength; i += 1) {
-                self.push(Object.create(BoardField).init());
+                self.push(Object.create(BoardField).init());                
             }
+
+            self[0].availableForBlack = false;
+            self[boardLength - 1].availableForWhite = false;
+
         }
 
         function addPiecesToBoard(self, color, numberOfPieces, position) {
@@ -37,8 +45,8 @@
 
             for (pieceNumber = 0; pieceNumber < numberOfPieces; pieceNumber += 1) {
                 currentPiece = Object.create(Piece).init(color);
-                self[position].push(currentPiece);
-            }
+                self[position].pieces.push(currentPiece);
+            }            
         }
 
         function putPlayerOnePieces(self) {
@@ -55,12 +63,15 @@
             addPiecesToBoard(self, 'black', 5, 6);
         }
 
+
+
         Object.defineProperty(board, 'init', {
             value: function () {
                 var self = this;
                 putBoardFields(self);
                 putPlayerOnePieces(self);
                 putPlayerTwoPieces(self);
+                setAvailabilityOfFields();
                 return this;
             }
         });
@@ -160,7 +171,6 @@
         return piece;
     }() );
 
-
     return {
         Board: Board,
         Player: Player,
@@ -168,4 +178,5 @@
     };
 
 }());
+
 

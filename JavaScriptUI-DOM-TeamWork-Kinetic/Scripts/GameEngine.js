@@ -13,18 +13,23 @@
         players.push(Object.create(GameObjects.Player).init('Second', 'black'));
 
         var board = GameObjects.Board.init(players);
+        //console.log(board);
 
         GameDraw.background();
 
         lengthBoard = board.length;
+        //console.log(lengthBoard)
+
 
         for (i = 1; i < lengthBoard - 1; i += 1) {
-            lengthField = board[i].length;
+            lengthField = board[i].pieces.length;
+        console.log(board[i])
+
 
             for (j = 0; j < lengthField; j += 1) {
-                x = i-1;
+                x = i;
                 y = j;
-                color = board[i][j].color;
+                color = board[i].pieces[j].color;
 
                 GameDraw.createCircle(x, y, color);
             }
@@ -59,4 +64,17 @@
     };
 }());
 
+function setAvailabilityOfFields () {
+    for (i = 1; i <= boardLength - 1; i += 1) {
+        GameObjects.Board[i].availableForBlack === true;
+        GameObjects.Board[i].availableForWhite === true;
+
+        if (GameObjects.Board[i].pieces.length > 1 && GameObjects.Board[i].pieces[1].color === 'white') {
+            GameObjects.Board[i].availableForBlack = false;
+        }
+        if (GameObjects.Board[i].pieces.length > 1 && GameObjects.Board[i].pieces[1].color === 'black') {
+            GameObjects.Board[i].availableForWhite = false;
+        }
+    }
+}
 // All events will call GameEngine.Update() and GameDraw.Update().
