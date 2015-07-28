@@ -1,9 +1,9 @@
-var boardLength = 26;
 var GameObjects = ( function () {
     var Board,
         Piece,
         Player,
         BoardField,
+        boardLength = 26,
         CONSTANTS = {};
 
     // pole ot igralnoto pole
