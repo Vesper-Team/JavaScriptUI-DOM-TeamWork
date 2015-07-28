@@ -92,9 +92,9 @@ var GameEngine = ( function () {
 
     function throwFirstDiceToDeterminePlayer() {
         dices.rollDices();
-        if (dices.numbers[0] > dices.numbers[1]) {
+        if (dices.numbers[dices.numbers.length-2] > dices.numbers[dices.numbers.length-1]) {
             players[0].isOnTurn = true;
-        } else if (dices.numbers[0] < dices.numbers[1]) {
+        } else if (dices.numbers[dices.numbers.length-2] < dices.numbers[dices.numbers.length-1]) {
             players[1].isOnTurn = true;
         } else {
             firstDiceThrow = true;
