@@ -102,14 +102,14 @@ function getFieldsWithMovesAvailable (player, board, numbers) {
 	color = player.color;
 
 	if (color === 'white') {
-		direction = -1;
-	} else {
 		direction = 1;
+	} else {
+		direction = -1;
 	}
 
 	color = color.substring(0, 1).toUpperCase() + color.substring(1);
 
-	for (i = 1; i < board.length - 1; i += 1) {
+	for (i = 0; i < board.length; i += 1) {
 		if (board[i].pieces[0].color === color.toLowerCase()) {
 			for (j = 0; j < numbers.length; j += 1) {
 				if (board[i + numbers[j] * direction]['availableFor' + color]) {
