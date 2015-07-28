@@ -166,7 +166,8 @@ var GameDraw = ( function () {
     };
 
     function createRectangleListener( x, y ) {
-
+        // we might just give to the boardFields X and Y and attach listener to every one of them
+        // those another 26 objects are just not needed
         var pos = getPosition( x, y );
         var posX = Math.floor( pos.x );
         var posY = Math.floor( pos.y );

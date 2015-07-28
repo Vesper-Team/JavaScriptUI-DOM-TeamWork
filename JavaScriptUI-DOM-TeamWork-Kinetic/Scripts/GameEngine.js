@@ -1,6 +1,6 @@
 ﻿var GameEngine = ( function () {
     var board;
-    
+
     function start() {
         var x,
             y,
@@ -16,6 +16,10 @@
 
         board = GameObjects.Board.init(players);
         //console.log(board);
+
+        var dices = [];
+        dices.push(Object.create(GameObjects.Dice).init());
+        dices.push(Object.create(GameObjects.Dice).init());
 
         GameDraw.background();
 
@@ -36,11 +40,11 @@
         //         GameDraw.createCircle(x, y, color);
         //     }
         // }
-        
-        for (x = 0; x < lengthBoard; x += 1) {
-            lengthField = board[x].length;                       
 
-            for (y = 0; y < lengthField; y += 1) {               
+        for (x = 0; x < lengthBoard; x += 1) {
+            lengthField = board[x].length;
+
+            for (y = 0; y < lengthField; y += 1) {
                 color = board[x][y].color;
 
                 GameDraw.createCircle(x, y, color);
@@ -57,6 +61,7 @@
     }
 
     function update(){
+
         // currentPlayer = GetCurrentPlayer - depending on player.isOnTurn or isFirstPlayerOnTurn
 
         // flag hasThrownDice -> if not - throw dice(allowedMoves = diceResult, currentPlayerMoves = 0); else - continue
@@ -75,7 +80,7 @@
 
         // if (playerMoves === allowedMoves) -> change player, hasThrownDice = false
     }
-    
+
     /////////////
         function updatePlayGround() {
         var x,
@@ -95,13 +100,13 @@
 
         GameDraw.updatePlayGround();
     }
-   
+
     function test(x, y) {
         //alert( x + ' ' + y );
-       
+
         board.movePiece( 6, 7 );
-       
-        updatePlayGround();        
+
+        updatePlayGround();
     }
     /////////////
 
