@@ -31,10 +31,10 @@ var GameDraw = ( function () {
 
     width = stage.getWidth();
     height = stage.getHeight();
-    
+
      function transformPositionFromBoardCanvasToBoardData( objX, objY ) {
         var x,
-            y;            
+            y;
 
         if ( objY < 310 ) {
             x = Math.round( objX / CONSTANTS.OBJ_SIZE_X ) + 12;
@@ -178,40 +178,8 @@ var GameDraw = ( function () {
         }
     };
 
-    function createRectangleListener( x, y ) {
-
-        var pos = transformPositionFromBoardDataToBoardCanvas( x, y );
-        var posX = Math.floor( pos.x );
-        var posY = Math.floor( pos.y );
-        var height = x < 13 ? ( -CONSTANTS.OBJ_SIZE_Y ) : CONSTANTS.OBJ_SIZE_Y;
-
-        var rect = new Kinetic.Rect( {
-            x: posX,
-            y: posY,
-            width: CONSTANTS.OBJ_SIZE_X,
-            height: ( height * 5 ),
-           // fill:'yellow',
-        } );
-
-        positionLayer.add( rect );
-
-        rect.addEventListener( 'click', function () {
-            var x,
-                y,
-                pos;
-
-            pos = transformPositionFromBoardCanvasToBoardData( rect.getAbsolutePosition().x,
-                rect.getAbsolutePosition().y );
-
-            playGroundLayer.destroyChildren();
-
-            GameEngine.update( pos.x );
-        } );
-    };
-
     ///Dice
     function createDicesButton( diceImg ) {
-        debugger;
         diceImg.onload = function () {
             var diceImage = new Kinetic.Image( {
                 x: 950,
@@ -230,9 +198,9 @@ var GameDraw = ( function () {
 
             diceImage.addEventListener( 'click', function () {
                 fadeOut( diceImage );
-                
+
                 fadeIn( diceImage );
-               
+
                 //GameEngine.test();
             } );
         };

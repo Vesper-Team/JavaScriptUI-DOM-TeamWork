@@ -21,7 +21,8 @@ var GameEngine = ( function () {
 
         GameDraw.initGame(board,diceImg);
 
-        diceImg.addEventListener('onclick',clickedToRollDices);
+        debugger;
+        diceImg.addEventListener('click',clickedToRollDices);
     }
 
     function clickedToRollDices() {
