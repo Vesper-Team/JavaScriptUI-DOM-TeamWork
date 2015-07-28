@@ -2,20 +2,20 @@
 /// <reference path="GameObjects.js" />
 
 var GameEngine = ( function () {
-    var board;
+	var board;
 
-    function start() {
-        var x,
-            y,
-            color,
-            i,
-            j,
-            lengthBoard,
-            lengthField;
+	function start() {
+		var x,
+		y,
+		color,
+		i,
+		j,
+		lengthBoard,
+		lengthField;
 
-        var players = [];
-        players.push(Object.create(GameObjects.Player).init('First', 'white'));
-        players.push(Object.create(GameObjects.Player).init('Second', 'black'));
+		var players = [];
+		players.push(Object.create(GameObjects.Player).init('First', 'white'));
+		players.push(Object.create(GameObjects.Player).init('Second', 'black'));
 
         //TODO check 
         board = GameObjects.Board.init();
@@ -38,7 +38,7 @@ var GameEngine = ( function () {
     }
 
     function updatePlayGround() {
-        GameDraw.updatePlayGround(board);
+    	GameDraw.updatePlayGround(board);
     }
 
 
@@ -62,17 +62,17 @@ var GameEngine = ( function () {
 
         // if (playerMoves === allowedMoves) -> change player, hasThrownDice = false
         function addListenersToPossibleGameFields(gameFields) {
-            var i,
-                len;
-            for (i = 0, len = gameFields.length; i < len; i += 1) {
-                var currentField = gameFields[i];
-                currentField.addEventListener('click', selectAndPaintLastPiece(currentField));
-            }
+        	var i,
+        	len;
+        	for (i = 0, len = gameFields.length; i < len; i += 1) {
+        		var currentField = gameFields[i];
+        		currentField.addEventListener('click', selectAndPaintLastPiece(currentField));
+        	}
         }
 
         function selectAndPaintLastPiece(gameField) {
-            var len = gameField.pieces.length;
-            gameField.pieces[len - 1].isChosen = true;
+        	var len = gameField.pieces.length;
+        	gameField.pieces[len - 1].isChosen = true;
         }
     }
 
@@ -89,11 +89,37 @@ var GameEngine = ( function () {
     /////////////
 
     return {
-        start: start,
-        update: update,
-        test: test,
+    	start: start,
+    	update: update,
+    	test: test,
     };
 }() );
 
+function getFieldsWithMovesAvailable (player, board, numbers) {
+	var direction,
+	i, j,
+	result = [],
+	color = player.color;
 
+	if (color === 'white') {
+		direction = -1;
+	} else {
+		direction = 1;
+	}
+
+	color = color.substring(0, 1).toUpperCase() + color.substring(1);
+
+	for (i = 1; i < board.length - 1; i += 1) {
+		if (board[i].pieces[0].color === color.toLowerCase()) {
+			for (j = 0; j < numbers.length; j += 1) {
+				if (board[i + numbers[j] * direction]['availableFor' + color]) {
+					result.push(i);
+					break;
+				}
+			}
+		}
+	}
+
+	return result;
+}
 // // All events will call GameEngine.Update() and GameDraw.Update().
