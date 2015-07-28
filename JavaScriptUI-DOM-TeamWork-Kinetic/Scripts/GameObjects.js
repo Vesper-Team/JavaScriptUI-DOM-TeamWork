@@ -16,8 +16,8 @@ var GameObjects = ( function () {
         Object.defineProperty( boardField, 'init', {
             value: function () {
                 this.availableForBlack = true,
-                    this.availableForWhite = true,
-                    this.pieces = [];
+                this.availableForWhite = true,
+                this.pieces = [];
 
                 return this;
             }
@@ -69,8 +69,8 @@ var GameObjects = ( function () {
 
         function setAvailabilityOfFields( board ) {
             for ( i = 1; i < board.length - 1; i += 1 ) {
-                board[i].availableForBlack === true;
-                board[i].availableForWhite === true;
+                board[i].availableForBlack = true;
+                board[i].availableForWhite = true;
 
                 if ( board[i].pieces.length > 1 && board[i].pieces[1].color === 'white' ) {
                     board[i].availableForBlack = false;
