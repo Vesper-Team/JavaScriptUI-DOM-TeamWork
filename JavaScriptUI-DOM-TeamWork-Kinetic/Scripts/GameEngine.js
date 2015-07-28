@@ -158,7 +158,7 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
     }    
 
     for (i = 1, len = board.length; i < board.length - 1; i += 1) {
-        if (board[i].pieces[0].color === color.toLowerCase()) {
+        if (board[i].pieces.length > 0 && board[i].pieces[0].color === color.toLowerCase()) {
             for (j = 0; j < numbers.length; j += 1) {
                 if (board[i + numbers[j] * direction]['availableFor' + color]) {
                     result.push(i);
