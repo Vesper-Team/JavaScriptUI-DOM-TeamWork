@@ -100,16 +100,20 @@ var GameEngine = ( function () {
         }
     }
 
-    function setCurrentPlayerOnTurn() {
+   function setCurrentPlayerOnTurn() {
+        var currentPlayer;
+
         if (players[0].isOnTurn) {
+            currentPlayer = players[0];
             players[0].isOnTurn = false;
             players[1].isOnTurn = true;
-            return players[0];
         } else {
+            currentPlayer = players[1];
             players[0].isOnTurn = true;
             players[1].isOnTurn = false;
-            return players[1];
         }
+
+        return currentPlayer;
     }
 
     return {
