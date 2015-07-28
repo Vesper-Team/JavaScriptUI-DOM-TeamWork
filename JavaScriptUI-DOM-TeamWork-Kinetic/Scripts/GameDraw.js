@@ -35,9 +35,7 @@ var GameDraw = ( function () {
     function getPosition( objX, objY ) {
         var x,
             y,
-            middleBoard = 0,
-            outOfGamePosition_X = 0,
-            outOfGamePosition_Y = 0;
+            middleBoard = 0;
 
         if ( objX === 0 || objX === 25 ) {
             outOfGamePosition = 50;
@@ -50,7 +48,7 @@ var GameDraw = ( function () {
         if ( objX === 25 ) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
-            y = CONSTANTS.TOP_START_POS_Y + ( outOfGamePosition_Y * CONSTANTS.OBJ_SIZE_Y );
+            y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
         } else if ( 13 <= objX && objX < 25 ) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
@@ -60,7 +58,7 @@ var GameDraw = ( function () {
         } else if ( objX === 0 ) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
-            y = CONSTANTS.BOTTOM_START_POS_Y - ( outOfGamePosition_Y * CONSTANTS.OBJ_SIZE_Y );
+            y = CONSTANTS.BOTTOM_START_POS_Y - ( objY * CONSTANTS.OBJ_SIZE_Y );
         }
 
         return {
@@ -171,12 +169,14 @@ var GameDraw = ( function () {
         var pos = getPosition( x, y );
         var posX = Math.floor( pos.x );
         var posY = Math.floor( pos.y );
+        var height = x < 13 ? ( -CONSTANTS.OBJ_SIZE_Y ) : CONSTANTS.OBJ_SIZE_Y;
 
         var rect = new Kinetic.Rect( {
             x: posX,
             y: posY,
             width: CONSTANTS.OBJ_SIZE_X,
-            height: ( CONSTANTS.OBJ_SIZE_Y * 5 ),
+            height: ( height * 5 ),
+           // fill:'yellow',
         } );
 
         positionLayer.add( rect );
@@ -193,7 +193,7 @@ var GameDraw = ( function () {
 
         //for ( var x = 0, len = board.length; x < len; x += 1 ) {
         //    if ( x < 13 ) {
-        //        createRectangleListener( x, 4 );
+        //        createRectangleListener( x, -1 );
         //    } else {
         //        createRectangleListener( x, 0 );
         //    }
