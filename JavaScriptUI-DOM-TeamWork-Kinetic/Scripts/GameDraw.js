@@ -51,13 +51,13 @@ var GameDraw = ( function () {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
             y = CONSTANTS.TOP_START_POS_Y + ( outOfGamePosition_Y * CONSTANTS.OBJ_SIZE_Y );
-        } else if ( 13 <= objX && objX < 25 ) {
+        }else if ( 13 <= objX && objX < 25 ) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
         } else if ( 1 <= objX && objX < 13 ) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.BOTTOM_START_POS_Y - ( objY * CONSTANTS.OBJ_SIZE_Y );
-        } else if ( objX === 0 ) {
+        } else if ( objX === 0) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
             y = CONSTANTS.BOTTOM_START_POS_Y - ( outOfGamePosition_Y * CONSTANTS.OBJ_SIZE_Y );
@@ -67,9 +67,9 @@ var GameDraw = ( function () {
             x: x,
             y: y,
         }
-    };
+    };    
 
-    function background() {
+    function initBackground() {
         var imageObjBackground = new Image();
         var imageObjBoard = new Image();        
 
@@ -127,7 +127,7 @@ var GameDraw = ( function () {
         radius = CONSTANTS.CIRCLE_RADIUS;
         pos = getPosition( x, y );
         posX = Math.floor( pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ) );
-        posY = Math.floor( pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ) );
+        posY = Math.floor( pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ) );              
 
         if ( color === 'white' ) {
             strokeColor = 'black';
@@ -141,13 +141,13 @@ var GameDraw = ( function () {
             x: posX,
             y: posY,
             radius: radius,
-            stroke: strokeColor,
+            stroke: strokeColor,            
             fillRadialGradientStartRadius: 0,
             fillRadialGradientEndRadius: radius,
             fillRadialGradientColorStops: [0, 'gray', 1, color],
         } );
 
-        var text = new Kinetic.Text( {
+        var text = new Kinetic.Text({
             x: pos.x,
             y: posY - 9,
             text: nuberOfPieces,
@@ -156,11 +156,11 @@ var GameDraw = ( function () {
             width: CONSTANTS.OBJ_SIZE_X,
             fill: strokeColor,
             align: 'center'
-        } );
+            });
 
         playGroundLayer.add( circle );
 
-        if ( nuberOfPieces > 5 || x === 0 || x === 25 ) {
+        if ( nuberOfPieces > 5 || x === 0 || x === 25) {
             playGroundLayer.add( text );
         }
     };
@@ -184,26 +184,62 @@ var GameDraw = ( function () {
             playGroundLayer.destroyChildren();
             GameEngine.test( rect.getAbsolutePosition().x, rect.getAbsolutePosition().y );
         } );
-    };        
+    }; 
 
-    function playGround() {
+    function initGame( board ) {
+
+        initBackground();
+
+        updatePlayGround (board);
+        // for (x = 0; x < lengthBoard; x += 1) {
+        //     lengthField = board[x].pieces.length;
+
+        //     for (y = 0; y < lengthField; y += 1) {
+        //         color = board[x].pieces[y].color;
+
+        //         GameDraw.createCircle(x, y, color);
+        //     }
+
+        //     // if (x < 13 ) {
+        //     //     GameDraw.createRectangleListener( x, 4 );
+        //     // } else {
+        //     //     GameDraw.createRectangleListener( x, 0 );
+        //     // }
+        // }
+
         stage.add( positionLayer );
         stage.add( playGroundLayer );
 
         playGroundLayer.setZIndex( 10 );
         positionLayer.setZIndex( 10 );
-    };
+    }
 
-    function updatePlayGround() {
+    function updatePlayGround( board ) {
+        var x,
+            y,
+            lengthBoard = board.length,
+            lengthField;
+
+        
+        for (x = 0; x < lengthBoard; x += 1) {
+            lengthField = board[x].pieces.length;
+
+            for (y = 0; y < lengthField; y += 1) {
+                color = board[x].pieces[y].color;
+
+                createCircle(x, y, color);
+            }
+        }
+                
         playGroundLayer.draw();
     }
 
-    return {
-        background: background,
-        playGround: playGround,
-        createCircle: createCircle,
-        createRectangleListener: createRectangleListener,
+
+
+    return {        
+        initGame: initGame,        
         updatePlayGround: updatePlayGround,
+        //renderBoard: renderBoard,
     }
 }() );
 

@@ -405,6 +405,13 @@ function throwDiceAndCheckMaxMovesForTurn() {
     }
 }
 
+function checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves,maximumAllowedMovesInTurn) {
+    if(currentPlayerMoves < maximumAllowedMovesInTurn && !currentActivePlayer.hasHitChecker && !currentActivePlayer.canTakeChecker) { 
+        return true;
+    }
+    return false;
+}
+
 //function checkIfWhitePlayerCanSetCheckerThere(diceNumber) {
 //    if (board.fields[1 + diceNumber].length === 0 ||
 //                     (board.fields[1 + diceNumber].length === 1 && board.fields[1 + diceNumber][0].color === inactivePlayer.color) ||
@@ -561,7 +568,7 @@ function play() {
             else {
                 currentPlayerMoves++; //you lose a move,because u cant set your pull there
                 if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-                    hasNoMoves = true;
+                    firstPlayerOnTurn = !firstPlayerOnTurn;
                     break;
                 }
             }
@@ -571,12 +578,9 @@ function play() {
     }
 
 
-
-
-
-
-
-
+    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+        play();
+    }
 
 
         
@@ -585,18 +589,46 @@ function play() {
     //CHECK IF PLAYER IS CURRENTLY TAKING CHECKERS
 
 
-
-
-
-
-
-
-
-
-
-
     
-    //JUST MOVE CHECKER
+
+    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
+        play();
+    }
+
+
+    //JUST MOVE CHECKERS
+    if (!checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves, maximumAllowedMovesInTurn)) { //CHECK IF PLAYER HAS TO END TURN
+        firstPlayerOnTurn = !firstPlayerOnTurn;
+        play();
+    }
+
+    if (currentActivePlayer.color === 'white') {//white player - player1
+
+
+        var isClickValidForStartPosition = false;
+
+        while (!isClickValidForStartPosition) {
+            //wait for mouse click for start position
+            //get X and Y of clicked position
+            //determine which board.fields place it is
+            //check if that position contains his checkers  (isAvailable for white/black)
+            //if no -> leave ,the  while loop will repeat itself and await new click for start position 
+            // if yes =>  isClickValidForStartPosition = true;
+            //highlight which board places the checker from the start position can move to
+            //wait for click to determine end position
+            //get X and Y of clicked position
+            //determine which board.fields place it is
+            //if it is one of the possible places,considering the start position -> make the move and draw ,
+                                                                             //else keep highligted and wait correct click for end position
+            //currentPlayerMoves++
+            //check is all possible moves for this player,for this turn are made and change players if so
+        }
+
+
+    }
+    else {  //black player - player 2
+
+    }
 
 
     draw();

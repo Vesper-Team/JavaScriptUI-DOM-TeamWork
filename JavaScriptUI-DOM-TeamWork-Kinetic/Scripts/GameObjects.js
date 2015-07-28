@@ -2,9 +2,12 @@ var GameObjects = ( function () {
     var Board,
         Piece,
         Player,
+        Dice,
         BoardField,
         boardLength = 26,
-        CONSTANTS = {};
+        CONSTANTS = {
+            DICE_DEFAULT_NUMBER: 6
+        };
 
     // pole ot igralnoto pole
     BoardField = (function () {
@@ -13,8 +16,8 @@ var GameObjects = ( function () {
         Object.defineProperty(boardField, 'init', {
             value: function () {
                 this.availableForBlack = true,
-                this.availableForWhite = true,
-                this.pieces = [];
+                    this.availableForWhite = true,
+                    this.pieces = [];
 
                 return this;
             }
@@ -32,7 +35,7 @@ var GameObjects = ( function () {
             var i;
 
             for (i = 0; i < boardLength; i += 1) {
-                self.push(Object.create(BoardField).init());                
+                self.push(Object.create(BoardField).init());
             }
 
             self[0].availableForBlack = false;
@@ -46,7 +49,7 @@ var GameObjects = ( function () {
             for (pieceNumber = 0; pieceNumber < numberOfPieces; pieceNumber += 1) {
                 currentPiece = Object.create(Piece).init(color);
                 self[position].pieces.push(currentPiece);
-            }            
+            }
         }
 
         function putPlayerOnePieces(self) {
@@ -63,6 +66,21 @@ var GameObjects = ( function () {
             addPiecesToBoard(self, 'black', 5, 6);
         }
 
+        function setAvailabilityOfFields (board) {
+    for (i = 1; i < board.length - 1; i += 1) {
+        board[i].availableForBlack === true;
+        board[i].availableForWhite === true;
+
+        if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'white') {
+            board[i].availableForBlack = false;
+        }
+        if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'black') {
+            board[i].availableForWhite = false;
+        }
+        
+        console.log(board[i])
+    }
+}
 
 
         Object.defineProperty(board, 'init', {
@@ -71,16 +89,16 @@ var GameObjects = ( function () {
                 putBoardFields(self);
                 putPlayerOnePieces(self);
                 putPlayerTwoPieces(self);
-                setAvailabilityOfFields();
+                setAvailabilityOfFields(self);
                 return this;
             }
         });
 
         // Called from update when moving. Ex.: gameBoard.movePiece({color:white}, 2, 5);
         Object.defineProperty(board, 'movePiece', {
-            value: function (piece, fromBoardField, toBoardField) {
-                this[fromBoardField].pop();
-                this[toBoardField].push(piece);
+            value: function (fromBoardField, toBoardField) {
+                var piece = this[fromBoardField].pieces.pop();
+                this[toBoardField].pieces.push(piece);
                 return this;
             }
         });
@@ -171,10 +189,48 @@ var GameObjects = ( function () {
         return piece;
     }() );
 
+    Dice = ( function () {
+        var dice = Object.create({});
+
+        Object.defineProperty(dice, 'init', {
+            value: function() {
+                this.number = CONSTANTS.DICE_DEFAULT_NUMBER;
+                this.isUsed = false; // whether the player moved with the number of that dice
+            }
+        });
+
+        Object.defineProperty(dice, 'isUsed', {
+            get: function () {
+                return this._isUsed;
+            },
+            set: function (value) {
+                this._isUsed = value;
+            }
+        });
+
+        Object.defineProperty(dice, 'number', {
+            get: function () {
+                return this._number;
+            },
+            set: function (value) {
+                this._number = value;
+            }
+        });
+
+        Object.defineProperty(dice, 'rollDice', {
+            value: function() {
+                return this.number = Math.floor(Math.random() * 6) + 1;
+            }
+        });
+
+        return dice;
+    }());
+
     return {
         Board: Board,
         Player: Player,
-        Piece: Piece
+        Piece: Piece,
+        Dice: Dice
     };
 
 }());
