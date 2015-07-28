@@ -156,7 +156,6 @@ var GameDraw = ( function () {
             y: posY,
             radius: radius,
             stroke: strokeColor,
-            draggable: isChosen,
             fillRadialGradientStartRadius: 0,
             fillRadialGradientEndRadius: radius,
             fillRadialGradientColorStops: [0, 'gray', 1, color],
@@ -210,8 +209,6 @@ var GameDraw = ( function () {
             GameEngine.update( pos.x );
         } );
     };
-    
-    
     ///Dice
     function createDicesButton() {
         var diceImg = new Image();
@@ -221,21 +218,27 @@ var GameDraw = ( function () {
                 x: 950,
                 y: 280,
                 image: diceImg,
-                width: 80,
-                height: 80,
-               
+                width: 120,
+                height: 120,
             } );
 
             diceLayer.add( diceImage );
 
             stage.add( diceLayer );
             diceLayer.setZIndex( 20 );
+
+            diceImage.addEventListener( 'click', function () {
+                fadeOut( diceImage );
+                
+                fadeIn( diceImage );
+               
+                //GameEngine.test();
+            } );
         };
 
         diceImg.src = 'Images/dice2.png';
     }
-    
-    
+
     function initGame( board ) {
 
         initBackground();
@@ -280,9 +283,38 @@ var GameDraw = ( function () {
         playGroundLayer.draw();
     }
 
+    function updateDice() {
+        diceLayer.draw();
+    }
+
+    var fadeIn = function ( shape ) {
+        var op = shape.getOpacity();
+        op = op + 0.1 >= 1 ? 1 : op + 0.1;
+        shape.setOpacity( op );
+        shape.getLayer().draw();
+        if ( op !== 1 ) {
+            setTimeout( function () {
+                fadeIn( shape );
+            }, 120 );
+        }
+    };
+
+    var fadeOut = function ( shape ) {
+        var op = shape.getOpacity();
+        op = op - 0.1 <= 0.1 ? 0.1 : op - 0.1;
+        shape.setOpacity( op );
+        shape.getLayer().draw();
+        if ( op !== 0.1 ) {
+            setTimeout( function () {
+                fadeOut( shape );
+            }, 120 );
+        }
+    };
+
     return {
         initGame: initGame,
         updatePlayGround: updatePlayGround,
+        updateDice: updateDice,
         //renderBoard: renderBoard,
     }
 }() );
