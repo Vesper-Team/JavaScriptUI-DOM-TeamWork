@@ -18,7 +18,7 @@ var GameEngine = ( function () {
         players.push( Object.create( GameObjects.Player ).init( 'Second', 'black' ) );
 
         //TODO check 
-        board = GameObjects.Board.init( players );
+        board = GameObjects.Board.init( );
 
         // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
         dices = GameObjects.Dices.init();
@@ -38,7 +38,7 @@ var GameEngine = ( function () {
     }
     
     function updatePlayGround() {
-        GameDraw.updatePlayGround();
+        GameDraw.updatePlayGround( board );
     }
 
 
