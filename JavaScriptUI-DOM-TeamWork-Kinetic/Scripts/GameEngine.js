@@ -1,4 +1,4 @@
-﻿/// <reference path="GameDraw.js" />
+/// <reference path="GameDraw.js" />
 /// <reference path="GameObjects.js" />
 var GameEngine = ( function () {
     var board,
@@ -21,8 +21,7 @@ var GameEngine = ( function () {
 
         GameDraw.initGame(board,diceImg);
 
-        debugger;
-        diceImg.addEventListener('click',clickedToRollDices);
+        diceImg.addEventListener('onclick',clickedToRollDices);
     }
 
     function clickedToRollDices() {
@@ -127,15 +126,35 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
         result = [],
         color = player.color;
 
-    if (color === 'white') {
-        direction = 1;
-    } else {
-        direction = -1;
-    }
-
     color = color.substring(0, 1).toUpperCase() + color.substring(1);
 
-    for (i = 0; i < board.length; i += 1) {
+    if (color.toLowerCase() === 'white') {
+        direction = 1;
+        if (board[0].pieces.length) {
+        	for (j = 0; j < numbers.length; j += 1) {
+                if (board[0 + numbers[j] * direction]['availableFor' + color]) {
+                    result.push(0);
+                    break;
+                }
+            }
+
+            return result;
+        }
+    } else {
+        direction = -1;
+        if (board[board.length - 1].pieces.length) {
+        	for (j = 0; j < numbers.length; j += 1) {
+                if (board[board.length - 1 + numbers[j] * direction]['availableFor' + color]) {
+                    result.push(board.length - 1);
+                    break;
+                }
+            }
+
+            return result;
+        }
+    }    
+
+    for (i = 1, len = board.length; i < board.length - 1; i += 1) {
         if (board[i].pieces[0].color === color.toLowerCase()) {
             for (j = 0; j < numbers.length; j += 1) {
                 if (board[i + numbers[j] * direction]['availableFor' + color]) {
@@ -148,6 +167,7 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
 
     return result;
 }
+
 // // All events will call GameEngine.Update() and GameDraw.Update().
 
 
