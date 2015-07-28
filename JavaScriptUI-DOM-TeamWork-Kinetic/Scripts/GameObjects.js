@@ -3,6 +3,7 @@ var GameObjects = ( function () {
         Piece,
         Player,
         Dice,
+        Dices, // we work Dices in update() not Dice
         BoardField,
         boardLength = 26,
         CONSTANTS = {
@@ -179,16 +180,7 @@ var GameObjects = ( function () {
         Object.defineProperty(dice, 'init', {
             value: function() {
                 this.number = CONSTANTS.DICE_DEFAULT_NUMBER;
-                this.isUsed = false; // whether the player moved with the number of that dice
-            }
-        });
-
-        Object.defineProperty(dice, 'isUsed', {
-            get: function () {
-                return this._isUsed;
-            },
-            set: function (value) {
-                this._isUsed = value;
+                return this;
             }
         });
 
@@ -210,11 +202,46 @@ var GameObjects = ( function () {
         return dice;
     }());
 
+    Dices = ( function() {
+        var dices = Object.create({}),
+            firstDice = Object.create(Dice.init()),
+            secondDice = Object.create(Dice.init());
+
+        Object.defineProperty(dices,'init',{
+            value: function() {
+                this.numbers = [];
+                return this;
+            }
+        });
+
+        Object.defineProperty(dices,'rollDices', {
+           value: function() {
+               this.numbers.push(firstDice.rollDice());
+               this.numbers.push(secondDice.rollDice());
+           }
+        });
+
+        Object.defineProperty(dices,'usedNumber',{
+           value: function(number) {
+               var index = this.numbers.indexOf(number);
+               this.numbers.splice(index,1);
+           }
+        });
+
+        Object.defineProperty(dices,'clearNumbers', { // in case the player doesnt have any moves with those Dice numbers
+           value: function() {
+               this.numbers.splice(0,this.numbers.length);
+           }
+        });
+
+        return dices;
+    }());
+
     return {
         Board: Board,
         Player: Player,
         Piece: Piece,
-        Dice: Dice
+        Dices: Dices
     };
 
 }());
