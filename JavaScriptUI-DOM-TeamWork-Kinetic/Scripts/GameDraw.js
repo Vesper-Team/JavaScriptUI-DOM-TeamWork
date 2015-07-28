@@ -1,4 +1,6 @@
 ﻿/// <reference path="lib/kinetic.js" />
+/// <reference path="lib/jquery-2.1.4.js" />
+/// <reference path="GameEngine.js" />
 
 var GameDraw = ( function () {
 
@@ -8,6 +10,7 @@ var GameDraw = ( function () {
         width,
         height,
         CONSTANTS = {
+            CIRCLE_RADIUS: 25,
             OBJ_SIZE_X: 60,
             OBJ_SIZE_Y: 52,
             TOP_START_POS_X: 30,
@@ -24,6 +27,7 @@ var GameDraw = ( function () {
 
     backgroundLayer = new Kinetic.Layer();
     playGroundLayer = new Kinetic.Layer();
+    positionLayer = new Kinetic.Layer();
 
     width = stage.getWidth();
     height = stage.getHeight();
@@ -31,18 +35,32 @@ var GameDraw = ( function () {
     function getPosition( objX, objY ) {
         var x,
             y,
-            middleBoard = 0;
+            middleBoard = 0,
+            outOfGamePosition_X = 0,
+            outOfGamePosition_Y = 0;
+
+        if ( objX === 0 || objX === 25 ) {
+            outOfGamePosition = 50;
+        }
 
         if ( objX < 7 || ( 12 < objX && 18 < objX ) ) {
             middleBoard = 39;
         }
 
-        if ( 13 <= objX && objX < 25 ) {
+        if ( objX === 25 ) {
+            x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X )
+                + middleBoard + outOfGamePosition;
+            y = CONSTANTS.TOP_START_POS_Y + ( outOfGamePosition_Y * CONSTANTS.OBJ_SIZE_Y );
+        } else if ( 13 <= objX && objX < 25 ) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
         } else if ( 1 <= objX && objX < 13 ) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.BOTTOM_START_POS_Y - ( objY * CONSTANTS.OBJ_SIZE_Y );
+        } else if ( objX === 0 ) {
+            x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X )
+                + middleBoard + outOfGamePosition;
+            y = CONSTANTS.BOTTOM_START_POS_Y - ( outOfGamePosition_Y * CONSTANTS.OBJ_SIZE_Y );
         }
 
         return {
@@ -95,11 +113,21 @@ var GameDraw = ( function () {
     };
 
     function createCircle( x, y, color ) {
-        var radius = 25;
-        var pos = getPosition( x, y );
-        var posX = Math.floor( pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ) );
-        var posY = Math.floor( pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ) );
-        var strokeColor;
+        var radius,
+            pos,
+            posX,
+            posY,
+            strokeColor,
+            nuberOfPieces = y + 1;
+
+        if ( y > 4 ) {
+            y = 0;
+        }
+
+        radius = CONSTANTS.CIRCLE_RADIUS;
+        pos = getPosition( x, y );
+        posX = Math.floor( pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ) );
+        posY = Math.floor( pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ) );
 
         if ( color === 'white' ) {
             strokeColor = 'black';
@@ -113,46 +141,69 @@ var GameDraw = ( function () {
             x: posX,
             y: posY,
             radius: radius,
-            stroke: strokeColor,            
+            stroke: strokeColor,
             fillRadialGradientStartRadius: 0,
             fillRadialGradientEndRadius: radius,
             fillRadialGradientColorStops: [0, 'gray', 1, color],
-            draggable: true,
+        } );
+
+        var text = new Kinetic.Text( {
+            x: pos.x,
+            y: posY - 9,
+            text: nuberOfPieces,
+            fontSize: 18,
+            fontFamily: 'Calibri',
+            width: CONSTANTS.OBJ_SIZE_X,
+            fill: strokeColor,
+            align: 'center'
         } );
 
         playGroundLayer.add( circle );
+
+        if ( nuberOfPieces > 5 || x === 0 || x === 25 ) {
+            playGroundLayer.add( text );
+        }
     };
 
-    //function createRectangle( x, y, color ) {
+    function createRectangleListener( x, y ) {
 
-    //    var pos = getPosition( x, y );
-    //    var posX = Math.floor( pos.x );
-    //    var posY = Math.floor( pos.y );
+        var pos = getPosition( x, y );
+        var posX = Math.floor( pos.x );
+        var posY = Math.floor( pos.y );
 
-    //    var rect = new Kinetic.Rect( {
-    //        x: posX,
-    //        y: posY,
-    //        width: CONSTANTS.OBJ_SIZE_X,
-    //        height: CONSTANTS.OBJ_SIZE_Y,
-    //        fill: color,
-    //        draggable: true,
-    //    } );
+        var rect = new Kinetic.Rect( {
+            x: posX,
+            y: posY,
+            width: CONSTANTS.OBJ_SIZE_X,
+            height: ( CONSTANTS.OBJ_SIZE_Y * 5 ),
+        } );
 
-    //    playGroundLayer.add( rect );
-    //};
+        positionLayer.add( rect );
 
-    
+        rect.addEventListener( 'click', function () {
+            playGroundLayer.destroyChildren();
+            GameEngine.test( rect.getAbsolutePosition().x, rect.getAbsolutePosition().y );
+        } );
+    };        
 
     function playGround() {
+        stage.add( positionLayer );
         stage.add( playGroundLayer );
+
         playGroundLayer.setZIndex( 10 );
+        positionLayer.setZIndex( 10 );
     };
+
+    function updatePlayGround() {
+        playGroundLayer.draw();
+    }
 
     return {
         background: background,
         playGround: playGround,
         createCircle: createCircle,
-        //createRectangle: createRectangle,
+        createRectangleListener: createRectangleListener,
+        updatePlayGround: updatePlayGround,
     }
 }() );
 
