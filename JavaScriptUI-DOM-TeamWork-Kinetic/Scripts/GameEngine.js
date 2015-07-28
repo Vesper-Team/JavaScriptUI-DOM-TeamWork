@@ -1,21 +1,17 @@
 ﻿/// <reference path="GameDraw.js" />
 /// <reference path="GameObjects.js" />
-
 var GameEngine = ( function () {
-	var board;
+    var board,
+        players,
+        dices,
+        diceImg = new Image(),
+        firstDiceThrow;
 
-	function start() {
-		var x,
-		y,
-		color,
-		i,
-		j,
-		lengthBoard,
-		lengthField;
-
-		var players = [];
-		players.push(Object.create(GameObjects.Player).init('First', 'white'));
-		players.push(Object.create(GameObjects.Player).init('Second', 'black'));
+    function start() {
+        players = [];
+        // playerOneName , playerTwoName - variables containing names from start screen
+        players.push(Object.create(GameObjects.Player).init('First', 'white'));
+        players.push(Object.create(GameObjects.Player).init('Second', 'black'));
 
         //TODO check 
         board = GameObjects.Board.init();
@@ -23,33 +19,41 @@ var GameEngine = ( function () {
         // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
         dices = GameObjects.Dices.init();
 
-        // TESTING Dices:
-        //dices.rollDices();
-        //console.log('dices.rollDices() - [' + dices.numbers + ']');
-        //console.log('dices.removeNumber(' + dices.numbers[0] + ') - ');
-        //dices.usedNumber(dices.numbers[0]);
-        //console.log(dices.numbers);
-        //console.log('dices.clearNumbers() - ');
-        //dices.clearNumbers();
-        //console.log(dices.numbers);
-        // END OF TEST;
+        GameDraw.initGame(board,diceImg);
 
-        GameDraw.initGame(board);
+        diceImg.addEventListener('click',clickedToRollDices);
+    }
+
+    function clickedToRollDices() {
+        debugger;
+        if (firstDiceThrow) {
+            firstDiceThrow = false;
+            throwFirstDiceToDeterminePlayer();
+        }
+        if (dices.numbers.length === 0) {
+            dices.rollDices();
+        }
+        update();
     }
 
     function updatePlayGround() {
-    	GameDraw.updatePlayGround(board);
+        GameDraw.updatePlayGround(board);
     }
 
 
     function update() {
-        // get dice numbers
-        // choose player to play
-        var possibleStartMoves = getFieldsWithMovesAvailable();
-        if(possibleStartMoves.length === 0) {
-            // next player
+        // taking player
+        var currentPlayer = setCurrentPlayerOnTurn();
+
+        // finding his possible moves
+        var possibleStartMoves = getFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
+        if (possibleStartMoves.length === 0) {
+            // TODO: show that there are no more moves, next player -> calling clickedToRollDices or telling to roll again
         }
+
+        // adding where the player can play
         addListenersToPossibleGameFields(possibleStartMoves);
+
         // currentPlayer = GetCurrentPlayer - depending on player.isOnTurn or isFirstPlayerOnTurn
 
         // flag hasThrownDice -> if not - throw dice(allowedMoves = diceResult, currentPlayerMoves = 0); else - continue
@@ -67,6 +71,10 @@ var GameEngine = ( function () {
         // if current player has no pieces on the board -> He wins.
 
         // if (playerMoves === allowedMoves) -> change player, hasThrownDice = false
+
+
+        // dunno whether this should be here
+        updatePlayGround();
     }
 
     function addListenersToPossibleGameFields(gameFields) {
@@ -76,104 +84,75 @@ var GameEngine = ( function () {
             var currentField = gameFields[i];
             currentField.addEventListener('click', selectAndPaintLastPiece(currentField));
         }
+        function selectAndPaintLastPiece(gameField) {
+            var lengthOfPiecesInField = gameField.pieces.length;
+            gameField.pieces[lengthOfPiecesInField - 1].isChosen = true;
+        }
     }
 
-    function selectAndPaintLastPiece(gameField) {
-        var len = gameField.pieces.length;
-        gameField.pieces[len - 1].isChosen = true;
+    function throwFirstDiceToDeterminePlayer() {
+        dices.rollDices();
+        if (dices.numbers[0] > dices.numbers[1]) {
+            players[0].isOnTurn = true;
+        } else if (dices.numbers[0] < dices.numbers[1]) {
+            players[1].isOnTurn = true;
+        } else {
+            firstDiceThrow = true;
+            clickedToRollDices();
+        }
     }
 
-    /////////////
-    function test(x, y) {
-        //alert( x + ' ' + y );
-
-        board.movePiece(6, 7);
-
-        updatePlayGround();
+    function setCurrentPlayerOnTurn() {
+        if (players[0].isOnTurn) {
+            currentPlayer = players[0];
+            players[0].isOnTurn = false;
+            players[1].isOnTurn = true;
+        } else {
+            currentPlayer = players[1];
+            players[0].isOnTurn = true;
+            players[1].isOnTurn = false;
+        }
     }
-
-    /////////////
 
     return {
-    	start: start,
-    	update: update,
-    	test: test,
+        start: start,
+        update: update
     };
 }() );
 
-function getFieldsWithMovesAvailable (player, board, numbers) {
-	var direction,
-	i, j,
-	result = [],
-	color = player.color;
+function getFieldsWithMovesAvailable(player, board, numbers) {
+    var direction,
+        i, j,
+        result = [],
+        color = player.color;
 
-	if (color === 'white') {
-		direction = 1;
-	} else {
-		direction = -1;
-	}
+    if (color === 'white') {
+        direction = 1;
+    } else {
+        direction = -1;
+    }
 
-	color = color.substring(0, 1).toUpperCase() + color.substring(1);
+    color = color.substring(0, 1).toUpperCase() + color.substring(1);
 
-	for (i = 0; i < board.length; i += 1) {
-		if (board[i].pieces[0].color === color.toLowerCase()) {
-			for (j = 0; j < numbers.length; j += 1) {
-				if (board[i + numbers[j] * direction]['availableFor' + color]) {
-					result.push(i);
-					break;
-				}
-			}
-		}
-	}
+    for (i = 0; i < board.length; i += 1) {
+        if (board[i].pieces[0].color === color.toLowerCase()) {
+            for (j = 0; j < numbers.length; j += 1) {
+                if (board[i + numbers[j] * direction]['availableFor' + color]) {
+                    result.push(i);
+                    break;
+                }
+            }
+        }
+    }
 
-	return result;
+    return result;
 }
 // // All events will call GameEngine.Update() and GameDraw.Update().
 
 
 //// Logic to add
-function checkIfDiceHaveBeenThrownBefore(firstDiceThrow) {
-    return !firstDiceThrow;
-}
-
-function throwFirstDiceToDeterminePlayer() {
-    firstDice.generateNewNumber();
-    secondDice.generateNewNumber();
-    if (firstDice.number > secondDice.number) {
-        firstPlayerOnTurn = true;
-    } else if (firstDice.number < secondDice.number) {
-        firstPlayerOnTurn = false;
-    } else {
-        firstDiceThrow = true;
-        play();
-    }
-}
-
-function setCurrentPlayerOnTurn(firstPlayerOnTurn) {
-    if (firstPlayerOnTurn) {
-        currentActivePlayer = firstPlayer;
-        inactivePlayer = secondPlayer;
-    }
-    else {
-        currentActivePlayer = secondPlayer;
-        inactivePlayer = firstPlayer;
-    }
-}
-
-function throwDiceAndCheckMaxMovesForTurn() {
-    firstDice.generateNewNumber();
-    secondDice.generateNewNumber();
-    //ANIMATE 
-    if (firstDice.number === secondDice.number) {
-        maximumAllowedMovesInTurn = 4;
-    }
-    else {
-        maximumAllowedMovesInTurn = 2;
-    }
-}
-
-function checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves,maximumAllowedMovesInTurn) {
-    if(currentPlayerMoves < maximumAllowedMovesInTurn && !currentActivePlayer.hasHitChecker && !currentActivePlayer.canTakeChecker) { 
+function checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves, maximumAllowedMovesInTurn) {
+    if (currentPlayerMoves < maximumAllowedMovesInTurn && !currentActivePlayer.hasHitChecker && !currentActivePlayer.canTakeChecker) {
         return true;
     }
     return false;
@@ -199,10 +178,10 @@ function play() {
     if (!checkIfDiceHaveBeenThrownBefore(firstDiceThrow)) {
         throwFirstDiceToDeterminePlayer();
     }
-    
+
     setCurrentPlayerOnTurn(firstPlayerOnTurn); //Will create the current player on turn
     //value,and have a inactivePlayer  value for the one that isnt  on turn at the moment
-    
+
     //IF NO MOVES AVAILABLE SWITCH PLAYERS WITHOUT THROWING DICE (player hit and all his 6 spaces are currently closed by enemy)
     if (!currentActivePlayer.hasMovesAvailable) {  //LOGIC NEEDS TO BE ADDED,WHEN  HAS MOVES AVAILABLE BECOMES FALSE- IT'S TRUE ON START,BUT CHANGES
         firstPlayerOnTurn = !firstPlayerOnTurn;
@@ -219,12 +198,11 @@ function play() {
         if (!currentActivePlayer.hasHitChecker) {
             break;
         }
-       
+
         //WHITE PLAYER - player 1
         if (currentActivePlayer.color === 'white') {
             //check if first dice number field is available
-            if (board.fields[firstDice.number].availableForWhite)
-            {
+            if (board.fields[firstDice.number].availableForWhite) {
                 if (board.fields[firstDice.number].length > 0 && board.fields[firstDice.number][0].color === inactivePlayer.color) {
                     //HIT HIS CHECKER AND PLACE YOUR OWN
                 }
@@ -233,7 +211,7 @@ function play() {
                 }
                 //CHANGE THE STATE OF THAT BOARD SPOT
                 currentPlayerMoves++;
-                if(board.fields[25].length ===0) { 
+                if (board.fields[25].length === 0) {
                     currentActivePlayer.hasHitChecker = false;
                     break;
                 }
@@ -242,7 +220,7 @@ function play() {
                     break;
                 }
 
-            } 
+            }
             else {
                 currentPlayerMoves++; //you lose a move,because u cant set your pull there
                 if (currentPlayerMoves === maximumAllowedMovesInTurn) {
@@ -259,7 +237,7 @@ function play() {
                 }
                 //CHANGE THE STATE OF THAT BOARD SPOT
                 currentPlayerMoves++;
-                if(board.fields[25].length ===0) { 
+                if (board.fields[25].length === 0) {
                     currentActivePlayer.hasHitChecker = false;
                     break;
                 }
@@ -276,18 +254,17 @@ function play() {
                     break;
                 }
             }
-               
-        }
-       
-        
 
-            //IF BLACK PLAYER - player 2
-        
+        }
+
+
+
+        //IF BLACK PLAYER - player 2
+
 
         else {
             //check if first dice number field is available
-            if (board.fields[firstDice.number].availableForBlack)
-            {
+            if (board.fields[firstDice.number].availableForBlack) {
                 if (board.fields[firstDice.number].length > 0 && board.fields[firstDice.number][0].color === inactivePlayer.color) {
                     //HIT HIS CHECKER AND PLACE YOUR OWN
                 }
@@ -296,7 +273,7 @@ function play() {
                 }
                 //CHANGE THE STATE OF THAT BOARD SPOT
                 currentPlayerMoves++;
-                if(board.fields[0].length ===0) { 
+                if (board.fields[0].length === 0) {
                     currentActivePlayer.hasHitChecker = false;
                     break;
                 }
@@ -305,7 +282,7 @@ function play() {
                     break;
                 }
 
-            } 
+            }
             else {
                 currentPlayerMoves++; //you lose a move,because u cant set your pull there
                 if (currentPlayerMoves === maximumAllowedMovesInTurn) {
@@ -322,7 +299,7 @@ function play() {
                 }
                 //CHANGE THE STATE OF THAT BOARD SPOT
                 currentPlayerMoves++;
-                if(board.fields[0].length ===0) { 
+                if (board.fields[0].length === 0) {
                     currentActivePlayer.hasHitChecker = false;
                     break;
                 }
@@ -339,7 +316,7 @@ function play() {
                     break;
                 }
             }
-               
+
         }
 
     }
@@ -350,13 +327,8 @@ function play() {
     }
 
 
-        
-      
-
     //CHECK IF PLAYER IS CURRENTLY TAKING CHECKERS
 
-
-    
 
     if (currentPlayerMoves === maximumAllowedMovesInTurn) {
         play();
@@ -396,67 +368,5 @@ function play() {
     else {  //black player - player 2
 
     }
-
-
     draw();
-    requestAnimationFrame(play);
-
-}
-
-play();
-
-function findPressedField( event ) {
-    var x = event.offsetX;
-    var y = event.offsetY;
-    if ( ( ( x < canvas.width - boardFrameOffset && x > boardFrameOffset + boardSide + boardBar ) ||
-        ( x < boardFrameOffset + boardSide && x > boardFrameOffset ) ) &&
-        ( y < canvas.height - boardFrameOffset && y > boardFrameOffset ) ) { // ignoring every piece of the frame
-        var i = 0,
-            len,
-            foundField,
-            upperSide = false;
-        // determining in which quadrant are we exactly
-        if ( y < canvas.height / 2 && y > boardFrameOffset ) {
-            i = 12; // last field of the upper side, last because if we take the first our condition in the for-loop will be achieved every time
-            upperSide = true;
-        } else {
-            i = 0; // first field of the lower side
-        }
-        if ( x < boardSide + boardFrameOffset && x > boardFrameOffset ) { // left side of the board
-            if ( i === 0 ) { // bottom left side
-                i = 6;
-            } else { // upper left side
-                i = 12;
-            }
-        } else { // right side of the board
-            if ( i === 0 ) { // bottom right side
-                i = 0;
-            } else { // upper left side
-                i = 18; // again last of the array
-            }
-        }
-        for ( len = i + 6; i < len; i += 1 ) {
-            var currentField = board.fields[i];
-            if ( upperSide ) { /* its all because of the fields..
-             the start position of the lower side is most-right and it starts from 0,
-             while the start position of the upper side is the most-left which confuses the algorithm */
-                var previousField = board.fields[i - 1];
-                if ( currentField.x > x ) {
-                    foundField = previousField;
-                    break;
-                }
-            } else {
-                if ( x > currentField.x ) {
-                    foundField = currentField;
-                    break;
-                }
-            }
-        }
-        if ( typeof foundField === 'undefined' ) { // when we are going out of the for-in and the condition for the upperSide is not met,
-            // because we take the previous field element we could not get to check the last one
-            foundField = board.fields[len - 1];
-        }
-        clickedField = foundField;
-        console.log( clickedField ); // testing purposes
-    }
 }
