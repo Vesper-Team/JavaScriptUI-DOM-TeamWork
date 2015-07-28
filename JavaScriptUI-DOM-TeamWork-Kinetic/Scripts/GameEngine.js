@@ -42,8 +42,14 @@ var GameEngine = ( function () {
     }
 
 
-    function update(numberOfBoardField) {
-
+    function update() {
+        // get dice numbers
+        // choose player to play
+        var possibleStartMoves = getFieldsWithMovesAvailable();
+        if(possibleStartMoves.length === 0) {
+            // next player
+        }
+        addListenersToPossibleGameFields(possibleStartMoves);
         // currentPlayer = GetCurrentPlayer - depending on player.isOnTurn or isFirstPlayerOnTurn
 
         // flag hasThrownDice -> if not - throw dice(allowedMoves = diceResult, currentPlayerMoves = 0); else - continue
@@ -61,21 +67,21 @@ var GameEngine = ( function () {
         // if current player has no pieces on the board -> He wins.
 
         // if (playerMoves === allowedMoves) -> change player, hasThrownDice = false
-        function addListenersToPossibleGameFields(gameFields) {
-        	var i,
-        	len;
-        	for (i = 0, len = gameFields.length; i < len; i += 1) {
-        		var currentField = gameFields[i];
-        		currentField.addEventListener('click', selectAndPaintLastPiece(currentField));
-        	}
-        }
+    }
 
-        function selectAndPaintLastPiece(gameField) {
-        	var len = gameField.pieces.length;
-        	gameField.pieces[len - 1].isChosen = true;
+    function addListenersToPossibleGameFields(gameFields) {
+        var i,
+            len;
+        for (i = 0, len = gameFields.length; i < len; i += 1) {
+            var currentField = gameFields[i];
+            currentField.addEventListener('click', selectAndPaintLastPiece(currentField));
         }
     }
 
+    function selectAndPaintLastPiece(gameField) {
+        var len = gameField.pieces.length;
+        gameField.pieces[len - 1].isChosen = true;
+    }
 
     /////////////
     function test(x, y) {
