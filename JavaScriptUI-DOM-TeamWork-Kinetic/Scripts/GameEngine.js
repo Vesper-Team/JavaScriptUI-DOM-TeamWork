@@ -3,8 +3,7 @@
 var GameEngine = ( function () {
     var board,
         players,
-        dices,
-        diceImg = new Image(),
+        dices,       
         firstDiceThrow;
 
     function start() {
@@ -19,10 +18,10 @@ var GameEngine = ( function () {
         // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
         dices = GameObjects.Dices.init();
 
-        GameDraw.initGame(board,diceImg);
+        GameDraw.initGame(board);//,diceImg);
 
-        debugger;
-        diceImg.addEventListener('click',clickedToRollDices);
+        //debugger;
+        //diceImg.addEventListener('click',clickedToRollDices);
     }
 
     function clickedToRollDices() {
@@ -117,7 +116,9 @@ var GameEngine = ( function () {
 
     return {
         start: start,
-        update: update
+        update: update,
+        clickedToRollDices: clickedToRollDices,
+        
     };
 }() );
 

@@ -179,7 +179,9 @@ var GameDraw = ( function () {
     };
 
     ///Dice
-    function createDicesButton( diceImg ) {
+    function createDicesButton(  ) {
+        var diceImg = new Image();
+         
         diceImg.onload = function () {
             var diceImage = new Kinetic.Image( {
                 x: 950,
@@ -198,7 +200,7 @@ var GameDraw = ( function () {
 
             diceImage.addEventListener( 'click', function () {
                 fadeOut( diceImage );
-
+                GameEngine.clickedToRollDices();           
                 fadeIn( diceImage );
 
                 //GameEngine.test();
