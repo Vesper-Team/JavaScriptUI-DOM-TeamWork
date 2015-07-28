@@ -17,10 +17,9 @@ var GameEngine = ( function () {
 
         // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
         dices = GameObjects.Dices.init();
+        firstDiceThrow = true;
 
-        GameDraw.initGame(board);//,diceImg);
-
-        //diceImg.addEventListener('onclick',clickedToRollDices);
+        GameDraw.initGame(board);
     }
 
     function clickedToRollDices() {
@@ -81,7 +80,7 @@ var GameEngine = ( function () {
             len;
         for (i = 0, len = gameFields.length; i < len; i += 1) {
             var currentField = gameFields[i];
-            currentField.addEventListener('click', selectAndPaintLastPiece(currentField));
+            currentField.addEventListener('mousedown', selectAndPaintLastPiece(currentField));
         }
         function selectAndPaintLastPiece(gameField) {
             var lengthOfPiecesInField = gameField.pieces.length;
@@ -103,13 +102,13 @@ var GameEngine = ( function () {
 
     function setCurrentPlayerOnTurn() {
         if (players[0].isOnTurn) {
-            currentPlayer = players[0];
             players[0].isOnTurn = false;
             players[1].isOnTurn = true;
+            return players[0];
         } else {
-            currentPlayer = players[1];
             players[0].isOnTurn = true;
             players[1].isOnTurn = false;
+            return players[1];
         }
     }
 
