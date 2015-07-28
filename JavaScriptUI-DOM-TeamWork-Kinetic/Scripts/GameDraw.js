@@ -236,7 +236,7 @@ var GameDraw = ( function () {
             } );
         };
 
-        diceImg.src = 'Images/dice2.png';
+        diceImg.src = 'Images/DicesNoBackground.jpg';
     }
 
     function initGame( board ) {
