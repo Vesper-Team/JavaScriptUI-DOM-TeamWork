@@ -155,6 +155,7 @@ var GameDraw = ( function () {
             y: posY,
             radius: radius,
             stroke: strokeColor,
+            draggable: isChosen,
             fillRadialGradientStartRadius: 0,
             fillRadialGradientEndRadius: radius,
             fillRadialGradientColorStops: [0, 'gray', 1, color],
