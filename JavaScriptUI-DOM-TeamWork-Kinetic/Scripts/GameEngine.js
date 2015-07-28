@@ -1,4 +1,7 @@
-﻿var GameEngine = ( function () {
+﻿/// <reference path="GameDraw.js" />
+/// <reference path="GameObjects.js" />
+
+var GameEngine = ( function () {
     var board;
 
     function start() {
@@ -64,7 +67,7 @@
     /////////////
     function test( x, y ) {
         //alert( x + ' ' + y );
-
+       
         board.movePiece( 6, 7 );
 
         updatePlayGround();
