@@ -178,8 +178,6 @@ var GameDraw = ( function () {
         }
     };
 
-<<<<<<< HEAD
-=======
     function createRectangleListener( x, y ) {
 
         var pos = transformPositionFromBoardDataToBoardCanvas( x, y );
@@ -210,7 +208,7 @@ var GameDraw = ( function () {
             GameEngine.update( pos.x );
         } );
     };
->>>>>>> origin/master
+
     ///Dice
     function createDicesButton( diceImg ) {
         debugger;
@@ -219,13 +217,10 @@ var GameDraw = ( function () {
                 x: 950,
                 y: 280,
                 image: diceImg,
-<<<<<<< HEAD
                 width: 80,
                 height: 80,
-=======
                 width: 120,
                 height: 120,
->>>>>>> origin/master
             } );
 
             diceLayer.add( diceImage );
@@ -241,20 +236,10 @@ var GameDraw = ( function () {
                 //GameEngine.test();
             } );
         };
-<<<<<<< HEAD
-        diceImg.src = 'Images/dice2.png';
-    }
-    
-    
-    function initGame( board, diceImg ) {
-=======
-
         diceImg.src = 'Images/DicesNoBackground.jpg';
     }
 
-    function initGame( board ) {
-
->>>>>>> origin/master
+    function initGame( board, diceImg ) {
         initBackground();
         updatePlayGround( board );
         createDicesButton( diceImg );
