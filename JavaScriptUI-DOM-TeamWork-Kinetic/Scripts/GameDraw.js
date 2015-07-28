@@ -31,8 +31,23 @@ var GameDraw = ( function () {
 
     width = stage.getWidth();
     height = stage.getHeight();
+    
+     function transformPositionFromBoardCanvasToBoardData( objX, objY ) {
+        var x,
+            y;            
 
-    function getPosition( objX, objY ) {
+        if ( objY < 310 ) {
+            x = Math.round( objX / CONSTANTS.OBJ_SIZE_X ) + 12;
+        } else {
+            x = 13 - Math.round( objX / CONSTANTS.OBJ_SIZE_X );
+        }
+
+        return {
+            x: x,
+        }
+    }
+
+    function transformPositionFromBoardDataToBoardCanvas( objX, objY ) {
         var x,
             y,
             middleBoard = 0;
@@ -123,7 +138,7 @@ var GameDraw = ( function () {
         }
 
         radius = CONSTANTS.CIRCLE_RADIUS;
-        pos = getPosition( x, y );
+        pos = transformPositionFromBoardDataToBoardCanvas( x, y );
         posX = Math.floor( pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ) );
         posY = Math.floor( pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ) );
 
@@ -165,7 +180,7 @@ var GameDraw = ( function () {
 
     function createRectangleListener( x, y ) {
 
-        var pos = getPosition( x, y );
+        var pos = transformPositionFromBoardDataToBoardCanvas( x, y );
         var posX = Math.floor( pos.x );
         var posY = Math.floor( pos.y );
         var height = x < 13 ? ( -CONSTANTS.OBJ_SIZE_Y ) : CONSTANTS.OBJ_SIZE_Y;
@@ -181,8 +196,16 @@ var GameDraw = ( function () {
         positionLayer.add( rect );
 
         rect.addEventListener( 'click', function () {
+            var x,
+                y,
+                pos;
+
+            pos = transformPositionFromBoardCanvasToBoardData( rect.getAbsolutePosition().x,
+                rect.getAbsolutePosition().y );
+
             playGroundLayer.destroyChildren();
-            GameEngine.test( rect.getAbsolutePosition().x, rect.getAbsolutePosition().y );
+
+            GameEngine.update( pos.x );
         } );
     };
 

@@ -42,7 +42,7 @@ var GameEngine = ( function () {
     }
 
 
-    function update() {
+    function update(numberOfBoardField) {
 
         // currentPlayer = GetCurrentPlayer - depending on player.isOnTurn or isFirstPlayerOnTurn
 
