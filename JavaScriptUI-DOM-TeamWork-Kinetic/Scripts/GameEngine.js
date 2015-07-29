@@ -48,9 +48,9 @@ var GameEngine = ( function () {
                 clearNumbers();
             } else if (possibleStartPositions.length === 1){
                 if (board[possibleStartPositions[0]].pieces.length >= 5) {
-                    board[possibleStartPositions[0]].pieces[4].isChosen;
+                    board[possibleStartPositions[0]].pieces[4].isChosen = true;
                 } else {
-                    board[possibleStartPositions[0]].pieces[pieces.length - 1].isChosen;
+                    board[possibleStartPositions[0]].pieces[pieces.length - 1].isChosen = true;
                 }
                 // TODO - add listeners to receiving spots
                 // TODO - move
