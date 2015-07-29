@@ -69,7 +69,9 @@ var GameObjects = ( function () {
         }
 
         function setAvailabilityOfFields(board) {
-            for (i = 1; i < board.length - 1; i += 1) {
+            var i,
+                len = board.length - 1;
+            for (i = 1; i < len; i += 1) {
                 board[i].availableForBlack = true;
                 board[i].availableForWhite = true;
 
@@ -79,8 +81,6 @@ var GameObjects = ( function () {
                 if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'black') {
                     board[i].availableForWhite = false;
                 }
-
-                //console.log( board[i] )
             }
         }
 
