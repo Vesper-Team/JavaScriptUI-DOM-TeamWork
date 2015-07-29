@@ -55,33 +55,33 @@ var GameDraw = ( function () {
         }
     }
 
-    function transformPositionFromBoardDataToBoardCanvas(objX, objY) {
+     function transformPositionFromBoardDataToBoardCanvas( objX, objY ) {
         var x,
             y,
             middleBoard = 0;
-
-        if (objX === 0 || objX === 25) {
+              
+        if ( objX === 0 || objX === 25 ) {
             outOfGamePosition = 50;
         }
 
-        if (objX < 7 || ( 12 < objX && 18 < objX )) {
+        if ( objX < 7 || ( 12 < objX && 18 < objX ) ) {
             middleBoard = 39;
         }
 
-        if (objX === 25) {
+        if ( objX === 25 ) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
-            y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
-        } else if (13 <= objX && objX < 25) {
+            y = CONSTANTS.TOP_START_POS_Y;
+        } else if ( 13 <= objX && objX < 25 ) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
-        } else if (1 <= objX && objX < 13) {
+        } else if ( 1 <= objX && objX < 13 ) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.BOTTOM_START_POS_Y - ( objY * CONSTANTS.OBJ_SIZE_Y );
-        } else if (objX === 0) {
+        } else if ( objX === 0 ) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
-            y = CONSTANTS.BOTTOM_START_POS_Y - ( objY * CONSTANTS.OBJ_SIZE_Y );
+            y = CONSTANTS.BOTTOM_START_POS_Y;
         }
 
         return {
@@ -184,6 +184,72 @@ var GameDraw = ( function () {
         if (nuberOfPieces > 5 || x === 0 || x === 25) {
             playGroundLayer.add(text);
         }
+    };
+    
+    function createCirclePositionForOutGamePieces( x, y, color ) {
+        var radius,
+           pos,
+           posX,
+           posY;
+
+        radius = CONSTANTS.CIRCLE_RADIUS;
+        pos = transformPositionFromBoardDataToBoardCanvas( x, y );
+        posX = Math.floor( pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ) );
+        posY = Math.floor( pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ) );
+
+        var circle = new Kinetic.Circle( {
+            x: posX,
+            y: posY,
+            radius: radius,
+            stroke: color,
+        } );
+
+        backgroundLayer.add( circle );
+    };
+    
+    function createRectangleListener( x, y ) {
+        var pos,
+            posX,
+            posY,
+            posYTop,
+            posYBottom,
+            height;
+
+        pos = transformPositionFromBoardDataToBoardCanvas( x, y );
+        posX = Math.floor( pos.x );
+        posYTop = Math.floor( pos.y );
+        posYBottom = Math.floor( pos.y + CONSTANTS.OBJ_SIZE_Y );
+
+        if ( x > 12 ) {
+            posY = posYTop;
+            height = x === 25 ? 1 : 5;
+        } else {           
+            posY = posYBottom;
+            height = x === 0 ? -1 : -5;
+        } 
+
+        var rect = new Kinetic.Rect( {
+            x: posX,
+            y: posY,
+            width: CONSTANTS.OBJ_SIZE_X,
+            height: ( CONSTANTS.OBJ_SIZE_Y * height ),
+            //fill:'yellow',
+        } );
+
+        positionLayer.add( rect );
+
+        rect.addEventListener( 'click', function () {
+            var x,
+                y,
+                pos;
+
+            pos = transformPositionFromBoardCanvasToBoardData( rect.getAbsolutePosition().x,
+                rect.getAbsolutePosition().y );                        
+
+            playGroundLayer.destroyChildren();
+
+            GameEngine.update( pos.x );
+        } );
     };
 
     ///Dice
@@ -309,19 +375,48 @@ var GameDraw = ( function () {
         }
     }
 
-    function initGame(board, diceImg) {
+    // function initGame(board, diceImg) {
+    //     initBackground();
+    //     updatePlayGround(board);
+    //     createDicesButton(diceImg);
+
+    //     stage.add(positionLayer);
+    //     stage.add(playGroundLayer);
+    //     stage.add(diceLayer);
+
+    //     playGroundLayer.setZIndex(10);
+    //     positionLayer.setZIndex(10);
+    //     diceLayer.setZIndex(10);
+    // };
+    
+    function initGame( board ) {
+        var x,
+            len;
+
         initBackground();
-        updatePlayGround(board);
-        createDicesButton(diceImg);
 
-        stage.add(positionLayer);
-        stage.add(playGroundLayer);
-        stage.add(diceLayer);
+        len = board.length;
+        for ( x = 0; x < len; x += 1 ) {
+            if ( x < 13 ) {
+                createRectangleListener( x, 0 );
+            } else {
+                createRectangleListener( x, 0 );
+            }
+        }
 
-        playGroundLayer.setZIndex(10);
-        positionLayer.setZIndex(10);
-        diceLayer.setZIndex(10);
+        createCirclePositionForOutGamePieces( 25, 0, 'yellow' );
+        createCirclePositionForOutGamePieces(0, 0, 'yellow');
+                
+        updatePlayGround( board );
+        createDicesButton();
+
+        stage.add( positionLayer );
+        stage.add( playGroundLayer );
+
+        playGroundLayer.setZIndex( 10 );
+        positionLayer.setZIndex( 10 );
     };
+
 
     function updatePlayGround(board) {
         var x,
