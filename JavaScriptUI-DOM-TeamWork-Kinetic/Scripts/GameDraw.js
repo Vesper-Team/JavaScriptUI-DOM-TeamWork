@@ -205,6 +205,9 @@ var GameDraw = ( function () {
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
+                if(dices.numbers.length !== 0) {
+                    return;
+                }
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
@@ -226,6 +229,9 @@ var GameDraw = ( function () {
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
+                if(dices.numbers.length !== 0) {
+                    return;
+                }
                 document.getElementById('dices').style.display = 'inline';
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
