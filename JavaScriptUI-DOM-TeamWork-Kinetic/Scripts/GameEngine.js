@@ -43,7 +43,7 @@ var GameEngine = ( function () {
         var currentPlayer = players[0].isOnTurn ? players[0] : players[1];
 
         // finding his possible moves
-        var possibleStartMoves = getFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
+        var possibleStartMoves = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
         if (possibleStartMoves.length === 0) {
             clickedToRollDices();
             setCurrentPlayerOnTurn();
@@ -129,7 +129,7 @@ var GameEngine = ( function () {
     };
 }() );
 
-function getFieldsWithMovesAvailable(player, board, numbers) {
+function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
     var direction,
         i, j,
         result = [],
@@ -143,12 +143,11 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
         if (board[0].pieces.length) {
             for (j = 0; j < numbers.length; j += 1) {
                 if (board[0 + numbers[j] * direction]['availableFor' + color]) {
-                    result.push(0);
-                    break;
+                    return [0];
                 }
             }
 
-            return result;
+            return result;            
         }
     } else {
         direction = -1;
@@ -156,8 +155,7 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
         if (board[board.length - 1].pieces.length) {
             for (j = 0; j < numbers.length; j += 1) {
                 if (board[board.length - 1 + numbers[j] * direction]['availableFor' + color]) {
-                    result.push(board.length - 1);
-                    break;
+                    return [board.length - 1];
                 }
             }
 

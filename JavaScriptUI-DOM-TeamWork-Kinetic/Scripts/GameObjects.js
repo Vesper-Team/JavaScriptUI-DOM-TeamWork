@@ -79,7 +79,7 @@ var GameObjects = ( function () {
                     board[i].availableForWhite = false;
                 }
 
-                console.log( board[i] )
+                //console.log( board[i] )
             }
         }
 
