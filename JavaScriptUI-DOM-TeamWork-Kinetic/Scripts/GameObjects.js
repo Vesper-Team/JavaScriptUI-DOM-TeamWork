@@ -12,31 +12,31 @@ var GameObjects = ( function () {
 
     // pole ot igralnoto pole
     BoardField = ( function () {
-        var boardField = Object.create( {} );
+        var boardField = Object.create({});
 
-        Object.defineProperty( boardField, 'init', {
+        Object.defineProperty(boardField, 'init', {
             value: function () {
                 this.availableForBlack = true,
-                this.availableForWhite = true,
-                this.pieces = [];
+                    this.availableForWhite = true,
+                    this.pieces = [];
 
                 return this;
             }
-        } );
+        });
 
         return boardField;
     }() );
 
     // igralno pole
     Board = ( function () {
-        var board = Object.create( [] );
+        var board = Object.create([]);
 
         // Inner helper functions.
-        function putBoardFields( self ) {
+        function putBoardFields(self) {
             var i;
 
-            for ( i = 0; i < boardLength; i += 1 ) {
-                self.push( Object.create( BoardField ).init() );
+            for (i = 0; i < boardLength; i += 1) {
+                self.push(Object.create(BoardField).init());
             }
 
             self[0].availableForBlack = false;
@@ -44,39 +44,39 @@ var GameObjects = ( function () {
 
         }
 
-        function addPiecesToBoard( self, color, numberOfPieces, position ) {
+        function addPiecesToBoard(self, color, numberOfPieces, position) {
             var pieceNumber, currentPiece;
 
-            for ( pieceNumber = 0; pieceNumber < numberOfPieces; pieceNumber += 1 ) {
-                currentPiece = Object.create( Piece ).init( color );
-                self[position].pieces.push( currentPiece );
+            for (pieceNumber = 0; pieceNumber < numberOfPieces; pieceNumber += 1) {
+                currentPiece = Object.create(Piece).init(color);
+                self[position].pieces.push(currentPiece);
             }
         }
 
-        function putPlayerOnePieces( self ) {
-            addPiecesToBoard( self, 'white', 2, 1 );
-            addPiecesToBoard( self, 'white', 5, 12 );
-            addPiecesToBoard( self, 'white', 3, 17 );
-            addPiecesToBoard( self, 'white', 5, 19 );
+        function putPlayerOnePieces(self) {
+            addPiecesToBoard(self, 'white', 2, 1);
+            addPiecesToBoard(self, 'white', 5, 12);
+            addPiecesToBoard(self, 'white', 3, 17);
+            addPiecesToBoard(self, 'white', 5, 19);
         }
 
-        function putPlayerTwoPieces( self ) {
-            addPiecesToBoard( self, 'black', 2, 24 );
-            addPiecesToBoard( self, 'black', 5, 13 );
-            addPiecesToBoard( self, 'black', 3, 8 );
-            addPiecesToBoard( self, 'black', 5, 6 );
+        function putPlayerTwoPieces(self) {
+            addPiecesToBoard(self, 'black', 2, 24);
+            addPiecesToBoard(self, 'black', 5, 13);
+            addPiecesToBoard(self, 'black', 3, 8);
+            addPiecesToBoard(self, 'black', 5, 6);
 
         }
 
-        function setAvailabilityOfFields( board ) {
-            for ( i = 1; i < board.length - 1; i += 1 ) {
+        function setAvailabilityOfFields(board) {
+            for (i = 1; i < board.length - 1; i += 1) {
                 board[i].availableForBlack = true;
                 board[i].availableForWhite = true;
 
-                if ( board[i].pieces.length > 1 && board[i].pieces[1].color === 'white' ) {
+                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'white') {
                     board[i].availableForBlack = false;
                 }
-                if ( board[i].pieces.length > 1 && board[i].pieces[1].color === 'black' ) {
+                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'black') {
                     board[i].availableForWhite = false;
                 }
 
@@ -85,175 +85,184 @@ var GameObjects = ( function () {
         }
 
 
-        Object.defineProperty( board, 'init', {
+        Object.defineProperty(board, 'init', {
             value: function () {
                 var self = this;
-                putBoardFields( self );
-                putPlayerOnePieces( self );
-                putPlayerTwoPieces( self );
-                setAvailabilityOfFields( self );
+                putBoardFields(self);
+                putPlayerOnePieces(self);
+                putPlayerTwoPieces(self);
+                setAvailabilityOfFields(self);
                 return this;
             }
-        } );
+        });
 
         // Called from update when moving. Ex.: gameBoard.movePiece({color:white}, 2, 5);
-        Object.defineProperty( board, 'movePiece', {
-            value: function ( fromBoardField, toBoardField ) {
+        Object.defineProperty(board, 'movePiece', {
+            value: function (fromBoardField, toBoardField) {
                 var piece = this[fromBoardField].pieces.pop();
-                this[toBoardField].pieces.push( piece );
+                this[toBoardField].pieces.push(piece);
                 return this;
             }
-        } );
+        });
 
         return board;
     }() );
 
     // igrach
     Player = ( function () {
-        var player = Object.create( {} );
+        var player = Object.create({});
         //var CONSTANTS_PLAYER = {
         //    TOTAL_NUMBER_OF_PIECES: 15,
         //    INIT_X: 0,
         //    INIT_Y: 0
         //};
 
-        Object.defineProperty( player, 'init', {
-            value: function ( name, color ) {
+        Object.defineProperty(player, 'init', {
+            value: function (name, color) {
                 this.name = name;
                 this.color = color;
                 this.isOnTurn = false;
-                this.numberOfPieces = 15;
+                this.countOfPieces = 15;
 
                 return this;
             }
-        } );
+        });
 
-        Object.defineProperty( player, 'name', {
+        Object.defineProperty(player, 'name', {
             get: function () {
                 return this._name;
             },
-            set: function ( value ) {
+            set: function (value) {
                 this._name = value;
             }
-        } );
+        });
 
-        Object.defineProperty( player, 'color', {
+        Object.defineProperty(player, 'color', {
             get: function () {
                 return this._color;
             },
-            set: function ( value ) {
+            set: function (value) {
                 this._color = value;
             }
-        } );
+        });
 
-        Object.defineProperty( player, 'isOnTurn', {
+        Object.defineProperty(player, 'isOnTurn', {
             get: function () {
                 return this._isOnTurn;
             },
-            set: function ( value ) {
+            set: function (value) {
                 this._isOnTurn = value;
             }
-        } );
+        });
+
+        Object.defineProperty(player, 'countOfPieces', {
+            get: function () {
+                return this._countOfPieces;
+            },
+            set: function (value) {
+                this._countOfPieces = value;
+            }
+        });
 
         return player;
     }() );
 
     // pulowe
     Piece = ( function () {
-        var piece = Object.create( {} );
+        var piece = Object.create({});
 
-        Object.defineProperty( piece, 'init', {
-            value: function ( color ) {
+        Object.defineProperty(piece, 'init', {
+            value: function (color) {
                 this.color = color;
                 this.isChosen = false;
                 return this;
             }
-        } );
+        });
 
-        Object.defineProperty( piece, 'color', {
+        Object.defineProperty(piece, 'color', {
             get: function () {
                 return this._color;
             },
-            set: function ( value ) {
+            set: function (value) {
                 this._color = value;
             }
-        } );
+        });
 
-        Object.defineProperty( piece, 'isChosen', {
+        Object.defineProperty(piece, 'isChosen', {
             get: function () {
                 return this._isChosen;
             },
-            set: function ( value ) {
+            set: function (value) {
                 this._isChosen = value;
             }
-        } );
+        });
 
         return piece;
     }() );
 
     Dice = ( function () {
-        var dice = Object.create( {} );
+        var dice = Object.create({});
 
-        Object.defineProperty( dice, 'init', {
+        Object.defineProperty(dice, 'init', {
             value: function () {
                 this.number = CONSTANTS.DICE_DEFAULT_NUMBER;
                 return this;
             }
-        } );
+        });
 
-        Object.defineProperty( dice, 'number', {
+        Object.defineProperty(dice, 'number', {
             get: function () {
                 return this._number;
             },
-            set: function ( value ) {
+            set: function (value) {
                 this._number = value;
             }
-        } );
+        });
 
-        Object.defineProperty( dice, 'rollDice', {
+        Object.defineProperty(dice, 'rollDice', {
             value: function () {
-                return this.number = Math.floor( Math.random() * 6 ) + 1;
+                return this.number = Math.floor(Math.random() * 6) + 1;
             }
-        } );
+        });
 
         return dice;
     }() );
 
     Dices = ( function () {
-        var dices = Object.create( {} ),
-            firstDice = Object.create( Dice.init() ),
-            secondDice = Object.create( Dice.init() );
+        var dices = Object.create({}),
+            firstDice = Object.create(Dice.init()),
+            secondDice = Object.create(Dice.init());
 
-        Object.defineProperty( dices, 'init', {
+        Object.defineProperty(dices, 'init', {
             value: function () {
                 this.numbers = [];
                 return this;
             }
-        } );
+        });
 
-        Object.defineProperty( dices, 'rollDices', {
+        Object.defineProperty(dices, 'rollDices', {
             value: function () {
-                this.numbers.push( firstDice.rollDice() );
-                this.numbers.push( secondDice.rollDice() );
-                if(this.numbers[0] === this.numbers[1]) {
+                this.numbers.push(firstDice.rollDice());
+                this.numbers.push(secondDice.rollDice());
+                if (this.numbers[0] === this.numbers[1]) {
                     this.numbers.push(this.numbers[0]);
                     this.numbers.push(this.numbers[0]);
                 }
             }
-        } );
+        });
 
-        Object.defineProperty( dices, 'usedNumber', {
-            value: function ( number ) {
-                var index = this.numbers.indexOf( number );
-                this.numbers.splice( index, 1 );
+        Object.defineProperty(dices, 'usedNumber', {
+            value: function (number) {
+                var index = this.numbers.indexOf(number);
+                this.numbers.splice(index, 1);
             }
-        } );
+        });
 
-        Object.defineProperty( dices, 'clearNumbers', { // in case the player doesnt have any moves with those Dice numbers
+        Object.defineProperty(dices, 'clearNumbers', { // in case the player doesnt have any moves with those Dice numbers
             value: function () {
-                this.numbers.splice( 0, this.numbers.length );
+                this.numbers.splice(0, this.numbers.length);
             }
-        } );
+        });
 
         return dices;
     }() );

@@ -92,7 +92,7 @@ var GameEngine = ( function () {
         // dunno whether this should be here
         updatePlayGround();
 
-        if (!currentPlayer.numberOfPieces) {
+        if (!currentPlayer.countOfPieces) {
             alert(currentPlayer.name + ' WINS!!!')
         }
 
@@ -208,7 +208,7 @@ function checkForPinnedPiece(board) {
         len = board.length;
 
     for (i = 1; i < len - 1; i += 1) {
-        if (board[i].length === 2 & board[i].pieces[0].color !== board[i].pieces[1].color) {
+        if (board[i].length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
             var shifted = board[i].pieces.shift();
             if (board[i].pieces[0].color === 'white') {
                 board[0].push(shifted);
