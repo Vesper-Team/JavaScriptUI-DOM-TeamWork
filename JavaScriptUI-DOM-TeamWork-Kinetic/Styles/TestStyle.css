@@ -4,9 +4,17 @@
     height: 600px;
 }*/
 
-#dices, #pair {
+#dices {
     position: fixed;
     left: 900px;
+    top: 280px;
+    display: none;
+    border: none;
+}
+
+#pair {
+    position: fixed;
+    left: 972px;
     top: 280px;
     display: none;
     border: none;
