@@ -4,6 +4,22 @@
     height: 600px;
 }*/
 
+#dices {
+    position: fixed;
+    left: 900px;
+    top: 280px;
+    display: none;
+    border: none;
+}
+
+#dice1, #dice2 {
+    border: none;
+    margin: 0;
+    padding: 0;
+    height: 64px;
+    width: 64px;
+}
+
 body, div {
     margin:0;
     padding:0;

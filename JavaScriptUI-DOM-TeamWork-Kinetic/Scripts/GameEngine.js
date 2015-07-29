@@ -119,10 +119,15 @@ var GameEngine = ( function () {
         }
     }
 
+    function getDices() {
+        return dices;
+    }
+
     return {
         start: start,
         update: update,
         clickedToRollDices: clickedToRollDices,
+        dices: getDices
     };
 }() );
 
