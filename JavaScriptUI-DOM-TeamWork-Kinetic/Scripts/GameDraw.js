@@ -275,6 +275,7 @@ var GameDraw = ( function () {
                     return;
                 }
                 GameEngine.clickedToRollDices();
+                //debugger;
                 displayRollingDices();
                 document.getElementById('dice1').number = dices.numbers[0];
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';

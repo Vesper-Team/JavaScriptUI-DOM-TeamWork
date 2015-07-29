@@ -12,11 +12,11 @@ var GameEngine = ( function () {
         players.push(Object.create(GameObjects.Player).init('First', 'white'));
         players.push(Object.create(GameObjects.Player).init('Second', 'black'));
 
-        //TODO check 
         board = GameObjects.Board.init();
 
         // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
         dices = GameObjects.Dices.init();
+
         firstDiceThrow = true;
 
         GameDraw.initGame(board);
