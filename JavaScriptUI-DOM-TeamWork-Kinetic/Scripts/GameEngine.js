@@ -3,7 +3,7 @@
 var GameEngine = ( function () {
     var board,
         players,
-        dices,        
+        dices,
         firstDiceThrow;
 
     function start() {
@@ -23,7 +23,6 @@ var GameEngine = ( function () {
     }
 
     function clickedToRollDices() {
-        debugger;
         if (firstDiceThrow) {
             firstDiceThrow = false;
             throwFirstDiceToDeterminePlayer();
@@ -41,17 +40,18 @@ var GameEngine = ( function () {
 
     function update() {
         // taking player
-        var currentPlayer = setCurrentPlayerOnTurn();
+        var currentPlayer = players[0].isOnTurn ? players[0] : players[1];
 
         // finding his possible moves
         var possibleStartMoves = getFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
         if (possibleStartMoves.length === 0) {
             clickedToRollDices();
+            setCurrentPlayerOnTurn();
             // TODO: show that there are no more moves, next player -> calling clickedToRollDices or telling to roll again
         }
 
-        // adding where the player can play
-        addListenersToPossibleGameFields(possibleStartMoves);
+        // adding where the player can play; Reconsider this!
+        //addListenersToPossibleGameFields(possibleStartMoves);
 
         // currentPlayer = GetCurrentPlayer - depending on player.isOnTurn or isFirstPlayerOnTurn
 
@@ -69,40 +69,46 @@ var GameEngine = ( function () {
 
         // if current player has no pieces on the board -> He wins.
 
-        // if (playerMoves === allowedMoves) -> change player, hasThrownDice = false
+        // if (playerMoves === allowedMoves) -> setCurrentPlayerOnTurn() , hasThrownDice = false
 
 
         // dunno whether this should be here
         updatePlayGround();
     }
 
-    function addListenersToPossibleGameFields(gameFields) {
-        var i,
-            len;
-        for (i = 0, len = gameFields.length; i < len; i += 1) {
-            var currentFieldIndex = gameFields[i],
-                currentField = board[currentFieldIndex];
-            currentField.addEventListener('mousedown', selectAndPaintLastPiece(currentField));
-        }
-        function selectAndPaintLastPiece(gameField) {
-            var lengthOfPiecesInField = gameField.pieces.length;
-            gameField.pieces[lengthOfPiecesInField - 1].isChosen = true;
-        }
-    }
+    // Event targets can be document elements, the document itself, window or any other object that supports events.
+    //function addListenersToPossibleGameFields(gameFields) {
+    //    var i,
+    //        len,
+    //        currentFieldIndex,
+    //        currentField;
+    //
+    //    for (i = 0, len = gameFields.length; i < len; i += 1) {
+    //        currentFieldIndex = gameFields[i];
+    //        currentField = board[currentFieldIndex];
+    //        currentField.addEventListener('mousedown', selectAndPaintLastPiece(currentField));
+    //    }
+    //}
+    //
+    //function selectAndPaintLastPiece(gameField) {
+    //    var lengthOfPiecesInField = gameField.pieces.length;
+    //    gameField.pieces[lengthOfPiecesInField - 1].isChosen = true;
+    //}
 
     function throwFirstDiceToDeterminePlayer() {
         dices.rollDices();
-        if (dices.numbers[dices.numbers.length-2] > dices.numbers[dices.numbers.length-1]) {
+        if (dices.numbers[dices.numbers.length - 2] > dices.numbers[dices.numbers.length - 1]) {
             players[0].isOnTurn = true;
-        } else if (dices.numbers[dices.numbers.length-2] < dices.numbers[dices.numbers.length-1]) {
+        } else if (dices.numbers[dices.numbers.length - 2] < dices.numbers[dices.numbers.length - 1]) {
             players[1].isOnTurn = true;
         } else {
             firstDiceThrow = true;
+            dices.numbers = [];
             clickedToRollDices();
         }
     }
 
-   function setCurrentPlayerOnTurn() {
+    function setCurrentPlayerOnTurn() {
         var currentPlayer;
 
         if (players[0].isOnTurn) {
@@ -114,8 +120,6 @@ var GameEngine = ( function () {
             players[0].isOnTurn = true;
             players[1].isOnTurn = false;
         }
-
-        return currentPlayer;
     }
 
     return {
@@ -134,10 +138,10 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
     color = color.substring(0, 1).toUpperCase() + color.substring(1);
 
     if (color.toLowerCase() === 'white') {
-        direction = 1; 
-               
+        direction = 1;
+
         if (board[0].pieces.length) {
-        	for (j = 0; j < numbers.length; j += 1) {
+            for (j = 0; j < numbers.length; j += 1) {
                 if (board[0 + numbers[j] * direction]['availableFor' + color]) {
                     result.push(0);
                     break;
@@ -150,7 +154,7 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
         direction = -1;
 
         if (board[board.length - 1].pieces.length) {
-        	for (j = 0; j < numbers.length; j += 1) {
+            for (j = 0; j < numbers.length; j += 1) {
                 if (board[board.length - 1 + numbers[j] * direction]['availableFor' + color]) {
                     result.push(board.length - 1);
                     break;
@@ -159,7 +163,7 @@ function getFieldsWithMovesAvailable(player, board, numbers) {
 
             return result;
         }
-    }    
+    }
 
     for (i = 1, len = board.length; i < board.length - 1; i += 1) {
         if (board[i].pieces.length > 0 && board[i].pieces[0].color === color.toLowerCase()) {
