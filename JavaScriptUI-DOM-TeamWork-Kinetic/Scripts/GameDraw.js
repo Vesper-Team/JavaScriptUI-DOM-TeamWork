@@ -28,6 +28,7 @@ var GameDraw = ( function () {
     playGroundLayer = new Kinetic.Layer();
     positionLayer = new Kinetic.Layer();
     diceLayer = new Kinetic.Layer();
+    playersNamesLayer = new Kinetic.Layer();
 
     width = stage.getWidth();
     height = stage.getHeight();
@@ -88,6 +89,37 @@ var GameDraw = ( function () {
             x: x,
             y: y,
         }
+    };
+    
+    function createPlayersNames( player ) {
+        var posX = 950,
+            posY,
+            strokeColor;
+
+        if ( player.color === 'white' ) {
+            posY = 100;
+            strokeColor = 'black';
+        } else {           
+            posY = 470;
+            strokeColor = 'white';
+        }
+
+        var text = new Kinetic.Text( {
+            x: posX,
+            y: posY,
+            text: player.name,
+            fontSize: 48,
+            fontStyle: 'bold',
+            fontFamily: 'fantasy',
+            width: 400,
+            fill: player.color,
+            stroke: strokeColor,
+            align: 'left',
+            shadowOffsetX: 10,
+            shadowOffsetY: 10,
+        } );
+
+        playersNamesLayer.add( text );
     };
 
     function initBackground() {
@@ -403,10 +435,14 @@ var GameDraw = ( function () {
 
         createCirclePositionForOutGamePieces( 25, 0, 'yellow' );
         createCirclePositionForOutGamePieces(0, 0, 'yellow');
+        
+        createPlayersNames( board.players[0] );
+        createPlayersNames( board.players[1] );
                 
         updatePlayGround( board );
         createDicesButton();
 
+        stage.add( playersNamesLayer );
         stage.add( positionLayer );
         stage.add( playGroundLayer );
 
@@ -463,12 +499,16 @@ var GameDraw = ( function () {
     function updatePlayerTurn() {
 
     }
+    
+     function updatePlayerNames() {
+        playersNamesLayer.draw();
+    }
 
     return {
         initGame: initGame,
         updatePlayGround: updatePlayGround,
-        updateDices: updateDices
-        //renderBoard: renderBoard,
+        updateDices: updateDices,
+        updatePlayerNames: updatePlayerNames,        
     }
 }() );
 
