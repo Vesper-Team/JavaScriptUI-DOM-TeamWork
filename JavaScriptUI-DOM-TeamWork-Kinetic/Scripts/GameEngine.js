@@ -40,13 +40,12 @@ var GameEngine = ( function () {
 
     function update() {
         // taking player
-        var currentPlayer = players[0].isOnTurn ? players[0] : players[1];
+        var currentPlayer = setCurrentPlayerOnTurn();
 
         // finding his possible moves
         var possibleStartMoves = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
         if (possibleStartMoves.length === 0) {
             clickedToRollDices();
-            setCurrentPlayerOnTurn();
             // TODO: show that there are no more moves, next player -> calling clickedToRollDices or telling to roll again
         }
 
@@ -103,22 +102,20 @@ var GameEngine = ( function () {
             players[1].isOnTurn = true;
         } else {
             firstDiceThrow = true;
-            dices.numbers = [];
+            dices.clearNumbers();
             clickedToRollDices();
         }
     }
 
     function setCurrentPlayerOnTurn() {
-        var currentPlayer;
-
         if (players[0].isOnTurn) {
-            currentPlayer = players[0];
             players[0].isOnTurn = false;
             players[1].isOnTurn = true;
+            return players[0];
         } else {
-            currentPlayer = players[1];
             players[0].isOnTurn = true;
             players[1].isOnTurn = false;
+            return players[1];
         }
     }
 
@@ -147,7 +144,7 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
                 }
             }
 
-            return result;            
+            return result;
         }
     } else {
         direction = -1;
@@ -187,15 +184,6 @@ function checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMove
     }
     return false;
 }
-
-//function checkIfWhitePlayerCanSetCheckerThere(diceNumber) {
-//    if (board.fields[1 + diceNumber].length === 0 ||
-//                     (board.fields[1 + diceNumber].length === 1 && board.fields[1 + diceNumber][0].color === inactivePlayer.color) ||
-//                    (board.fields[1 + diceNumber].length > 0 && board.fields[1 + diceNumber][0].color === currentActivePlayer.color)) { 
-//        return true;
-//    }
-//    return false;
-//}
 
 function play() {
 
