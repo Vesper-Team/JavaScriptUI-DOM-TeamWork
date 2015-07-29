@@ -4,7 +4,8 @@ var GameEngine = ( function () {
     var board,
         players,
         dices,
-        firstDiceThrow;
+        firstDiceThrow,
+        currentPlayer;
 
     function start() {
         players = [];
@@ -29,8 +30,8 @@ var GameEngine = ( function () {
         }
         if (dices.numbers.length === 0) {
             dices.rollDices();
+            currentPlayer = setCurrentPlayerOnTurn();
         }
-        update();
     }
 
     function updatePlayGround() {
@@ -38,15 +39,12 @@ var GameEngine = ( function () {
     }
 
 
-    function update() {
-        // taking player
-        var currentPlayer = setCurrentPlayerOnTurn();   
-            
-        if (!checkIfPlayerCanExtractPieces (currentPlayer, board)) {
+    function update(pressedField) {
+        if (!checkIfPlayerCanExtractPieces(currentPlayer, board)) {
             var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
             if (!possibleStartPositions.length) {
                 dices.clearNumbers();
-            } else if (possibleStartPositions.length === 1){
+            } else if (possibleStartPositions.length === 1) {
                 if (board[possibleStartPositions[0]].pieces.length >= 5) {
                     board[possibleStartPositions[0]].pieces[4].isChosen = true;
                 } else {
@@ -60,7 +58,7 @@ var GameEngine = ( function () {
                 //TODO - add listeners to starting pieces
                 // choose
                 // TODO - add rightClick listener for denial, add listeners to receiving spots
-                    //if rightClick - remove listeners to receiving spots
+                //if rightClick - remove listeners to receiving spots
                 // TODO - move
                 // TODO - remove all listeners
             }
@@ -205,44 +203,44 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
     return result;
 }
 
-function checkForPinnedPiece (board) {
-	var i,
-		len = board.length;
+function checkForPinnedPiece(board) {
+    var i,
+        len = board.length;
 
-	for (i = 1; i < len - 1; i += 1) {
-		if (board[i].length === 2 & board[i].pieces[0].color !== board[i].pieces[1].color) {				
-			var shifted = board[i].pieces.shift();				
-			if (board[i].pieces[0].color === 'white') {
-				board[0].push(shifted);
-				return;
-			} else {
-				board[len - 1].push(shifted);
-				return;
-			}
-		}
-	}
+    for (i = 1; i < len - 1; i += 1) {
+        if (board[i].length === 2 & board[i].pieces[0].color !== board[i].pieces[1].color) {
+            var shifted = board[i].pieces.shift();
+            if (board[i].pieces[0].color === 'white') {
+                board[0].push(shifted);
+                return;
+            } else {
+                board[len - 1].push(shifted);
+                return;
+            }
+        }
+    }
 }
 
-function checkIfPlayerCanExtractPieces (player, board) {
-	var color = player.color,
-		i,
-		count = 0;
+function checkIfPlayerCanExtractPieces(player, board) {
+    var color = player.color,
+        i,
+        count = 0;
 
-		if (color === 'white') {
-			for (i = 19; i <= 24; i += 1) {
-				if(board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
-					count += board[i].pieces.length;
-				}				
-			}
-		} else {
-			for (i = 1; i <= 6; i += 1) {
-				if(board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
-					count += board[i].pieces.length;
-				}	
-			}
-		}
+    if (color === 'white') {
+        for (i = 19; i <= 24; i += 1) {
+            if (board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
+                count += board[i].pieces.length;
+            }
+        }
+    } else {
+        for (i = 1; i <= 6; i += 1) {
+            if (board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
+                count += board[i].pieces.length;
+            }
+        }
+    }
 
-		return count === player.countOfPieces;
+    return count === player.countOfPieces;
 }
 
 // // All events will call GameEngine.Update() and GameDraw.Update().

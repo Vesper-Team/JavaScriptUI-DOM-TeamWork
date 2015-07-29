@@ -239,11 +239,7 @@ var GameDraw = ( function () {
         positionLayer.add( rect );
 
         rect.addEventListener( 'click', function () {
-            var x,
-                y,
-                pos;
-
-            pos = transformPositionFromBoardCanvasToBoardData( rect.getAbsolutePosition().x,
+            var pos = transformPositionFromBoardCanvasToBoardData( rect.getAbsolutePosition().x,
                 rect.getAbsolutePosition().y );                        
 
             playGroundLayer.destroyChildren();
@@ -418,7 +414,6 @@ var GameDraw = ( function () {
         positionLayer.setZIndex( 10 );
     };
 
-
     function updatePlayGround(board) {
         var x,
             y,
@@ -465,34 +460,14 @@ var GameDraw = ( function () {
         }
     }
 
-    var fadeIn = function (shape) {
-        var op = shape.getOpacity();
-        op = op + 0.1 >= 1 ? 1 : op + 0.1;
-        shape.setOpacity(op);
-        shape.getLayer().draw();
-        if (op !== 1) {
-            setTimeout(function () {
-                fadeIn(shape);
-            }, 120);
-        }
-    };
+    function updatePlayerTurn() {
 
-    var fadeOut = function (shape) {
-        var op = shape.getOpacity();
-        op = op - 0.1 <= 0.1 ? 0.1 : op - 0.1;
-        shape.setOpacity(op);
-        shape.getLayer().draw();
-        if (op !== 0.1) {
-            setTimeout(function () {
-                fadeOut(shape);
-            }, 120);
-        }
-    };
+    }
 
     return {
         initGame: initGame,
         updatePlayGround: updatePlayGround,
-        updateDices: updateDices,
+        updateDices: updateDices
         //renderBoard: renderBoard,
     }
 }() );
