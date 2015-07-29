@@ -34,12 +34,20 @@ var GameDraw = ( function () {
 
      function transformPositionFromBoardCanvasToBoardData( objX, objY ) {
         var x,
-            y;
+            y;            
 
         if ( objY < 310 ) {
-            x = Math.round( objX / CONSTANTS.OBJ_SIZE_X ) + 12;
+            if ( objX < 810 ) {
+                x = Math.round( objX / CONSTANTS.OBJ_SIZE_X ) + 12;
+            } else {
+                x = 25;
+            }
         } else {
-            x = 13 - Math.round( objX / CONSTANTS.OBJ_SIZE_X );
+            if ( objX < 810 ) {
+                x = 13 - Math.round( objX / CONSTANTS.OBJ_SIZE_X );
+            } else {
+                x = 0;
+            }
         }
 
         return {
@@ -122,7 +130,7 @@ var GameDraw = ( function () {
 
 
         imageObjBackground.src = 'Images/wood_background_BlackNWhite_1920x1080.jpg';
-        imageObjBoard.src = 'Images/Board800x600.png';
+        imageObjBoard.src = 'Images/Board800x600.jpg';
     };
 
     function createCircle( x, y, color, isChosen) {
