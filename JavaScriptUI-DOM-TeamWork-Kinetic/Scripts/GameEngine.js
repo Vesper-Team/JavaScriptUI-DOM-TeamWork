@@ -203,6 +203,29 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
     return result;
 }
 
+function getIndexesOfPossibleTargetFields(markedIndex, player, board, numbers) {
+    var color = player.color,
+        i,
+        result = [],
+        direction;
+
+    if (color === 'white') {
+        direction = 1
+    } else {
+        direction = -1
+    }
+
+    color = color.substring(0, 1).toUpperCase() + color.substring(1);
+
+    for (i = 0; i < numbers.length; i++) {
+        if (board[markedIndex + numbers[i] * direction]['availableFor' + color]) {
+            result.push(markedIndex + numbers[i] * direction);
+        }
+    }
+
+    return result; 
+}
+
 function checkForPinnedPiece(board) {
     var i,
         len = board.length;
