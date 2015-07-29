@@ -210,9 +210,12 @@ var GameDraw = ( function () {
                 }
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
+                document.getElementById('dice1').number = dices.numbers[0];
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                //GameEngine.test();
+                if(dices.numbers[0] === dices.numbers[1]) {
+                    addAnotherPairOfDices();
+                }
             });
         };
 
@@ -234,15 +237,30 @@ var GameDraw = ( function () {
                 }
                 document.getElementById('dices').style.display = 'inline';
                 GameEngine.clickedToRollDices();
+                document.getElementById('dice1').number = dices.numbers[0];
                 displayRollingDices();
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                //GameEngine.test();
+                if(dices.numbers[0] === dices.numbers[1]) {
+                    addAnotherPairOfDices();
+                }
             });
         };
 
         diceOne.src = '../Testing/dieWhite6.png';
         diceTwo.src = '../Testing/dieWhite6.png';
+
+        function addAnotherPairOfDices() {
+            setTimeout(function() {
+                $('#dice3').css('opacity',0);
+                $('#dice4').css('opacity',0);
+                document.getElementById('pair').style.display = 'inline';
+                $('#dice3').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
+                $('#dice4').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
+                $('#dice3').animate({opacity: '1'},100);
+                $('#dice4').animate({opacity: '1'},200);
+            },710);
+        }
 
         function displayRollingDices() {
             document.getElementById('dices').style.display = 'inline';
@@ -326,8 +344,29 @@ var GameDraw = ( function () {
         playGroundLayer.draw();
     }
 
-    function updateDice() {
-        diceLayer.draw();
+    function updateDices() {
+        var dices = GameEngine.dices(),
+            firstDice = document.getElementById('dice1'),
+            secondDice = document.getElementById('dice2');
+        if(dices.numbers[0] === dices.numbers[1]) {
+            if(dices.numbers.length === 3) {
+                $('#dice4').animate({opacity: '0'},140);
+                setTimeout(function() {
+                    document.getElementById('dice4').style.display = 'none';
+                },150);
+            } else if (dices.numbers.length === 2) {
+                $('#dice3').animate({opacity: '0'},140);
+                setTimeout(function() {
+                    document.getElementById('dice3').style.display = 'none';
+                },150);
+            }
+        } else if(dices.numbers.length === 1) {
+            if(dices.numbers[0] === firstDice.number) {
+                secondDice.animate({opacity: '0.5'},150);
+            } else {
+                firstDice.animate({opacity: '0.5'},150);
+            }
+        }
     }
 
     var fadeIn = function (shape) {
@@ -357,7 +396,7 @@ var GameDraw = ( function () {
     return {
         initGame: initGame,
         updatePlayGround: updatePlayGround,
-        updateDice: updateDice,
+        updateDices: updateDices,
         //renderBoard: renderBoard,
     }
 }() );
