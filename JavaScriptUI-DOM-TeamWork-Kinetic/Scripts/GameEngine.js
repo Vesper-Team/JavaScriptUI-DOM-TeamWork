@@ -174,6 +174,46 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
     return result;
 }
 
+function checkForPinnedPiece (board) {
+	var i,
+		len = board.length;
+
+	for (i = 1; i < len - 1; i += 1) {
+		if (board[i].length === 2 & board[i].pieces[0].color !== board[i].pieces[1].color) {				
+			var shifted = board[i].pieces.shift();				
+			if (board[i].pieces[0].color === 'white') {
+				board[0].push(shifted);
+				return;
+			} else {
+				board[len - 1].push(shifted);
+				return;
+			}
+		}
+	}
+}
+
+function checkIfPlayerCanExtractPieces (player, board) {
+	var color = player.color,
+		i,
+		count = 0;
+
+		if (color === 'white') {
+			for (i = 19; i <= 24; i += 1) {
+				if(board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
+					count += board[i].pieces.length;
+				}				
+			}
+		} else {
+			for (i = 1; i <= 6; i += 1) {
+				if(board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
+					count += board[i].pieces.length;
+				}	
+			}
+		}
+
+		return count === player.countOfPieces;
+}
+
 // // All events will call GameEngine.Update() and GameDraw.Update().
 
 
