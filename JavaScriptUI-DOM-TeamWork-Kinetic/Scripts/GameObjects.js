@@ -3,6 +3,7 @@ var GameObjects = ( function () {
         Piece,
         Player,
         Dice,
+        Dices,
         BoardField,
         boardLength = 26,
         CONSTANTS = {

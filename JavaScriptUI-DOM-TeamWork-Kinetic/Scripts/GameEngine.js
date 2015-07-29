@@ -45,7 +45,7 @@ var GameEngine = ( function () {
         if (!checkIfPlayerCanExtractPieces (currentPlayer, board)) {
             var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
             if (!possibleStartPositions.length) {
-                clearNumbers();
+                dices.clearNumbers();
             } else if (possibleStartPositions.length === 1){
                 if (board[possibleStartPositions[0]].pieces.length >= 5) {
                     board[possibleStartPositions[0]].pieces[4].isChosen = true;
