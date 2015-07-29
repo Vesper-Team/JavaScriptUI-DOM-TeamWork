@@ -121,6 +121,7 @@ var GameObjects = ( function () {
                 this.name = name;
                 this.color = color;
                 this.isOnTurn = false;
+                this.numberOfPieces = 15;
 
                 return this;
             }

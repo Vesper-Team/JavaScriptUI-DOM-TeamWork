@@ -40,13 +40,34 @@ var GameEngine = ( function () {
 
     function update() {
         // taking player
-        var currentPlayer = setCurrentPlayerOnTurn();
+        var currentPlayer = setCurrentPlayerOnTurn();   
+            
+        if (!checkIfPlayerCanExtractPieces (currentPlayer, board)) {
+            var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
+            if (!possibleStartPositions.length) {
+                clearNumbers();
+                break;
+            } else if (possibleStartPositions.length === 1){
+                if (board[possibleStartPositions[0]].pieces.length >= 5) {
+                    board[possibleStartPositions[0]].pieces[4].isChosen;
+                } else {
+                    board[possibleStartPositions[0]].pieces[pieces.length - 1].isChosen;
+                }
+                // TODO - add listeners to receiving spots
+                // TODO - move
+                // TODO - remove all listeners
 
-        // finding his possible moves
-        var possibleStartMoves = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
-        if (possibleStartMoves.length === 0) {
-            clickedToRollDices();
-            // TODO: show that there are no more moves, next player -> calling clickedToRollDices or telling to roll again
+            } else {
+                //TODO - add listeners to starting pieces
+                // choose
+                // TODO - add rightClick listener for denial, add listeners to receiving spots
+                    //if rightClick - remove listeners to receiving spots
+                // TODO - move
+                // TODO - remove all listeners
+            }
+
+        } else {
+
         }
 
         // adding where the player can play; Reconsider this!
@@ -73,6 +94,13 @@ var GameEngine = ( function () {
 
         // dunno whether this should be here
         updatePlayGround();
+
+        if (!currentPlayer.numberOfPieces) {
+            alert(currentPlayer.name + ' ' + WINS!!!)
+            return;
+        }
+
+        clickedToRollDices();
     }
 
     // Event targets can be document elements, the document itself, window or any other object that supports events.

@@ -150,12 +150,12 @@ var GameDraw = ( function () {
         posX = Math.floor(pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ));
         posY = Math.floor(pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ));
 
-        if (color === 'white') {
-            strokeColor = 'black';
+        if (isChosen) {
+            strokeColor = 'yellowgreen';
         } else if (color === 'black') {
             strokeColor = 'white';
-        } else if (isChosen) {
-            strokeColor = 'yellowgreen';
+        } else if(color === 'white') {
+            strokeColor = 'black';
         }
 
         var circle = new Kinetic.Circle({
