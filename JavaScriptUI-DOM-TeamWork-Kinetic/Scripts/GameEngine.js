@@ -46,7 +46,6 @@ var GameEngine = ( function () {
             var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
             if (!possibleStartPositions.length) {
                 clearNumbers();
-                break;
             } else if (possibleStartPositions.length === 1){
                 if (board[possibleStartPositions[0]].pieces.length >= 5) {
                     board[possibleStartPositions[0]].pieces[4].isChosen;
@@ -96,11 +95,10 @@ var GameEngine = ( function () {
         updatePlayGround();
 
         if (!currentPlayer.numberOfPieces) {
-            alert(currentPlayer.name + ' ' + WINS!!!)
-            return;
+            alert(currentPlayer.name + ' WINS!!!')
         }
 
-        clickedToRollDices();
+        //clickedToRollDices();
     }
 
     // Event targets can be document elements, the document itself, window or any other object that supports events.
