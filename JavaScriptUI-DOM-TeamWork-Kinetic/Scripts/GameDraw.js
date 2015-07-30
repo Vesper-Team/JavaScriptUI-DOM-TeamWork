@@ -298,7 +298,6 @@ var GameDraw = ( function () {
                 height: 64,
                 shadowOffsetX: 10,
                 shadowOffsetY: 10,
-                opacity: 1
             });
 
             diceLayer.add(diceImage);
@@ -334,7 +333,6 @@ var GameDraw = ( function () {
                 height: 64,
                 shadowOffsetX: 10,
                 shadowOffsetY: 10,
-                opacity: 1
             });
 
             diceLayer.add(diceImage);

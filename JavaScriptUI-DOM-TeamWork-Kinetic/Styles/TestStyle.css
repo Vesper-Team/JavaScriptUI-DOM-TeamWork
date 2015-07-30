@@ -21,6 +21,10 @@
 }
 
 #dice1, #dice2, #dice3, #dice4 {
+    -moz-box-shadow:    10px 10px 5px black;
+    -webkit-box-shadow: 10px 10px 5px black;
+    box-shadow:         10px 10px 5px black;
+    border-radius: 10px;
     border: none;
     margin: 0;
     padding: 0;
