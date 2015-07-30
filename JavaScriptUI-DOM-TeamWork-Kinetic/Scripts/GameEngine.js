@@ -72,6 +72,9 @@ var GameEngine = ( function () {
     }
 
     function update(pressedField) {
+        if(dices.numbers[2]) {
+            return;
+        }
         var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
 
         // alert(hasChosen +' ' + indexOfChosenField +' ' +  indexOfTargetField +' ' +  canExtract)
