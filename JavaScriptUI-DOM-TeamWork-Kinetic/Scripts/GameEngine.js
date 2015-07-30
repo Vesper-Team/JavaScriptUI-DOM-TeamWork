@@ -96,9 +96,10 @@ var GameEngine = ( function () {
 
             if (dices.numbers.length === 0) {
                 alert('No more moves. Next player turn');
+                setAvailabilityOfFields(board);
                 GameDraw.updateDices();
                 updatePlayGround();
-                setCurrentPlayerOnTurn();
+                setCurrentPlayerOnTurn();                
                 return;
             }
 
@@ -108,10 +109,12 @@ var GameEngine = ( function () {
                 // alert(possibleStartPositions)
                 if (!possibleStartPositions.length) {
                     alert('No moves');
-                    dices.clearNumbers();
+                    //dices.clearNumbers();
+                    setAvailabilityOfFields(board);                    
                     GameDraw.updateDices();
                     updatePlayGround();
                     setCurrentPlayerOnTurn();
+
                     return;
                 } else if (possibleStartPositions.length === 1) {
 
@@ -275,6 +278,22 @@ var GameEngine = ( function () {
 
         return count === player.countOfPieces;
     }
+
+    function setAvailabilityOfFields(board) {
+            var i,
+                len = board.length - 1;
+            for (i = 1; i < len; i += 1) {
+                board[i].availableForBlack = true;
+                board[i].availableForWhite = true;
+
+                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'white') {
+                    board[i].availableForBlack = false;
+                }
+                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'black') {
+                    board[i].availableForWhite = false;
+                }
+            }
+        }
 
     function updatePlayGround() {
         GameDraw.updatePlayGround(board);

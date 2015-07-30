@@ -66,24 +66,7 @@ var GameObjects = ( function () {
             addPiecesToBoard(self, 'black', 3, 8);
             addPiecesToBoard(self, 'black', 5, 6);
 
-        }
-
-        function setAvailabilityOfFields(board) {
-            var i,
-                len = board.length - 1;
-            for (i = 1; i < len; i += 1) {
-                board[i].availableForBlack = true;
-                board[i].availableForWhite = true;
-
-                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'white') {
-                    board[i].availableForBlack = false;
-                }
-                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'black') {
-                    board[i].availableForWhite = false;
-                }
-            }
-        }
-
+        }    
 
         Object.defineProperty(board, 'init', {
             value: function () {
@@ -91,7 +74,7 @@ var GameObjects = ( function () {
                 putBoardFields(self);
                 putPlayerOnePieces(self);
                 putPlayerTwoPieces(self);
-                setAvailabilityOfFields(self);
+                //setAvailabilityOfFields(self);
                 return this;
             }
         });
