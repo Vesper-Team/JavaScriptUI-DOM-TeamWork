@@ -36,7 +36,9 @@ var GameEngine = ( function () {
             // after the first throw which is for who will be first the first player throws again his real dices
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
             firstDiceThrow = false;
-            swal(currentPlayer.name + " begins the game!", "Good luck!")
+            setTimeout(function() {
+                swal(currentPlayer.name + " begins the game!", "Good luck!")
+            },710);
         } else if (dices.numbers.length === 0) {
             dices.rollDices();
             //dices.numbers = [6,6,6,6];
@@ -74,7 +76,15 @@ var GameEngine = ( function () {
     }
 
     function update(pressedField) {
-        if (dices.numbers['mustThrowAgain'] || dices.numbers.length === 0) {
+        if (dices.numbers['mustThrowAgain']) {
+            return;
+        }
+        if (dices.numbers.length === 0) { // because when clicked without dices checkIfPlayerCanExtractPieces throws
+            swal({
+                title: 'Roll dices first!',
+                timer: 1500,
+                showConfirmButton: false
+            });
             return;
         }
         var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
@@ -97,10 +107,11 @@ var GameEngine = ( function () {
             checkForPinnedPiece(pressedField);
 
             if (dices.numbers.length === 0) {
-            	swal({
-            		title: "Next player turn!",
-            	    timer: 1500,
-            	    showConfirmButton: false });
+                swal({
+                    title: "Next player turn!",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
                 //alert('No more moves. ');
                 setAvailabilityOfFields(board);
                 GameDraw.updateDices();
@@ -114,11 +125,12 @@ var GameEngine = ( function () {
                 var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
                 // alert(possibleStartPositions)
                 if (!possibleStartPositions.length) {
-                	swal({
-                	   title: "Next player turn!",
-                	   text: "No moves available",
-                	   timer: 1500,
-                	   showConfirmButton: false });
+                    swal({
+                        title: "Next player turn!",
+                        text: "No moves available",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
                     //alert('No moves');
                     //dices.clearNumbers(); MIGHT BE NEEDED <<=======================
                     setAvailabilityOfFields(board);
@@ -165,9 +177,10 @@ var GameEngine = ( function () {
         GameDraw.updateDices();
 
         if (!currentPlayer.countOfPieces) {
-        	swal({
-        		title: "Congratulations",
-        		imageUrl: "images/trophy_image.jpg" });
+            swal({
+                title: "Congratulations",
+                imageUrl: "images/trophy_image.jpg"
+            });
             // alert(currentPlayer.name + ' WINS!!!')
         }
     }
@@ -255,18 +268,18 @@ var GameEngine = ( function () {
         //     len = board.length;
 
         // for (i = 1; i < len - 1; i += 1) {
-            if (board[pressedField].pieces.length === 2 && board[pressedField].pieces[0].color !== board[pressedField].pieces[1].color) {
-                var shifted = board[pressedField].pieces.shift();
-                if (shifted.color === 'white') {
-                    board[0].pieces.push(shifted);
-                    updatePlayGround();
-                    return;
-                } else {
-                    board[len - 1].pieces.push(shifted);
-                    updatePlayGround();
-                    return;
-                }
+        if (board[pressedField].pieces.length === 2 && board[pressedField].pieces[0].color !== board[pressedField].pieces[1].color) {
+            var shifted = board[pressedField].pieces.shift();
+            if (shifted.color === 'white') {
+                board[0].pieces.push(shifted);
+                updatePlayGround();
+                return;
+            } else {
+                board[len - 1].pieces.push(shifted);
+                updatePlayGround();
+                return;
             }
+        }
         // }
     }
 
@@ -293,20 +306,20 @@ var GameEngine = ( function () {
     }
 
     function setAvailabilityOfFields(board) {
-            var i,
-                len = board.length - 1;
-            for (i = 1; i < len; i += 1) {
-                board[i].availableForBlack = true;
-                board[i].availableForWhite = true;
+        var i,
+            len = board.length - 1;
+        for (i = 1; i < len; i += 1) {
+            board[i].availableForBlack = true;
+            board[i].availableForWhite = true;
 
-                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'white') {
-                    board[i].availableForBlack = false;
-                }
-                if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'black') {
-                    board[i].availableForWhite = false;
-                }
+            if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'white') {
+                board[i].availableForBlack = false;
+            }
+            if (board[i].pieces.length > 1 && board[i].pieces[1].color === 'black') {
+                board[i].availableForWhite = false;
             }
         }
+    }
 
     function updatePlayGround() {
         GameDraw.updatePlayGround(board);
