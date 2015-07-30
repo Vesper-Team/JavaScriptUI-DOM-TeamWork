@@ -6,18 +6,27 @@
 
 #dices {
     position: fixed;
-    left: 900px;
+    left: 960px;
     top: 280px;
     display: none;
     border: none;
 }
 
 #pair {
-    position: fixed;
-    left: 1036px;
-    top: 280px;
     display: none;
     border: none;
+}
+
+#dice4 {
+    position: fixed;
+    left: 1106px;
+    top: 280px;
+}
+
+#dice3 {
+    position: fixed;
+    left: 885px;
+    top: 280px;
 }
 
 #dice1, #dice2, #dice3, #dice4 {
@@ -26,7 +35,7 @@
     box-shadow:         10px 10px 5px black;
     border-radius: 10px;
     border: none;
-    margin: 0;
+    margin-right: 2px;
     padding: 0;
     height: 64px;
     width: 64px;

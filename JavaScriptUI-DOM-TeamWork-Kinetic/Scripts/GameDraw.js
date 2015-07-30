@@ -291,7 +291,7 @@ var GameDraw = ( function () {
 
         diceOne.onload = function () {
             var diceImage = new Kinetic.Image({
-                x: 900,
+                x: 960,
                 y: 280,
                 image: diceOne,
                 width: 64,
@@ -309,7 +309,7 @@ var GameDraw = ( function () {
                 }
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
-                if(diceLayer.children[0].attrs.x === 900) {
+                if(diceLayer.children[0].attrs.x === 960) {
                     diceLayer.children[0].attrs.number = dices.numbers[0];
                     diceLayer.children[1].attrs.number = dices.numbers[1];
                 } else {
@@ -326,7 +326,7 @@ var GameDraw = ( function () {
 
         diceTwo.onload = function () {
             var diceImage = new Kinetic.Image({
-                x: 968,
+                x: 1030,
                 y: 280,
                 image: diceTwo,
                 width: 64,
@@ -345,7 +345,7 @@ var GameDraw = ( function () {
                 document.getElementById('dices').style.display = 'inline';
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
-                if(diceLayer.children[0].attrs.x === 900) {
+                if(diceLayer.children[0].attrs.x === 960) {
                     diceLayer.children[0].attrs.number = dices.numbers[0];
                     diceLayer.children[1].attrs.number = dices.numbers[1];
                 } else {
