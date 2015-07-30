@@ -82,9 +82,9 @@ var GameEngine = ( function () {
 
             updatePlayGround();
 
-            checkForPinnedPiece(board);
-
             dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
+
+            checkForPinnedPiece(board);
 
             if (dices.numbers.length === 0) {
                 alert('No more moves. Next player turn');
@@ -265,10 +265,10 @@ function checkForPinnedPiece(board) {
         if (board[i].pieces.length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
             var shifted = board[i].pieces.shift();
             if (shifted.color === 'white') {
-                board[0].push(shifted);
+                board[0].pieces.push(shifted);
                 return;
             } else {
-                board[len - 1].push(shifted);
+                board[len - 1].pieces.push(shifted);
                 return;
             }
         }
