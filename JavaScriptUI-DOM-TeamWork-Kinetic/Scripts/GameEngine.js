@@ -61,6 +61,8 @@ var GameEngine = ( function () {
 
             hasChosen = false;
 
+            updatePlayGround();
+
             checkForPinnedPiece(board);
 
             dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
@@ -229,7 +231,7 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
 }
 
 function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
-    alert(markedIndex + ' ' + numbers)
+    alert('clicked position 'markedIndex + '\n dices to play' + numbers)
 
     var color = player.color,
         i,
@@ -261,7 +263,7 @@ function checkForPinnedPiece(board) {
         len = board.length;
 
     for (i = 1; i < len - 1; i += 1) {
-        if (board[i].length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
+        if (board[i].pieces.length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
             var shifted = board[i].pieces.shift();
             if (shifted.color === 'white') {
                 board[0].push(shifted);
