@@ -345,12 +345,13 @@ var GameDraw = ( function () {
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
-                if (dices.numbers.length !== 0 && !dices.numbers[2]) { // dices.numbers[2] whether the player
+                if (dices.numbers.length !== 0 && !dices.numbers['mustThrowAgain']) { // dices.numbers[2] whether the player
                     // should trow his first dices
                     return;
                 }
-                if (dices.numbers[2]) {
+                if (dices.numbers['mustThrowAgain']) {
                     dices.clearNumbers();
+                    dices.numbers['mustThrowAgain'] = false;
                 }
                 document.getElementById('dices').style.display = 'inline';
                 GameEngine.clickedToRollDices();
@@ -364,7 +365,7 @@ var GameDraw = ( function () {
                 }
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                if (dices.numbers[0] === dices.numbers[1] && !dices.numbers[2]) {
+                if (dices.numbers[0] === dices.numbers[1] && !dices.numbers['mustThrowAgain']) {
                     addAnotherPairOfDices();
                 }
             });
