@@ -177,8 +177,8 @@ var GameDraw = ( function () {
         if (y > 4) {
             y = 0;
         }
-        if(x===0 || x === 25) {
-            numberOfPieces = y + 4;
+        if (x === 0 || x === 25) {
+            numberOfPieces = y + 5;
         }
 
         radius = CONSTANTS.CIRCLE_RADIUS;
@@ -306,11 +306,12 @@ var GameDraw = ( function () {
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
-                if (dices.numbers.length !== 0 && !dices.numbers[2]) {
+                if (dices.numbers.length !== 0 && !dices.numbers['mustThrowAgain']) {
                     return;
                 }
-                if(dices.numbers[2]) {
+                if (dices.numbers['mustThrowAgain']) {
                     dices.clearNumbers();
+                    dices.numbers['mustThrowAgain'] = false;
                 }
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
@@ -323,7 +324,7 @@ var GameDraw = ( function () {
                 }
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                if (dices.numbers[0] === dices.numbers[1]) {
+                if (dices.numbers[0] === dices.numbers[1] && !dices.numbers['mustThrowAgain']) {
                     addAnotherPairOfDices();
                 }
             });
@@ -346,9 +347,9 @@ var GameDraw = ( function () {
             diceImage.addEventListener('click', function () {
                 if (dices.numbers.length !== 0 && !dices.numbers[2]) { // dices.numbers[2] whether the player
                     // should trow his first dices
-                     return;
+                    return;
                 }
-                if(dices.numbers[2]) {
+                if (dices.numbers[2]) {
                     dices.clearNumbers();
                 }
                 document.getElementById('dices').style.display = 'inline';
@@ -363,7 +364,7 @@ var GameDraw = ( function () {
                 }
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                if (dices.numbers[0] === dices.numbers[1] && dices.numbers.length === 2) {
+                if (dices.numbers[0] === dices.numbers[1] && !dices.numbers[2]) {
                     addAnotherPairOfDices();
                 }
             });

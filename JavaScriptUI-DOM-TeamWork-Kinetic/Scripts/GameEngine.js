@@ -31,7 +31,7 @@ var GameEngine = ( function () {
         diceSound.play();
         if (firstDiceThrow) {
             throwFirstDiceToDeterminePlayer();
-            dices.numbers[2] = true; // Whether should throw again ..
+            dices.numbers['mustThrowAgain'] = true;
             // after the first throw which is for who will be first the first player throws again his real dices
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
             firstDiceThrow = false;
@@ -72,7 +72,7 @@ var GameEngine = ( function () {
     }
 
     function update(pressedField) {
-        if(dices.numbers[2]) {
+        if (dices.numbers[2]) {
             return;
         }
         var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
@@ -146,8 +146,6 @@ var GameEngine = ( function () {
         }
 
         updatePlayGround();
-
-        GameDraw.updateDices();
 
         if (!currentPlayer.countOfPieces) {
             alert(currentPlayer.name + ' WINS!!!')
@@ -233,6 +231,7 @@ var GameEngine = ( function () {
     }
 
     function checkForPinnedPiece(board) {
+        debugger;
         var i,
             len = board.length;
 
@@ -241,9 +240,11 @@ var GameEngine = ( function () {
                 var shifted = board[i].pieces.shift();
                 if (shifted.color === 'white') {
                     board[0].pieces.push(shifted);
+                    updatePlayGround();
                     return;
                 } else {
                     board[len - 1].pieces.push(shifted);
+                    updatePlayGround();
                     return;
                 }
             }
