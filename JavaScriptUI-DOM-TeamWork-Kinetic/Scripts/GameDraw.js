@@ -368,6 +368,8 @@ var GameDraw = ( function () {
                 $('#dice3').css('opacity', 0);
                 $('#dice4').css('opacity', 0);
                 document.getElementById('pair').style.display = 'inline';
+                document.getElementById('dice3').style.display = 'inline';
+                document.getElementById('dice4').style.display = 'inline';
                 $('#dice3').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
                 $('#dice4').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
                 $('#dice3').animate({opacity: 1}, 100);
