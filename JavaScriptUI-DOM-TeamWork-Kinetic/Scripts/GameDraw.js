@@ -548,6 +548,16 @@ var GameDraw = ( function () {
             diceLayer.draw();
         } else if (dices.numbers.length === 0) {
             diceLayer.destroyChildren();
+            if (document.getElementById('dice4').style.display = 'inline') {
+                $('#dice4').animate({opacity: 0}, 140);
+                setTimeout(function () {
+                    document.getElementById('dice4').style.display = 'none';
+                }, 150);
+                $('#dice3').animate({opacity: 0}, 140);
+                setTimeout(function () {
+                    document.getElementById('dice3').style.display = 'none';
+                }, 150);
+            }
             createDicesButton(firstDice.attrs.number, secondDice.attrs.number);
         }
     }
