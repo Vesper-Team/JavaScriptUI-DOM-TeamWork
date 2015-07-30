@@ -8,7 +8,8 @@ var GameEngine = ( function () {
         currentPlayer,
         hasChosen,
         indexOfChosenField,
-        indexOfTargetField;
+        indexOfTargetField,
+        diceSound = new Audio('Sounds/dice.wav');
 
     function start() {
         players = [];
@@ -27,7 +28,11 @@ var GameEngine = ( function () {
     }
 
     function clickedToRollDices() {
+<<<<<<< HEAD
         debugger;
+=======
+        diceSound.play();
+>>>>>>> origin/master
         if (firstDiceThrow) {
             throwFirstDiceToDeterminePlayer();
             dices.numbers[2] = true; // Whether should throw again ..
