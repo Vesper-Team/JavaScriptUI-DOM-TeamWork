@@ -27,16 +27,20 @@ var GameEngine = ( function () {
     }
 
     function clickedToRollDices() {
+        debugger;
         if (firstDiceThrow) {
-            firstDiceThrow = false;
             throwFirstDiceToDeterminePlayer();
+            dices.numbers[2] = true; // Whether should throw again ..
+            // after the first throw which is for who will be first the first player throws again his real dices
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
+            firstDiceThrow = false;
         } else if (dices.numbers.length === 0) {
             dices.rollDices();
             //dices.numbers = [6,6,6,6];
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
         }
-        GameDraw.updatePlayerNames(currentPlayer)
+        GameDraw.updatePlayerNames(currentPlayer);
+        // DO NOT USE dices.clearNumbers here!!!!
     }
 
     function throwFirstDiceToDeterminePlayer() {
@@ -136,6 +140,7 @@ var GameEngine = ( function () {
         }
 
         updatePlayGround();
+
         GameDraw.updateDices();
 
         if (!currentPlayer.countOfPieces) {
@@ -143,29 +148,127 @@ var GameEngine = ( function () {
         }
     }
 
+    function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
+        var direction,
+            i, j,
+            result = [],
+            color = player.color,
+            index;
+
+        color = color.substring(0, 1).toUpperCase() + color.substring(1);
+
+        if (color.toLowerCase() === 'white') {
+            direction = 1;
+
+            if (board[0].pieces.length) {
+                for (j = 0; j < numbers.length; j += 1) {
+                    if (board[0 + numbers[j] * direction]['availableFor' + color]) {
+                        return [0];
+                    }
+                }
+
+                return result;
+            }
+        } else {
+            direction = -1;
+
+            if (board[board.length - 1].pieces.length) {
+                for (j = 0; j < numbers.length; j += 1) {
+                    if (board[board.length - 1 + numbers[j] * direction]['availableFor' + color]) {
+                        return [board.length - 1];
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        for (i = 1, len = board.length; i < board.length - 1; i += 1) {
+            if (board[i].pieces.length > 0 && board[i].pieces[0].color === color.toLowerCase()) {
+                for (j = 0; j < numbers.length; j += 1) {
+                    index = i + numbers[j] * direction;
+                    if (0 < index && index < 25 && board[index]['availableFor' + color]) {
+                        result.push(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
+        alert('clicked position ' + markedIndex + '\n dices to play' + numbers)
+
+        var color = player.color,
+            i,
+            result = [],
+            direction,
+            index;
+
+        if (color === 'white') {
+            direction = 1
+        } else {
+            direction = -1
+        }
+
+        color = color.substring(0, 1).toUpperCase() + color.substring(1);
+
+        for (i = 0; i < numbers.length; i++) {
+            index = markedIndex + numbers[i] * direction;
+
+            if (0 < index && index < 25 && board[index]['availableFor' + color]) {
+                result.push(markedIndex + numbers[i] * direction);
+            }
+        }
+
+        return result;
+    }
+
+    function checkForPinnedPiece(board) {
+        var i,
+            len = board.length;
+
+        for (i = 1; i < len - 1; i += 1) {
+            if (board[i].pieces.length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
+                var shifted = board[i].pieces.shift();
+                if (shifted.color === 'white') {
+                    board[0].pieces.push(shifted);
+                    return;
+                } else {
+                    board[len - 1].pieces.push(shifted);
+                    return;
+                }
+            }
+        }
+    }
+
+    function checkIfPlayerCanExtractPieces(player, board) {
+        var color = player.color,
+            i,
+            count = 0;
+
+        if (color === 'white') {
+            for (i = 19; i <= 24; i += 1) {
+                if (board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
+                    count += board[i].pieces.length;
+                }
+            }
+        } else {
+            for (i = 1; i <= 6; i += 1) {
+                if (board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
+                    count += board[i].pieces.length;
+                }
+            }
+        }
+
+        return count === player.countOfPieces;
+    }
+
     function updatePlayGround() {
         GameDraw.updatePlayGround(board);
     }
-
-
-    // Event targets can be document elements, the document itself, window or any other object that supports events.
-    //function addListenersToPossibleGameFields(gameFields) {
-    //    var i,
-    //        len,
-    //        currentFieldIndex,
-    //        currentField;
-    //
-    //    for (i = 0, len = gameFields.length; i < len; i += 1) {
-    //        currentFieldIndex = gameFields[i];
-    //        currentField = board[currentFieldIndex];
-    //        currentField.addEventListener('mousedown', selectAndPaintLastPiece(currentField));
-    //    }
-    //}
-    //
-    //function selectAndPaintLastPiece(gameField) {
-    //    var lengthOfPiecesInField = gameField.pieces.length;
-    //    gameField.pieces[lengthOfPiecesInField - 1].isChosen = true;
-    //}
 
     function getDices() {
         return dices;
@@ -179,123 +282,6 @@ var GameEngine = ( function () {
     };
 }() );
 
-function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
-    var direction,
-        i, j,
-        result = [],
-        color = player.color,
-        index;
-
-    color = color.substring(0, 1).toUpperCase() + color.substring(1);
-
-    if (color.toLowerCase() === 'white') {
-        direction = 1;
-
-        if (board[0].pieces.length) {
-            for (j = 0; j < numbers.length; j += 1) {
-                if (board[0 + numbers[j] * direction]['availableFor' + color]) {
-                    return [0];
-                }
-            }
-
-            return result;
-        }
-    } else {
-        direction = -1;
-
-        if (board[board.length - 1].pieces.length) {
-            for (j = 0; j < numbers.length; j += 1) {
-                if (board[board.length - 1 + numbers[j] * direction]['availableFor' + color]) {
-                    return [board.length - 1];
-                }
-            }
-
-            return result;
-        }
-    }
-
-    for (i = 1, len = board.length; i < board.length - 1; i += 1) {
-        if (board[i].pieces.length > 0 && board[i].pieces[0].color === color.toLowerCase()) {
-            for (j = 0; j < numbers.length; j += 1) {
-                index = i + numbers[j] * direction;
-                if (0 < index && index < 25 && board[index]['availableFor' + color]) {
-                    result.push(i);
-                    break;
-                }
-            }
-        }
-    }
-
-    return result;
-}
-
-function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
-    alert('clicked position ' + markedIndex + '\n dices to play' + numbers)
-
-    var color = player.color,
-        i,
-        result = [],
-        direction,
-        index;
-
-    if (color === 'white') {
-        direction = 1
-    } else {
-        direction = -1
-    }
-
-    color = color.substring(0, 1).toUpperCase() + color.substring(1);
-
-    for (i = 0; i < numbers.length; i++) {
-        index = markedIndex + numbers[i] * direction;
-
-        if (0 < index && index < 25 && board[index]['availableFor' + color]) {
-            result.push(markedIndex + numbers[i] * direction);
-        }
-    }
-
-    return result;
-}
-
-function checkForPinnedPiece(board) {
-    var i,
-        len = board.length;
-
-    for (i = 1; i < len - 1; i += 1) {
-        if (board[i].pieces.length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
-            var shifted = board[i].pieces.shift();
-            if (shifted.color === 'white') {
-                board[0].pieces.push(shifted);
-                return;
-            } else {
-                board[len - 1].pieces.push(shifted);
-                return;
-            }
-        }
-    }
-}
-
-function checkIfPlayerCanExtractPieces(player, board) {
-    var color = player.color,
-        i,
-        count = 0;
-
-    if (color === 'white') {
-        for (i = 19; i <= 24; i += 1) {
-            if (board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
-                count += board[i].pieces.length;
-            }
-        }
-    } else {
-        for (i = 1; i <= 6; i += 1) {
-            if (board[i].pieces.length > 0 && board[i].pieces[0].color === color) {
-                count += board[i].pieces.length;
-            }
-        }
-    }
-
-    return count === player.countOfPieces;
-}
 
 // // All events will call GameEngine.Update() and GameDraw.Update().
 

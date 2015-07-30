@@ -172,10 +172,13 @@ var GameDraw = ( function () {
             posX,
             posY,
             strokeColor,
-            nuberOfPieces = y + 1;
+            numberOfPieces = y + 1;
 
         if (y > 4) {
             y = 0;
+        }
+        if(x===0 || x === 25) {
+            numberOfPieces = y + 4;
         }
 
         radius = CONSTANTS.CIRCLE_RADIUS;
@@ -204,7 +207,7 @@ var GameDraw = ( function () {
         var text = new Kinetic.Text({
             x: pos.x,
             y: posY - 9,
-            text: nuberOfPieces,
+            text: numberOfPieces - 4,
             fontSize: 18,
             fontFamily: 'Calibri',
             width: CONSTANTS.OBJ_SIZE_X,
@@ -214,7 +217,7 @@ var GameDraw = ( function () {
 
         playGroundLayer.add(circle);
 
-        if (nuberOfPieces > 5 || x === 0 || x === 25) {
+        if (numberOfPieces > 5 || x === 0 || x === 25) {
             playGroundLayer.add(text);
         }
     };
@@ -281,7 +284,6 @@ var GameDraw = ( function () {
         });
     };
 
-    ///Dice
     function createDicesButton(d1Number, d2Number) {
         var diceOne = new Image(),
             diceTwo = new Image();
@@ -304,8 +306,11 @@ var GameDraw = ( function () {
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
-                if (dices.numbers.length !== 0) {
+                if (dices.numbers.length !== 0 && !dices.numbers[2]) {
                     return;
+                }
+                if(dices.numbers[2]) {
+                    dices.clearNumbers();
                 }
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
@@ -339,8 +344,12 @@ var GameDraw = ( function () {
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
-                if (dices.numbers.length !== 0) {
-                    return;
+                if (dices.numbers.length !== 0 && !dices.numbers[2]) { // dices.numbers[2] whether the player
+                    // should trow his first dices
+                     return;
+                }
+                if(dices.numbers[2]) {
+                    dices.clearNumbers();
                 }
                 document.getElementById('dices').style.display = 'inline';
                 GameEngine.clickedToRollDices();
@@ -495,7 +504,7 @@ var GameDraw = ( function () {
         var dices = GameEngine.dices(),
             firstDice,
             secondDice;
-        if (diceLayer.children[0].attrs.x === 900) {
+        if (diceLayer.children[0].attrs.x === 960) {
             firstDice = diceLayer.children[0];
             secondDice = diceLayer.children[1];
         } else {
