@@ -43,7 +43,6 @@ var GameEngine = ( function () {
                 dices.rollDices();
                 //dices.numbers = [6,6,6,6];
                 currentPlayer = players[0].isOnTurn ? players[0] : players[1];
-                debugger;
                 var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
                 if (possibleStartPositions.length === 1) {
                     if (board[possibleStartPositions[0]].pieces.length >= 5) {
@@ -150,7 +149,6 @@ var GameEngine = ( function () {
                         GameDraw.updateDices();
                         updatePlayGround();
                         setCurrentPlayerOnTurn();
-                        clickedToRollDices();
                         return;
                     } else {
                         if (possibleStartPositions.indexOf(pressedField) > -1) {
