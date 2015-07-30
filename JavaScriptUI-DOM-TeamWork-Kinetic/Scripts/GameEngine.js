@@ -36,6 +36,7 @@ var GameEngine = ( function () {
             // after the first throw which is for who will be first the first player throws again his real dices
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
             firstDiceThrow = false;
+            swal(currentPlayer.name + " begins the game!", "Good luck!")
         } else if (dices.numbers.length === 0) {
             dices.rollDices();
             //dices.numbers = [6,6,6,6];
@@ -96,7 +97,11 @@ var GameEngine = ( function () {
             checkForPinnedPiece(pressedField);
 
             if (dices.numbers.length === 0) {
-                alert('No more moves. Next player turn');
+            	swal({   
+            		title: "Next player turn!",  
+            	    timer: 2000,   
+            	    showConfirmButton: false });
+                //alert('No more moves. ');
                 setAvailabilityOfFields(board);
                 GameDraw.updateDices();
                 updatePlayGround();
@@ -109,7 +114,12 @@ var GameEngine = ( function () {
                 var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
                 // alert(possibleStartPositions)
                 if (!possibleStartPositions.length) {
-                    alert('No moves');
+                	swal({
+                	   title: "Next player turn!",
+                	   text: "No moves available",
+                	   timer: 2000,
+                	   showConfirmButton: false });
+                    //alert('No moves');
                     //dices.clearNumbers();
                     setAvailabilityOfFields(board);                    
                     GameDraw.updateDices();
@@ -156,7 +166,11 @@ var GameEngine = ( function () {
         GameDraw.updateDices();
 
         if (!currentPlayer.countOfPieces) {
-            alert(currentPlayer.name + ' WINS!!!')
+        	swal({   
+        		title: "Congratulations",   
+        		//text: "Here's a custom image.",   
+        		imageUrl: "images/trophy_image.jpg" });
+            // alert(currentPlayer.name + ' WINS!!!')
         }
     }
 
@@ -211,7 +225,7 @@ var GameEngine = ( function () {
     }
 
     function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
-        alert('clicked position ' + markedIndex + '\n dices to play' + numbers)
+        // alert('clicked position ' + markedIndex + '\n dices to play' + numbers)
 
         var color = player.color,
             i,
