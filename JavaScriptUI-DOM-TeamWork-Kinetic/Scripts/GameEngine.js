@@ -34,6 +34,7 @@ var GameEngine = ( function () {
         }
         if (dices.numbers.length === 0) {
             dices.rollDices();
+            //dices.numbers = [6,6,6,6];
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
         }
         GameDraw.updatePlayerNames(currentPlayer)
@@ -66,6 +67,7 @@ var GameEngine = ( function () {
 
             if (dices.numbers.length === 0) {
             	alert ('No more moves. Next player turn');
+                GameDraw.updateDices();
             	setCurrentPlayerOnTurn();
             }
             
@@ -147,9 +149,9 @@ var GameEngine = ( function () {
             players[1].isOnTurn = true;
         } else {
             firstDiceThrow = true;
-            dices.clearNumbers();
             clickedToRollDices();
         }
+        dices.clearNumbers();
     }
 
     function setCurrentPlayerOnTurn() {
