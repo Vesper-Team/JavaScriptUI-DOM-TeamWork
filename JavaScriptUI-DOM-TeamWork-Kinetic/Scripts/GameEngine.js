@@ -40,6 +40,8 @@ var GameEngine = ( function () {
             //dices.numbers = [6,6,6,6];
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
         }
+
+        diceSound.currentTime = 1.25;
         GameDraw.updatePlayerNames(currentPlayer);
         // DO NOT USE dices.clearNumbers here!!!!
     }
