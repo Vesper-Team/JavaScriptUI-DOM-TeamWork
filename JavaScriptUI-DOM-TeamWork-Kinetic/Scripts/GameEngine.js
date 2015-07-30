@@ -25,6 +25,7 @@ var GameEngine = ( function () {
         firstDiceThrow = true;
 
         GameDraw.initGame(board, players);
+        setAvailabilityOfFields(board);
     }
 
     function clickedToRollDices() {
@@ -92,7 +93,7 @@ var GameEngine = ( function () {
 
             dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
 
-            checkForPinnedPiece(board);
+            checkForPinnedPiece(pressedField);
 
             if (dices.numbers.length === 0) {
                 alert('No more moves. Next player turn');
@@ -237,13 +238,13 @@ var GameEngine = ( function () {
         return result;
     }
 
-    function checkForPinnedPiece(board) {
-        var i,
-            len = board.length;
+    function checkForPinnedPiece(pressedField) {
+        // var i,
+        //     len = board.length;
 
-        for (i = 1; i < len - 1; i += 1) {
-            if (board[i].pieces.length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
-                var shifted = board[i].pieces.shift();
+        // for (i = 1; i < len - 1; i += 1) {
+            if (board[pressedField].pieces.length === 2 && board[pressedField].pieces[0].color !== board[pressedField].pieces[1].color) {
+                var shifted = board[pressedField].pieces.shift();
                 if (shifted.color === 'white') {
                     board[0].pieces.push(shifted);
                     updatePlayGround();
@@ -254,7 +255,7 @@ var GameEngine = ( function () {
                     return;
                 }
             }
-        }
+        // }
     }
 
     function checkIfPlayerCanExtractPieces(player, board) {
