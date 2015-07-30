@@ -97,15 +97,15 @@ var GameEngine = ( function () {
             checkForPinnedPiece(pressedField);
 
             if (dices.numbers.length === 0) {
-            	swal({   
-            		title: "Next player turn!",  
-            	    timer: 2000,   
+            	swal({
+            		title: "Next player turn!",
+            	    timer: 1500,
             	    showConfirmButton: false });
                 //alert('No more moves. ');
                 setAvailabilityOfFields(board);
                 GameDraw.updateDices();
                 updatePlayGround();
-                setCurrentPlayerOnTurn();                
+                setCurrentPlayerOnTurn();
                 return;
             }
 
@@ -117,15 +117,14 @@ var GameEngine = ( function () {
                 	swal({
                 	   title: "Next player turn!",
                 	   text: "No moves available",
-                	   timer: 2000,
+                	   timer: 1500,
                 	   showConfirmButton: false });
                     //alert('No moves');
-                    //dices.clearNumbers();
-                    setAvailabilityOfFields(board);                    
+                    //dices.clearNumbers(); MIGHT BE NEEDED <<=======================
+                    setAvailabilityOfFields(board);
                     GameDraw.updateDices();
                     updatePlayGround();
                     setCurrentPlayerOnTurn();
-
                     return;
                 } else if (possibleStartPositions.length === 1) {
 
@@ -166,9 +165,8 @@ var GameEngine = ( function () {
         GameDraw.updateDices();
 
         if (!currentPlayer.countOfPieces) {
-        	swal({   
-        		title: "Congratulations",   
-        		//text: "Here's a custom image.",   
+        	swal({
+        		title: "Congratulations",
         		imageUrl: "images/trophy_image.jpg" });
             // alert(currentPlayer.name + ' WINS!!!')
         }
