@@ -34,7 +34,7 @@ var GameEngine = ( function () {
         }
         if (dices.numbers.length === 0) {
             dices.rollDices();
-            currentPlayer = setCurrentPlayerOnTurn();
+            currentPlayer = players[0].isOnTurn ? players[0] : players[1];
         }
         GameDraw.updatePlayerNames(currentPlayer)
     }
