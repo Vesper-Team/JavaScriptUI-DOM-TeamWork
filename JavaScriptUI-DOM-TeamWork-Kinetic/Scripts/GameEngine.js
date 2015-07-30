@@ -200,6 +200,59 @@ var GameEngine = ( function () {
         }
     }
 
+    function checkIfCanExtractPiece (player, numbers, board) {
+    	var color = player.color,
+    	i, j, k,
+    	sum;
+
+    	numbers.sort(function(a, b) {
+    		return b - a;
+    	});
+
+    	if (color === 'white') {
+    		for (i = 0; i < numbers.length; i++) {
+    			if (board[25 - i].pieces) {
+    				player.countOfPieces--;
+    				board[25 - i].pieces.pop();
+    			} else {
+    				for (j = 19; j < 25 - i; j++) {
+    					sum += board[j].pieces.length;
+    				}
+    				if (!sum) {
+    					for (k = 25 - i + 1; k < 25; k++) {
+    						if(board[k].pieces.length) {
+    							board[k].pieces.pop();
+    							player.countOfPieces--;
+    							break;
+    						}
+    					}
+    				} 
+    			}
+    		}
+    	} else {
+    		for (i = 0; i < numbers.length; i++) {
+    			if (board[i].pieces) {
+    				player.countOfPieces--;
+    				board[i].pieces.pop();
+    				return;
+    			} else {
+    				for (j = 6; j > i; j--) {
+    					sum += board[j].pieces.length;
+    				}
+    				if (!sum) {
+    					for (k = i - 1; k > 0; k--) {
+    						if(board[k].pieces.length) {
+    							board[k].pieces.pop();
+    							player.countOfPieces--;
+    							return;
+    						}
+    					}
+    				} 
+    			}
+    		}
+    	}
+    }
+
     function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
         var direction,
             i, j,
