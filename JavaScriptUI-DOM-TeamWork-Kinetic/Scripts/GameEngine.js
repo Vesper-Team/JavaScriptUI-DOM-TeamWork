@@ -5,7 +5,10 @@ var GameEngine = ( function () {
         players,
         dices,
         firstDiceThrow,
-        currentPlayer;
+        currentPlayer,
+        hasChosen,
+    	indexOfChosenField,
+    	indexOfTargetField;
 
     function start() {
         players = [];
@@ -42,63 +45,78 @@ var GameEngine = ( function () {
 
 
     function update(pressedField) {
-        if (!checkIfPlayerCanExtractPieces(currentPlayer, board)) {
-            var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
-            if (!possibleStartPositions.length) {
-                dices.clearNumbers();
-            } else if (possibleStartPositions.length === 1) {
-                if (board[possibleStartPositions[0]].pieces.length >= 5) {
-                    board[possibleStartPositions[0]].pieces[4].isChosen = true;
-                } else {
-                    board[possibleStartPositions[0]].pieces[pieces.length - 1].isChosen = true;
-                }
-                // TODO - add listeners to receiving spots
-                // TODO - move
-                // TODO - remove all listeners
+        var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
 
-            } else {
-                //TODO - add listeners to starting pieces
-                // choose
-                // TODO - add rightClick listener for denial, add listeners to receiving spots
-                //if rightClick - remove listeners to receiving spots
-                // TODO - move
-                // TODO - remove all listeners
+    		// alert(hasChosen +' ' + indexOfChosenField +' ' +  indexOfTargetField +' ' +  canExtract)
+
+    	if (hasChosen) {
+    		indexOfTargetField = getIndexOfPossibleTargetFields(indexOfChosenField, currentPlayer, board, dices.numbers);
+
+    		if (indexOfTargetField.indexOf(pressedField) < 0) {
+    			return;
+    		}
+
+            board.movePiece (indexOfChosenField, pressedField);
+
+            hasChosen = false;
+
+            checkForPinnedPiece(board);
+
+            dices.usedNumber(Math.abs(pressedField - board[indexOfChosenField]));
+
+            if (dices.numbers.length === 0) {
+            	alert ('No more moves. Next player turn');
+            	setCurrentPlayerOnTurn();
             }
+            
+    	} else {
+    		if (!canExtract) {
+            	var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
+            	// alert(possibleStartPositions)
+            	if (!possibleStartPositions.length) {
+                	alert('No moves');
+                	dices.clearNumbers();
+                	return;
+            	} else if (possibleStartPositions.length === 1) { 
 
-        } else {
+                	if (board[possibleStartPositions[0]].pieces.length >= 5) {
+                   		board[possibleStartPositions[0]].pieces[4].isChosen = true;
+                	} else {
+                    	board[possibleStartPositions[0]].pieces[board[possibleStartPositions[0]].pieces.length - 1].isChosen = true;
+                	}
 
-        }
+                	hasChosen = true;
+                	indexOfChosenField = possibleStartPositions[0];
+                	// alert(hasChosen + ' ' + indexOfChosenField)
 
-        // adding where the player can play; Reconsider this!
-        //addListenersToPossibleGameFields(possibleStartMoves);
+            	} else {
+            		if (possibleStartPositions.indexOf(pressedField) > -1) {
+            			if (board[pressedField].pieces.length >= 5) {
+                   			board[pressedField].pieces[4].isChosen = true;
+                		} else {
+                    		board[pressedField].pieces[board[pressedField].pieces.length - 1].isChosen = true;
+                		}
+            		} else {
+            			return;
+            		}
 
-        // currentPlayer = GetCurrentPlayer - depending on player.isOnTurn or isFirstPlayerOnTurn
+            		hasChosen = true;
+                	indexOfChosenField = pressedField;
+                	// alert(hasChosen + ' ' + indexOfChosenField)
 
-        // flag hasThrownDice -> if not - throw dice(allowedMoves = diceResult, currentPlayerMoves = 0); else - continue
+            	}
 
-        // if (currentPlayer.hasHitPiece) -> Call function(s) to deal with this situation.
-        // if can't put piece -> playerMoves = allowedMoves
+        	} else {
+        		// drago tuka move da tegli playera.. 
 
-        // if ((currentPlayerMoves < allowedMoves) && hasMovedPiece (sets to true when called from onDrag event on piece)
+        	}
+    	}
 
-        // Subcases: move from position to position/ collect piece
-        // Call function(s) to deal with this situation. -> hasMovedPiece = false, currentPlayerMoves++;
-
-        // Missed logic?
-
-        // if current player has no pieces on the board -> He wins.
-
-        // if (playerMoves === allowedMoves) -> setCurrentPlayerOnTurn() , hasThrownDice = false
-
-
-        // dunno whether this should be here
         updatePlayGround();
 
         if (!currentPlayer.countOfPieces) {
             alert(currentPlayer.name + ' WINS!!!')
         }
-
-        //clickedToRollDices();
     }
 
     // Event targets can be document elements, the document itself, window or any other object that supports events.
@@ -161,7 +179,8 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
     var direction,
         i, j,
         result = [],
-        color = player.color;
+        color = player.color,
+        index;
 
     color = color.substring(0, 1).toUpperCase() + color.substring(1);
 
@@ -194,7 +213,8 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
     for (i = 1, len = board.length; i < board.length - 1; i += 1) {
         if (board[i].pieces.length > 0 && board[i].pieces[0].color === color.toLowerCase()) {
             for (j = 0; j < numbers.length; j += 1) {
-                if (board[i + numbers[j] * direction]['availableFor' + color]) {
+            	index = i + numbers[j] * direction;
+                if (1 < index  && index < 24 && board[index]['availableFor' + color]) {
                     result.push(i);
                     break;
                 }
@@ -205,7 +225,9 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
     return result;
 }
 
-function getIndexesOfPossibleTargetFields(markedIndex, player, board, numbers) {
+function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
+    // alert(markedIndex + ' ' + numbers)
+
     var color = player.color,
         i,
         result = [],
@@ -235,7 +257,7 @@ function checkForPinnedPiece(board) {
     for (i = 1; i < len - 1; i += 1) {
         if (board[i].length === 2 && board[i].pieces[0].color !== board[i].pieces[1].color) {
             var shifted = board[i].pieces.shift();
-            if (board[i].pieces[0].color === 'white') {
+            if (shifted.color === 'white') {
                 board[0].push(shifted);
                 return;
             } else {

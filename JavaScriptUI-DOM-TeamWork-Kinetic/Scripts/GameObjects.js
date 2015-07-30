@@ -101,6 +101,7 @@ var GameObjects = ( function () {
             value: function (fromBoardField, toBoardField) {
                 var piece = this[fromBoardField].pieces.pop();
                 this[toBoardField].pieces.push(piece);
+                piece.isChosen = false;                
                 return this;
             }
         });
