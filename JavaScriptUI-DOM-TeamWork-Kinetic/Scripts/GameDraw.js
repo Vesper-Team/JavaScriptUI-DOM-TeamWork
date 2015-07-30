@@ -196,7 +196,7 @@ var GameDraw = ( function () {
         if (isChosen) {
             strokeColor = 'limegreen';
             innerColor = 'limegreen';
-            strokeWidth = 4;
+            strokeWidth = 2;
         } else if (color === 'black') {
             strokeColor = 'white';
             strokeWidth = 2;
