@@ -92,13 +92,18 @@ var GameDraw = ( function () {
     };
 
     function createPlayersNames(player) {
-        var posX = 950,
+        var calculateX = function() {
+            var startX = 1000,
+                endX = 1200;
+                len = player.name.length;
+            return startX + (endX-startX)/2 - len/2 * 48;
+        };
+        var posX = calculateX(),
             posY,
             strokeColor;
 
         if (player.color === 'white') {
             posY = 100;
-            posX += 28;
             strokeColor = 'black';
         } else {
             posY = 470;
