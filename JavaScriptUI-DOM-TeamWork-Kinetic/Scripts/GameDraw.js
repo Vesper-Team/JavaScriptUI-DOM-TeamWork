@@ -295,7 +295,8 @@ var GameDraw = ( function () {
                 width: 64,
                 height: 64,
                 shadowOffsetX: 10,
-                shadowOffsetY: 10
+                shadowOffsetY: 10,
+                opacity: 1
             });
 
             diceLayer.add(diceImage);
@@ -306,8 +307,9 @@ var GameDraw = ( function () {
                     return;
                 }
                 GameEngine.clickedToRollDices();
-                //debugger;
                 displayRollingDices();
+                diceLayer.children[0].attrs.opacity = 1;
+                diceLayer.children[1].attrs.opacity = 1;
                 document.getElementById('dice1').number = dices.numbers[0];
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
@@ -325,7 +327,8 @@ var GameDraw = ( function () {
                 width: 64,
                 height: 64,
                 shadowOffsetX: 10,
-                shadowOffsetY: 10
+                shadowOffsetY: 10,
+                opacity: 1
             });
 
             diceLayer.add(diceImage);
@@ -339,6 +342,8 @@ var GameDraw = ( function () {
                 GameEngine.clickedToRollDices();
                 document.getElementById('dice1').number = dices.numbers[0];
                 displayRollingDices();
+                diceLayer.children[0].attrs.opacity = 1;
+                diceLayer.children[1].attrs.opacity = 1;
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
                 if (dices.numbers[0] === dices.numbers[1]) {
@@ -357,8 +362,8 @@ var GameDraw = ( function () {
                 document.getElementById('pair').style.display = 'inline';
                 $('#dice3').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
                 $('#dice4').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
-                $('#dice3').animate({opacity: '1'}, 100);
-                $('#dice4').animate({opacity: '1'}, 200);
+                $('#dice3').animate({opacity: 1}, 100);
+                $('#dice4').animate({opacity: 1}, 200);
             }, 710);
         }
 
@@ -478,26 +483,41 @@ var GameDraw = ( function () {
 
     function updateDices() {
         var dices = GameEngine.dices(),
-            firstDice = document.getElementById('dice1'),
-            secondDice = document.getElementById('dice2');
+            firstDice = diceLayer.children[0],
+            secondDice = diceLayer.children[1];
         if (dices.numbers[0] === dices.numbers[1]) {
             if (dices.numbers.length === 3) {
-                $('#dice4').animate({opacity: '0'}, 140);
+                $('#dice4').animate({opacity: 0}, 140);
                 setTimeout(function () {
                     document.getElementById('dice4').style.display = 'none';
                 }, 150);
             } else if (dices.numbers.length === 2) {
-                $('#dice3').animate({opacity: '0'}, 140);
+                $('#dice3').animate({opacity: 0}, 140);
                 setTimeout(function () {
                     document.getElementById('dice3').style.display = 'none';
                 }, 150);
             }
         } else if (dices.numbers.length === 1) {
-            if (dices.numbers[0] === firstDice.number) {
-                secondDice.animate({opacity: '0.5'}, 150);
+            diceLayer.destroyChildren();
+            if (dices.numbers[0] === document.getElementById('dice1').number) {
+                secondDice.attrs.opacity = 0.5;
+                diceLayer.add(firstDice);
+                diceLayer.add(secondDice);
+                diceLayer.draw();
             } else {
-                firstDice.animate({opacity: '0.5'}, 150);
+                firstDice.attrs.opacity = 0.5;
+                diceLayer.add(firstDice);
+                diceLayer.add(secondDice);
+                diceLayer.draw();
             }
+        } else if (dices.numbers.length === 0) {
+            secondDice.attrs.opacity = 0.5;
+            firstDice.attrs.opacity = 0.5;
+            diceLayer.destroyChildren();
+            diceLayer.add(firstDice);
+            diceLayer.add(secondDice);
+            //debugger;
+            diceLayer.draw();
         }
     }
 

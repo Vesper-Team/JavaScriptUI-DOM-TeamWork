@@ -113,6 +113,7 @@ var GameEngine = ( function () {
     	}
 
         updatePlayGround();
+        GameDraw.updateDices();
 
         if (!currentPlayer.countOfPieces) {
             alert(currentPlayer.name + ' WINS!!!')
