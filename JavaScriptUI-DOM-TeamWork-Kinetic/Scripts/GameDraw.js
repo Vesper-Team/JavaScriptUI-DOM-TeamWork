@@ -56,30 +56,30 @@ var GameDraw = ( function () {
         }
     }
 
-     function transformPositionFromBoardDataToBoardCanvas( objX, objY ) {
+    function transformPositionFromBoardDataToBoardCanvas(objX, objY) {
         var x,
             y,
             middleBoard = 0;
-              
-        if ( objX === 0 || objX === 25 ) {
+
+        if (objX === 0 || objX === 25) {
             outOfGamePosition = 50;
         }
 
-        if ( objX < 7 || ( 12 < objX && 18 < objX ) ) {
+        if (objX < 7 || ( 12 < objX && 18 < objX )) {
             middleBoard = 39;
         }
 
-        if ( objX === 25 ) {
+        if (objX === 25) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
             y = CONSTANTS.TOP_START_POS_Y;
-        } else if ( 13 <= objX && objX < 25 ) {
+        } else if (13 <= objX && objX < 25) {
             x = CONSTANTS.TOP_START_POS_X + ( ( objX - 13 ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.TOP_START_POS_Y + ( objY * CONSTANTS.OBJ_SIZE_Y );
-        } else if ( 1 <= objX && objX < 13 ) {
+        } else if (1 <= objX && objX < 13) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X ) + middleBoard;
             y = CONSTANTS.BOTTOM_START_POS_Y - ( objY * CONSTANTS.OBJ_SIZE_Y );
-        } else if ( objX === 0 ) {
+        } else if (objX === 0) {
             x = CONSTANTS.BOTTOM_START_POS_X + ( ( 12 - objX ) * CONSTANTS.OBJ_SIZE_X )
                 + middleBoard + outOfGamePosition;
             y = CONSTANTS.BOTTOM_START_POS_Y;
@@ -90,21 +90,22 @@ var GameDraw = ( function () {
             y: y,
         }
     };
-    
-    function createPlayersNames( player ) {
+
+    function createPlayersNames(player) {
         var posX = 950,
             posY,
             strokeColor;
 
-        if ( player.color === 'white' ) {
+        if (player.color === 'white') {
             posY = 100;
+            posX += 28;
             strokeColor = 'black';
-        } else {           
+        } else {
             posY = 470;
             strokeColor = 'white';
         }
 
-        var text = new Kinetic.Text( {
+        var text = new Kinetic.Text({
             x: posX,
             y: posY,
             text: player.name,
@@ -117,9 +118,9 @@ var GameDraw = ( function () {
             align: 'left',
             shadowOffsetX: 10,
             shadowOffsetY: 10,
-        } );
+        });
 
-        playersNamesLayer.add( text );
+        playersNamesLayer.add(text);
     };
 
     function initBackground() {
@@ -186,7 +187,7 @@ var GameDraw = ( function () {
             strokeColor = 'yellowgreen';
         } else if (color === 'black') {
             strokeColor = 'white';
-        } else if(color === 'white') {
+        } else if (color === 'white') {
             strokeColor = 'black';
         }
 
@@ -217,29 +218,29 @@ var GameDraw = ( function () {
             playGroundLayer.add(text);
         }
     };
-    
-    function createCirclePositionForOutGamePieces( x, y, color ) {
+
+    function createCirclePositionForOutGamePieces(x, y, color) {
         var radius,
-           pos,
-           posX,
-           posY;
+            pos,
+            posX,
+            posY;
 
         radius = CONSTANTS.CIRCLE_RADIUS;
-        pos = transformPositionFromBoardDataToBoardCanvas( x, y );
-        posX = Math.floor( pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ) );
-        posY = Math.floor( pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ) );
+        pos = transformPositionFromBoardDataToBoardCanvas(x, y);
+        posX = Math.floor(pos.x + ( CONSTANTS.OBJ_SIZE_X / 2 ));
+        posY = Math.floor(pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ));
 
-        var circle = new Kinetic.Circle( {
+        var circle = new Kinetic.Circle({
             x: posX,
             y: posY,
             radius: radius,
             stroke: color,
-        } );
+        });
 
-        backgroundLayer.add( circle );
+        backgroundLayer.add(circle);
     };
-    
-    function createRectangleListener( x, y ) {
+
+    function createRectangleListener(x, y) {
         var pos,
             posX,
             posY,
@@ -247,37 +248,37 @@ var GameDraw = ( function () {
             posYBottom,
             height;
 
-        pos = transformPositionFromBoardDataToBoardCanvas( x, y );
-        posX = Math.floor( pos.x );
-        posYTop = Math.floor( pos.y );
-        posYBottom = Math.floor( pos.y + CONSTANTS.OBJ_SIZE_Y );
+        pos = transformPositionFromBoardDataToBoardCanvas(x, y);
+        posX = Math.floor(pos.x);
+        posYTop = Math.floor(pos.y);
+        posYBottom = Math.floor(pos.y + CONSTANTS.OBJ_SIZE_Y);
 
-        if ( x > 12 ) {
+        if (x > 12) {
             posY = posYTop;
             height = x === 25 ? 1 : 5;
-        } else {           
+        } else {
             posY = posYBottom;
             height = x === 0 ? -1 : -5;
-        } 
+        }
 
-        var rect = new Kinetic.Rect( {
+        var rect = new Kinetic.Rect({
             x: posX,
             y: posY,
             width: CONSTANTS.OBJ_SIZE_X,
             height: ( CONSTANTS.OBJ_SIZE_Y * height ),
             //fill:'yellow',
-        } );
+        });
 
-        positionLayer.add( rect );
+        positionLayer.add(rect);
 
-        rect.addEventListener( 'click', function () {
-            var pos = transformPositionFromBoardCanvasToBoardData( rect.getAbsolutePosition().x,
-                rect.getAbsolutePosition().y );                        
+        rect.addEventListener('click', function () {
+            var pos = transformPositionFromBoardCanvasToBoardData(rect.getAbsolutePosition().x,
+                rect.getAbsolutePosition().y);
 
             playGroundLayer.destroyChildren();
 
-            GameEngine.update( pos.x );
-        } );
+            GameEngine.update(pos.x);
+        });
     };
 
     ///Dice
@@ -292,14 +293,16 @@ var GameDraw = ( function () {
                 y: 280,
                 image: diceOne,
                 width: 64,
-                height: 64
+                height: 64,
+                shadowOffsetX: 10,
+                shadowOffsetY: 10
             });
 
             diceLayer.add(diceImage);
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
-                if(dices.numbers.length !== 0) {
+                if (dices.numbers.length !== 0) {
                     return;
                 }
                 GameEngine.clickedToRollDices();
@@ -308,7 +311,7 @@ var GameDraw = ( function () {
                 document.getElementById('dice1').number = dices.numbers[0];
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                if(dices.numbers[0] === dices.numbers[1]) {
+                if (dices.numbers[0] === dices.numbers[1]) {
                     addAnotherPairOfDices();
                 }
             });
@@ -320,14 +323,16 @@ var GameDraw = ( function () {
                 y: 280,
                 image: diceTwo,
                 width: 64,
-                height: 64
+                height: 64,
+                shadowOffsetX: 10,
+                shadowOffsetY: 10
             });
 
             diceLayer.add(diceImage);
             stage.add(diceLayer);
 
             diceImage.addEventListener('click', function () {
-                if(dices.numbers.length !== 0) {
+                if (dices.numbers.length !== 0) {
                     return;
                 }
                 document.getElementById('dices').style.display = 'inline';
@@ -336,7 +341,7 @@ var GameDraw = ( function () {
                 displayRollingDices();
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                if(dices.numbers[0] === dices.numbers[1]) {
+                if (dices.numbers[0] === dices.numbers[1]) {
                     addAnotherPairOfDices();
                 }
             });
@@ -346,15 +351,15 @@ var GameDraw = ( function () {
         diceTwo.src = '../Testing/dieWhite6.png';
 
         function addAnotherPairOfDices() {
-            setTimeout(function() {
-                $('#dice3').css('opacity',0);
-                $('#dice4').css('opacity',0);
+            setTimeout(function () {
+                $('#dice3').css('opacity', 0);
+                $('#dice4').css('opacity', 0);
                 document.getElementById('pair').style.display = 'inline';
                 $('#dice3').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
                 $('#dice4').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
-                $('#dice3').animate({opacity: '1'},100);
-                $('#dice4').animate({opacity: '1'},200);
-            },710);
+                $('#dice3').animate({opacity: '1'}, 100);
+                $('#dice4').animate({opacity: '1'}, 200);
+            }, 710);
         }
 
         function displayRollingDices() {
@@ -398,9 +403,9 @@ var GameDraw = ( function () {
                 $('#dice2').attr('src', '../Testing/dieWhite6.png');
             }, 700);
 
-            setTimeout(function() {
+            setTimeout(function () {
                 document.getElementById('dices').style.display = 'none';
-            },710)
+            }, 710)
         }
     }
 
@@ -417,37 +422,37 @@ var GameDraw = ( function () {
     //     positionLayer.setZIndex(10);
     //     diceLayer.setZIndex(10);
     // };
-    
-    function initGame( board ) {
+
+    function initGame(board, players) {
         var x,
             len;
 
         initBackground();
 
         len = board.length;
-        for ( x = 0; x < len; x += 1 ) {
-            if ( x < 13 ) {
-                createRectangleListener( x, 0 );
+        for (x = 0; x < len; x += 1) {
+            if (x < 13) {
+                createRectangleListener(x, 0);
             } else {
-                createRectangleListener( x, 0 );
+                createRectangleListener(x, 0);
             }
         }
 
-        createCirclePositionForOutGamePieces( 25, 0, 'yellow' );
+        createCirclePositionForOutGamePieces(25, 0, 'yellow');
         createCirclePositionForOutGamePieces(0, 0, 'yellow');
-        
-        createPlayersNames( board.players[0] );
-        createPlayersNames( board.players[1] );
-                
-        updatePlayGround( board );
+
+        createPlayersNames(players[0]);
+        createPlayersNames(players[1]);
+
+        updatePlayGround(board);
         createDicesButton();
 
-        stage.add( playersNamesLayer );
-        stage.add( positionLayer );
-        stage.add( playGroundLayer );
+        stage.add(playersNamesLayer);
+        stage.add(positionLayer);
+        stage.add(playGroundLayer);
 
-        playGroundLayer.setZIndex( 10 );
-        positionLayer.setZIndex( 10 );
+        playGroundLayer.setZIndex(10);
+        positionLayer.setZIndex(10);
     };
 
     function updatePlayGround(board) {
@@ -475,40 +480,45 @@ var GameDraw = ( function () {
         var dices = GameEngine.dices(),
             firstDice = document.getElementById('dice1'),
             secondDice = document.getElementById('dice2');
-        if(dices.numbers[0] === dices.numbers[1]) {
-            if(dices.numbers.length === 3) {
-                $('#dice4').animate({opacity: '0'},140);
-                setTimeout(function() {
+        if (dices.numbers[0] === dices.numbers[1]) {
+            if (dices.numbers.length === 3) {
+                $('#dice4').animate({opacity: '0'}, 140);
+                setTimeout(function () {
                     document.getElementById('dice4').style.display = 'none';
-                },150);
+                }, 150);
             } else if (dices.numbers.length === 2) {
-                $('#dice3').animate({opacity: '0'},140);
-                setTimeout(function() {
+                $('#dice3').animate({opacity: '0'}, 140);
+                setTimeout(function () {
                     document.getElementById('dice3').style.display = 'none';
-                },150);
+                }, 150);
             }
-        } else if(dices.numbers.length === 1) {
-            if(dices.numbers[0] === firstDice.number) {
-                secondDice.animate({opacity: '0.5'},150);
+        } else if (dices.numbers.length === 1) {
+            if (dices.numbers[0] === firstDice.number) {
+                secondDice.animate({opacity: '0.5'}, 150);
             } else {
-                firstDice.animate({opacity: '0.5'},150);
+                firstDice.animate({opacity: '0.5'}, 150);
             }
         }
     }
 
-    function updatePlayerTurn() {
-
-    }
-    
-     function updatePlayerNames() {
-        playersNamesLayer.draw();
+    function updatePlayerNames(currentPlayer) {
+        if(currentPlayer.color === 'white') {
+            playersNamesLayer.children[0].attrs.fill = 'blue';
+            playersNamesLayer.children[1].attrs.fill = 'black';
+        } else {
+            playersNamesLayer.children[0].attrs.fill = 'white';
+            playersNamesLayer.children[1].attrs.fill = 'blue';
+        }
+        setTimeout(function() {
+            playersNamesLayer.draw();
+        },720);
     }
 
     return {
         initGame: initGame,
         updatePlayGround: updatePlayGround,
         updateDices: updateDices,
-        updatePlayerNames: updatePlayerNames,        
+        updatePlayerNames: updatePlayerNames,
     }
 }() );
 

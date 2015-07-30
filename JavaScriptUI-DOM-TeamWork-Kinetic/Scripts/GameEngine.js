@@ -20,18 +20,20 @@ var GameEngine = ( function () {
 
         firstDiceThrow = true;
 
-        GameDraw.initGame(board);
+        GameDraw.initGame(board, players);
     }
 
     function clickedToRollDices() {
         if (firstDiceThrow) {
             firstDiceThrow = false;
             throwFirstDiceToDeterminePlayer();
+            currentPlayer = players[0].isOnTurn ? players[0] : players[1];
         }
         if (dices.numbers.length === 0) {
             dices.rollDices();
             currentPlayer = setCurrentPlayerOnTurn();
         }
+        GameDraw.updatePlayerNames(currentPlayer)
     }
 
     function updatePlayGround() {
@@ -223,7 +225,7 @@ function getIndexesOfPossibleTargetFields(markedIndex, player, board, numbers) {
         }
     }
 
-    return result; 
+    return result;
 }
 
 function checkForPinnedPiece(board) {
