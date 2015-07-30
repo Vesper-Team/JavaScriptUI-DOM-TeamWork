@@ -51,3 +51,81 @@ body {
     background-color: dimgray;
 }
 
+#kinetic-container {
+    /*only used for the animation*/
+    visibility: hidden;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0
+}
+
+svg {
+    background-image: url("../Images/wood_background_BlackNWhite_1920x1080.jpg");
+}
+
+svg text {
+    font-family: fantasy;
+}
+
+#textPlay {
+    font-size: 120px;
+    stroke-width: 1;
+    fill: blue;
+    stroke: black;
+}
+
+#textHelp {
+    font-size: 90px;
+    fill: blue;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+#textExit {
+    font-size: 70px;
+    fill: blue;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.textGoodBye {
+    font-size: 80px;
+    stroke: black;
+    stroke-width: 2;
+}
+
+.button:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+#boardImage {
+    visibility: hidden;
+}
+
+input {
+    color: blue;
+    position: fixed;
+    border: 2px solid blue;
+    width: 400px;
+    height: 50px;
+    background-color: black;
+    font-size: 40px;
+    text-align: center;
+}
+
+#firstPlayerText, #secondPlayerText {
+    font-size: 90px;
+}
+
+#firstPlayerText, #secondPlayerText, #proceedButton, #firstPlayer-name, #secondPlayer-name{
+    display: none;
+}
+
+#proceedButton {
+    font-size: 70px;
+    fill: blue;
+    stroke: black;
+    stroke-width: 1px;
+}

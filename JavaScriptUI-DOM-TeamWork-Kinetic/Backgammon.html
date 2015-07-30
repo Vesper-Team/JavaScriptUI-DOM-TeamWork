@@ -13,6 +13,34 @@
 	
 </head>
 <body>
+<svg width="1359" height="639" id="theSvg">
+    <radialGradient id="blackCircleGradient" cy="60%" fx="45%" fy="45%" r="2">
+        <stop offset="0%" stop-color="grey"/>
+        <stop offset="25%" stop-color="black"/>
+    </radialGradient>
+    <radialGradient id="whiteCircleGradient" cy="60%" fx="45%" fy="45%" r="2">
+        <stop offset="0%" stop-color="grey"/>
+        <stop offset="25%" stop-color="white"/>
+    </radialGradient>
+    <image id="boardImage" xlink:href="Images/Board800x600.png" x="10" y="10" width="800" height="600"/>
+    <text class="textGoodBye" id="textThanks" x="375" y="300" fill="blue"></text>
+    <text class="textGoodBye" id="textGoodbye" x="530" y="400" fill="blue"></text>
+    <text onclick="play()" class="button" id="textPlay" x="579" y="206">Play</text>
+    <text onclick="getHelp()" class="button" id="textHelp" x="600" y="359">Help</text>
+    <text onclick="exitGame()" class="button" id="textExit" x="630" y="498">Exit</text>
+    <text id="firstPlayerText" x="245" y="206" fill="blue">Who is playing Whites?</text>
+    <text id="secondPlayerText" x="259" y="206" fill="blue">Who is playing Blacks?</text>
+    <foreignObject x="472" y="289" width="500" height="550">
+        <body xmlns="http://www.w3.org/1999/xhtml">
+        <form>
+            <input type="text" id="firstPlayer-name" value="Pesho" name="fname"/>
+            <input type="text" id="secondPlayer-name" value="Gosho" name="sname"/>
+        </form>
+        </body>
+    </foreignObject>
+    <text class="button" onclick="setName()" x="555" y="498" id="proceedButton">Proceed</text>
+</svg>
+
 <div id="kinetic-container"></div>
 <div id="dices">
     <img id="dice1"/>
@@ -23,6 +51,7 @@
     <img id="dice4"/>
 </div>
 
+<script src="Scripts/MenuScripts.js"></script>
 <script src="Scripts/GameObjects.js"></script>
 <script src="Scripts/GameDraw.js"></script>
 <script src="Scripts/GameEngine.js"></script>

@@ -93,7 +93,7 @@ var GameDraw = ( function () {
 
     function createPlayersNames(player) {
         var calculateX = function () {
-            var startX = 1000,
+            var startX = 950,
                 endX = 1200;
             len = player.name.length;
             return startX + (endX - startX) / 2 - len / 2 * 48;
@@ -335,8 +335,8 @@ var GameDraw = ( function () {
                     diceLayer.children[1].attrs.number = dices.numbers[0];
                     diceLayer.children[0].attrs.number = dices.numbers[1];
                 }
-                diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
-                diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
+                diceOne.src = 'Images/dieWhite' + dices.numbers[0] + '.png';
+                diceTwo.src = 'Images/dieWhite' + dices.numbers[1] + '.png';
                 if (dices.numbers[0] === dices.numbers[1] && !dices.numbers['mustThrowAgain']) {
                     addAnotherPairOfDices();
                 }
@@ -376,16 +376,16 @@ var GameDraw = ( function () {
                     diceLayer.children[1].attrs.number = dices.numbers[0];
                     diceLayer.children[0].attrs.number = dices.numbers[1];
                 }
-                diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
-                diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
+                diceOne.src = 'Images/dieWhite' + dices.numbers[0] + '.png';
+                diceTwo.src = 'Images/dieWhite' + dices.numbers[1] + '.png';
                 if (dices.numbers[0] === dices.numbers[1] && !dices.numbers['mustThrowAgain']) {
                     addAnotherPairOfDices();
                 }
             });
         };
 
-        diceOne.src = '../Testing/dieWhite' + diceOneNumber + '.png';
-        diceTwo.src = '../Testing/dieWhite' + diceTwoNumber + '.png';
+        diceOne.src = 'Images/dieWhite' + diceOneNumber + '.png';
+        diceTwo.src = 'Images/dieWhite' + diceTwoNumber + '.png';
 
         function addAnotherPairOfDices() {
             setTimeout(function () {
@@ -394,8 +394,8 @@ var GameDraw = ( function () {
                 document.getElementById('pair').style.display = 'inline';
                 document.getElementById('dice3').style.display = 'inline';
                 document.getElementById('dice4').style.display = 'inline';
-                $('#dice3').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
-                $('#dice4').attr('src', '../Testing/dieWhite' + dices.numbers[0] + '.png');
+                $('#dice3').attr('src', 'Images/dieWhite' + dices.numbers[0] + '.png');
+                $('#dice4').attr('src', 'Images/dieWhite' + dices.numbers[0] + '.png');
                 $('#dice3').animate({opacity: 1}, 100);
                 $('#dice4').animate({opacity: 1}, 200);
             }, 710);
@@ -405,41 +405,41 @@ var GameDraw = ( function () {
             document.getElementById('dices').style.display = 'inline';
 
             setTimeout(function () {
-                $('#dice1').attr('src', '../Testing/dieWhite1.png');
+                $('#dice1').attr('src', 'Images/dieWhite1.png');
             }, 50);
             setTimeout(function () {
-                $('#dice1').attr('src', '../Testing/dieWhite2.png');
+                $('#dice1').attr('src', 'Images/dieWhite2.png');
             }, 150);
             setTimeout(function () {
-                $('#dice1').attr('src', '../Testing/dieWhite3.png');
+                $('#dice1').attr('src', 'Images/dieWhite3.png');
             }, 250);
             setTimeout(function () {
-                $('#dice1').attr('src', '../Testing/dieWhite4.png');
+                $('#dice1').attr('src', 'Images/dieWhite4.png');
             }, 350);
             setTimeout(function () {
-                $('#dice1').attr('src', '../Testing/dieWhite5.png');
+                $('#dice1').attr('src', 'Images/dieWhite5.png');
             }, 450);
             setTimeout(function () {
-                $('#dice1').attr('src', '../Testing/dieWhite6.png');
+                $('#dice1').attr('src', 'Images/dieWhite6.png');
             }, 550);
 
             setTimeout(function () {
-                $('#dice2').attr('src', '../Testing/dieWhite1.png');
+                $('#dice2').attr('src', 'Images/dieWhite1.png');
             }, 100);
             setTimeout(function () {
-                $('#dice2').attr('src', '../Testing/dieWhite2.png');
+                $('#dice2').attr('src', 'Images/dieWhite2.png');
             }, 220);
             setTimeout(function () {
-                $('#dice2').attr('src', '../Testing/dieWhite3.png');
+                $('#dice2').attr('src', 'Images/dieWhite3.png');
             }, 340);
             setTimeout(function () {
-                $('#dice2').attr('src', '../Testing/dieWhite4.png');
+                $('#dice2').attr('src', 'Images/dieWhite4.png');
             }, 460);
             setTimeout(function () {
-                $('#dice2').attr('src', '../Testing/dieWhite5.png');
+                $('#dice2').attr('src', 'Images/dieWhite5.png');
             }, 580);
             setTimeout(function () {
-                $('#dice2').attr('src', '../Testing/dieWhite6.png');
+                $('#dice2').attr('src', 'Images/dieWhite6.png');
             }, 700);
 
             setTimeout(function () {
@@ -480,7 +480,6 @@ var GameDraw = ( function () {
         positionLayer.setZIndex(10);
 
         window.addEventListener("keyup", function (e) {
-            debugger;
             if (e.keyCode == 27) {
                 board.forEach(function (gameField) {
                     var currentGameField = gameField;
@@ -573,36 +572,3 @@ var GameDraw = ( function () {
         updatePlayerNames: updatePlayerNames,
     }
 }() );
-
-
-// not used
-function createRectangleListener(x, y) {
-
-    var pos = transformPositionFromBoardDataToBoardCanvas(x, y);
-    var posX = Math.floor(pos.x);
-    var posY = Math.floor(pos.y);
-    var height = x < 13 ? ( -CONSTANTS.OBJ_SIZE_Y ) : CONSTANTS.OBJ_SIZE_Y;
-
-    var rect = new Kinetic.Rect({
-        x: posX,
-        y: posY,
-        width: CONSTANTS.OBJ_SIZE_X,
-        height: ( height * 5 ),
-        // fill:'yellow',
-    });
-
-    positionLayer.add(rect);
-
-    rect.addEventListener('click', function () {
-        var x,
-            y,
-            pos;
-
-        pos = transformPositionFromBoardCanvasToBoardData(rect.getAbsolutePosition().x,
-            rect.getAbsolutePosition().y);
-
-        playGroundLayer.destroyChildren();
-
-        GameEngine.update(pos.x);
-    });
-};
