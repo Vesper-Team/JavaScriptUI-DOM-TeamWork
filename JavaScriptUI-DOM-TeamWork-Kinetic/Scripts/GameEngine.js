@@ -8,7 +8,8 @@ var GameEngine = ( function () {
         currentPlayer,
         hasChosen,
         indexOfChosenField,
-        indexOfTargetField;
+        indexOfTargetField,
+        diceSound = new Audio('Sounds/dice.wav');
 
     function start() {
         players = [];
@@ -27,6 +28,7 @@ var GameEngine = ( function () {
     }
 
     function clickedToRollDices() {
+        diceSound.play();
         if (firstDiceThrow) {
             firstDiceThrow = false;
             throwFirstDiceToDeterminePlayer();
