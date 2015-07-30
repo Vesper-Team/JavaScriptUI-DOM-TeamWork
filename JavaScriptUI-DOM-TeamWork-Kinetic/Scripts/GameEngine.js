@@ -155,11 +155,11 @@ var GameEngine = ( function () {
         if (players[0].isOnTurn) {
             players[0].isOnTurn = false;
             players[1].isOnTurn = true;
-            return players[1];
+            return players[0];
         } else {
             players[0].isOnTurn = true;
             players[1].isOnTurn = false;
-            return players[0];
+            return players[1];
         }
     }
 
