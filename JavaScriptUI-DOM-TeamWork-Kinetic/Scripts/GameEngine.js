@@ -231,7 +231,7 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
 }
 
 function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
-    alert('clicked position 'markedIndex + '\n dices to play' + numbers)
+    alert('clicked position ' + markedIndex + '\n dices to play' + numbers)
 
     var color = player.color,
         i,
