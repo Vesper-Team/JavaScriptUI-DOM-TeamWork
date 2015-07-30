@@ -28,11 +28,7 @@ var GameEngine = ( function () {
     }
 
     function clickedToRollDices() {
-<<<<<<< HEAD
-        debugger;
-=======
         diceSound.play();
->>>>>>> origin/master
         if (firstDiceThrow) {
             throwFirstDiceToDeterminePlayer();
             dices.numbers[2] = true; // Whether should throw again ..
