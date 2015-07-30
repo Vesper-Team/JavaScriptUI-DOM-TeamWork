@@ -47,9 +47,9 @@ var GameEngine = ( function () {
             players[1].isOnTurn = true;
         } else {
             firstDiceThrow = true;
+            dices.clearNumbers();
             throwFirstDiceToDeterminePlayer();
         }
-        dices.clearNumbers();
     }
 
     function setCurrentPlayerOnTurn() {
