@@ -62,7 +62,7 @@ var GameEngine = ( function () {
 
             checkForPinnedPiece(board);
 
-            dices.usedNumber(Math.abs(pressedField - board[indexOfChosenField]));
+            dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
 
             if (dices.numbers.length === 0) {
             	alert ('No more moves. Next player turn');
@@ -214,7 +214,7 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
         if (board[i].pieces.length > 0 && board[i].pieces[0].color === color.toLowerCase()) {
             for (j = 0; j < numbers.length; j += 1) {
             	index = i + numbers[j] * direction;
-                if (1 < index  && index < 24 && board[index]['availableFor' + color]) {
+                if (0 < index  && index < 25 && board[index]['availableFor' + color]) {
                     result.push(i);
                     break;
                 }
@@ -226,12 +226,13 @@ function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
 }
 
 function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
-    // alert(markedIndex + ' ' + numbers)
+    alert(markedIndex + ' ' + numbers)
 
     var color = player.color,
         i,
         result = [],
-        direction;
+        direction,
+        index;
 
     if (color === 'white') {
         direction = 1
@@ -242,7 +243,9 @@ function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
     color = color.substring(0, 1).toUpperCase() + color.substring(1);
 
     for (i = 0; i < numbers.length; i++) {
-        if (board[markedIndex + numbers[i] * direction]['availableFor' + color]) {
+    	index = markedIndex + numbers[i] * direction;
+
+        if (0 < index  && index < 25 && board[index]['availableFor' + color]) {
             result.push(markedIndex + numbers[i] * direction);
         }
     }
