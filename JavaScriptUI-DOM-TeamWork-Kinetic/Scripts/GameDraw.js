@@ -172,7 +172,9 @@ var GameDraw = ( function () {
             posX,
             posY,
             strokeColor,
-            numberOfPieces = y + 1;
+            strokeWidth,
+            numberOfPieces = y + 1,
+            innerColor = 'gray';
 
         if (y > 4) {
             y = 0;
@@ -187,11 +189,16 @@ var GameDraw = ( function () {
         posY = Math.floor(pos.y + ( CONSTANTS.OBJ_SIZE_Y / 2 ));
 
         if (isChosen) {
-            strokeColor = 'yellowgreen';
+            strokeColor = 'limegreen';
+            innerColor = 'limegreen';
+            strokeWidth = 4;
         } else if (color === 'black') {
             strokeColor = 'white';
+            strokeWidth = 2;
         } else if (color === 'white') {
             strokeColor = 'black';
+            strokeWidth = 2;
+
         }
 
         var circle = new Kinetic.Circle({
@@ -199,9 +206,10 @@ var GameDraw = ( function () {
             y: posY,
             radius: radius,
             stroke: strokeColor,
+            strokeWidth: strokeWidth,
             fillRadialGradientStartRadius: 0,
             fillRadialGradientEndRadius: radius,
-            fillRadialGradientColorStops: [0, 'gray', 1, color],
+            fillRadialGradientColorStops: [0, innerColor, 1, color],
         });
 
         var text = new Kinetic.Text({

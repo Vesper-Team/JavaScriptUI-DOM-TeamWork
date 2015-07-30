@@ -13,6 +13,7 @@
 }
 
 #pair {
+    position: fixed;
     display: none;
     border: none;
 }
