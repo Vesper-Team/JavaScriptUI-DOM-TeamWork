@@ -36,8 +36,8 @@ var GameEngine = ( function () {
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
             firstDiceThrow = false;
         } else if (dices.numbers.length === 0) {
-            //dices.rollDices();
-            dices.numbers = [6,6,6,6];
+            dices.rollDices();
+            //dices.numbers = [6,6,6,6];
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
         }
 
