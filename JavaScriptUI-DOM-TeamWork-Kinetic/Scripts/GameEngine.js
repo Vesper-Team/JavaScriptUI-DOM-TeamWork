@@ -39,10 +39,30 @@ var GameEngine = ( function () {
         GameDraw.updatePlayerNames(currentPlayer)
     }
 
-    function updatePlayGround() {
-        GameDraw.updatePlayGround(board);
+    function throwFirstDiceToDeterminePlayer() {
+        dices.rollDices();
+        if (dices.numbers[dices.numbers.length - 2] > dices.numbers[dices.numbers.length - 1]) {
+            players[0].isOnTurn = true;
+        } else if (dices.numbers[dices.numbers.length - 2] < dices.numbers[dices.numbers.length - 1]) {
+            players[1].isOnTurn = true;
+        } else {
+            firstDiceThrow = true;
+            throwFirstDiceToDeterminePlayer();
+        }
+        dices.clearNumbers();
     }
 
+    function setCurrentPlayerOnTurn() {
+        if (players[0].isOnTurn) {
+            players[0].isOnTurn = false;
+            players[1].isOnTurn = true;
+            return players[0];
+        } else {
+            players[0].isOnTurn = true;
+            players[1].isOnTurn = false;
+            return players[1];
+        }
+    }
 
     function update(pressedField) {
         var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
@@ -123,6 +143,11 @@ var GameEngine = ( function () {
         }
     }
 
+    function updatePlayGround() {
+        GameDraw.updatePlayGround(board);
+    }
+
+
     // Event targets can be document elements, the document itself, window or any other object that supports events.
     //function addListenersToPossibleGameFields(gameFields) {
     //    var i,
@@ -141,31 +166,6 @@ var GameEngine = ( function () {
     //    var lengthOfPiecesInField = gameField.pieces.length;
     //    gameField.pieces[lengthOfPiecesInField - 1].isChosen = true;
     //}
-
-    function throwFirstDiceToDeterminePlayer() {
-        dices.rollDices();
-        if (dices.numbers[dices.numbers.length - 2] > dices.numbers[dices.numbers.length - 1]) {
-            players[0].isOnTurn = true;
-        } else if (dices.numbers[dices.numbers.length - 2] < dices.numbers[dices.numbers.length - 1]) {
-            players[1].isOnTurn = true;
-        } else {
-            firstDiceThrow = true;
-            clickedToRollDices();
-        }
-        dices.clearNumbers();
-    }
-
-    function setCurrentPlayerOnTurn() {
-        if (players[0].isOnTurn) {
-            players[0].isOnTurn = false;
-            players[1].isOnTurn = true;
-            return players[0];
-        } else {
-            players[0].isOnTurn = true;
-            players[1].isOnTurn = false;
-            return players[1];
-        }
-    }
 
     function getDices() {
         return dices;

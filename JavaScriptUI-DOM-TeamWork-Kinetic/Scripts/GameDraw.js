@@ -282,7 +282,7 @@ var GameDraw = ( function () {
     };
 
     ///Dice
-    function createDicesButton(d1Number,d2Number) {
+    function createDicesButton(d1Number, d2Number) {
         var diceOne = new Image(),
             diceTwo = new Image();
         var dices = GameEngine.dices(),
@@ -309,7 +309,7 @@ var GameDraw = ( function () {
                 }
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
-                if(diceLayer.children[0].attrs.x === 960) {
+                if (diceLayer.children[0].attrs.x === 960) {
                     diceLayer.children[0].attrs.number = dices.numbers[0];
                     diceLayer.children[1].attrs.number = dices.numbers[1];
                 } else {
@@ -345,7 +345,7 @@ var GameDraw = ( function () {
                 document.getElementById('dices').style.display = 'inline';
                 GameEngine.clickedToRollDices();
                 displayRollingDices();
-                if(diceLayer.children[0].attrs.x === 960) {
+                if (diceLayer.children[0].attrs.x === 960) {
                     diceLayer.children[0].attrs.number = dices.numbers[0];
                     diceLayer.children[1].attrs.number = dices.numbers[1];
                 } else {
@@ -354,7 +354,7 @@ var GameDraw = ( function () {
                 }
                 diceOne.src = '../Testing/dieWhite' + dices.numbers[0] + '.png';
                 diceTwo.src = '../Testing/dieWhite' + dices.numbers[1] + '.png';
-                if (dices.numbers[0] === dices.numbers[1]) {
+                if (dices.numbers[0] === dices.numbers[1] && dices.numbers.length === 2) {
                     addAnotherPairOfDices();
                 }
             });
@@ -495,7 +495,7 @@ var GameDraw = ( function () {
         var dices = GameEngine.dices(),
             firstDice,
             secondDice;
-        if(diceLayer.children[0].attrs.x === 900) {
+        if (diceLayer.children[0].attrs.x === 900) {
             firstDice = diceLayer.children[0];
             secondDice = diceLayer.children[1];
         } else {
@@ -526,21 +526,21 @@ var GameDraw = ( function () {
             diceLayer.draw();
         } else if (dices.numbers.length === 0) {
             diceLayer.destroyChildren();
-            createDicesButton(firstDice.attrs.number,secondDice.attrs.number);
+            createDicesButton(firstDice.attrs.number, secondDice.attrs.number);
         }
     }
 
     function updatePlayerNames(currentPlayer) {
-        if(currentPlayer.color === 'white') {
+        if (currentPlayer.color === 'white') {
             playersNamesLayer.children[0].attrs.fill = 'blue';
             playersNamesLayer.children[1].attrs.fill = 'black';
         } else {
             playersNamesLayer.children[0].attrs.fill = 'white';
             playersNamesLayer.children[1].attrs.fill = 'blue';
         }
-        setTimeout(function() {
+        setTimeout(function () {
             playersNamesLayer.draw();
-        },720);
+        }, 720);
     }
 
     return {
