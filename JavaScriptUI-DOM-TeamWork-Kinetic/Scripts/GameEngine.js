@@ -74,7 +74,7 @@ var GameEngine = ( function () {
     }
 
     function update(pressedField) {
-        if (dices.numbers['mustThrowAgain']) {
+        if (dices.numbers['mustThrowAgain'] || dices.numbers.length === 0) {
             return;
         }
         var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);

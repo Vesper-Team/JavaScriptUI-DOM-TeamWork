@@ -92,11 +92,11 @@ var GameDraw = ( function () {
     };
 
     function createPlayersNames(player) {
-        var calculateX = function() {
+        var calculateX = function () {
             var startX = 1000,
                 endX = 1200;
-                len = player.name.length;
-            return startX + (endX-startX)/2 - len/2 * 48;
+            len = player.name.length;
+            return startX + (endX - startX) / 2 - len / 2 * 48;
         };
         var posX = calculateX(),
             posY,
@@ -448,20 +448,6 @@ var GameDraw = ( function () {
         }
     }
 
-    // function initGame(board, diceImg) {
-    //     initBackground();
-    //     updatePlayGround(board);
-    //     createDicesButton(diceImg);
-
-    //     stage.add(positionLayer);
-    //     stage.add(playGroundLayer);
-    //     stage.add(diceLayer);
-
-    //     playGroundLayer.setZIndex(10);
-    //     positionLayer.setZIndex(10);
-    //     diceLayer.setZIndex(10);
-    // };
-
     function initGame(board, players) {
         var x,
             len;
@@ -492,7 +478,20 @@ var GameDraw = ( function () {
 
         playGroundLayer.setZIndex(10);
         positionLayer.setZIndex(10);
-    };
+
+        window.addEventListener("keyup", function (e) {
+            debugger;
+            if (e.keyCode == 27) {
+                board.forEach(function (gameField) {
+                    var currentGameField = gameField;
+                    currentGameField.pieces.forEach(function (piece) {
+                        piece.isChosen = false;
+                    })
+                });
+                updatePlayGround(board);
+            }
+        });
+    }
 
     function updatePlayGround(board) {
         var x,
