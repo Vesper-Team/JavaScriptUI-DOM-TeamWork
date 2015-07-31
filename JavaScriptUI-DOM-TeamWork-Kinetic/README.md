@@ -1,3 +1,5 @@
+# Telerik Vesper Team
+
 # JavaScriptUI-DOM-TeamWork
 
 ## Classic Backgammon
