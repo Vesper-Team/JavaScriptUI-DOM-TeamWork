@@ -39,5 +39,5 @@ The checkers are also done using KineticJS. They are circle objects with given f
 SweetAlert is used for the user game assistance
 
 
-##### for more info see provided [documentation](https://github.com/Vesper-Team/JavaScriptUI-DOM-TeamWork/blob/master/JavaScriptUI-DOM-TeamWork-Kinetic/Documentation.docx)
+##### for more info see provided [documentation](https://github.com/Vesper-Team/JavaScriptUI-DOM-TeamWork/blob/master/Documentation.docx)
 
