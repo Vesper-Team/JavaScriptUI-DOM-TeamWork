@@ -18,5 +18,5 @@
 
 
 
-##### for more info see provided [documentation](#)
+##### for more info see provided [documentation](https://github.com/Vesper-Team/JavaScriptUI-DOM-TeamWork/blob/master/JavaScriptUI-DOM-TeamWork-Kinetic/Documentation.docx)
 
