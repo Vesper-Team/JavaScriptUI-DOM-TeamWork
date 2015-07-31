@@ -443,7 +443,7 @@ function play() {
 }
 
 function getHelp() {
-    //document.getElementById("theSvg").innerHTML='<object type="text/html" data="Images/read.txt" ></object>';
+    window.open('Help.html');
 }
 
 function exitGame() {
