@@ -93,10 +93,10 @@ var GameDraw = ( function () {
 
     function createPlayersNames(player) {
         var calculateX = function () {
-            var startX = 950,
+            var startX = 1000,
                 endX = 1200;
             len = player.name.length;
-            return startX + (endX - startX) / 2 - len / 2 * 48;
+            return startX + (endX - startX) / 2 - len / 2 * 64;
         };
         var posX = calculateX(),
             posY,
@@ -114,12 +114,13 @@ var GameDraw = ( function () {
             x: posX,
             y: posY,
             text: player.name,
-            fontSize: 48,
+            fontSize: 64,
             fontStyle: 'bold',
             fontFamily: 'fantasy',
             width: 400,
             fill: player.color,
             stroke: strokeColor,
+            strokeWidth: 4,
             align: 'left',
             shadowOffsetX: 10,
             shadowOffsetY: 10,

@@ -101,7 +101,9 @@ var GameEngine = ( function () {
         var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
 
         // alert(hasChosen +' ' + indexOfChosenField +' ' +  indexOfTargetField +' ' +  canExtract)
-        verifyHasChosen();
+        if(hasChosen) {
+            verifyHasChosen();
+        }
         if (hasChosen) {
 
             indexOfTargetField = getIndexOfPossibleTargetFields(indexOfChosenField, currentPlayer, board, dices.numbers);
@@ -150,6 +152,17 @@ var GameEngine = ( function () {
                     updatePlayGround();
                     setCurrentPlayerOnTurn();
                     return;
+                } else if (possibleStartPositions.length === 1) {
+                    if (indexOfChosenField !== possibleStartPositions[0]) {
+                        if (board[possibleStartPositions[0]].pieces.length >= 5) {
+                            board[possibleStartPositions[0]].pieces[4].isChosen = true;
+                        } else {
+                            board[possibleStartPositions[0]].pieces[board[possibleStartPositions[0]].pieces.length - 1].isChosen = true;
+                        }
+                        hasChosen = true;
+                        indexOfChosenField = possibleStartPositions[0];
+                        updatePlayGround();
+                    }
                 } else {
                     if (possibleStartPositions.indexOf(pressedField) > -1) {
                         if (board[pressedField].pieces.length >= 5) {
