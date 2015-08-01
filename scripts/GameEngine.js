@@ -107,8 +107,8 @@ var GameEngine = ( function () {
         }
         if (hasChosen) {
             indexOfTargetField = getIndexOfPossibleTargetFields(indexOfChosenField, currentPlayer, board, dices.numbers);
-            debugger;
             if (canExtract) {
+                debugger;
                 if (pressedField === indexOfChosenField) {
                     currentPieces = currentPlayer.countOfPieces;
 
@@ -254,7 +254,6 @@ var GameEngine = ( function () {
             }
         }
 
-
         function markPiece(field) {
             if (board[field].pieces.length >= 5) {
                 board[field].pieces[4].isChosen = true;
@@ -303,8 +302,8 @@ var GameEngine = ( function () {
                 if (pressedField === 25 - numbers[i]) {
                     player.countOfPieces--;
                     //alert(board[pressedField].pieces.length)
-                    board[pressedField].pieces.pop();
                     unmarkPiece(pressedField);
+                    board[pressedField].pieces.pop();
                     // alert(board[pressedField].pieces.length)
                     dices.usedNumber(numbers[i]);
                     //alert(numbers)
@@ -315,8 +314,8 @@ var GameEngine = ( function () {
                     }
                     if (!sum) {
                         player.countOfPieces--;
-                        board[pressedField].pieces.pop();
                         unmarkPiece(pressedField);
+                        board[pressedField].pieces.pop();
                         dices.usedNumber(numbers[i]);
                         //alert(numbers)
                         return;
@@ -332,8 +331,8 @@ var GameEngine = ( function () {
                 if (pressedField === numbers[i]) {
                     player.countOfPieces--;
                     //alert(board[i].pieces.length)
-                    board[pressedField].pieces.pop();
                     unmarkPiece(pressedField);
+                    board[pressedField].pieces.pop();
                     //alert(board[i].pieces.length)
                     dices.usedNumber(numbers[i]);
                     //alert(numbers);
@@ -345,8 +344,8 @@ var GameEngine = ( function () {
                     }
                     if (!sum) {
                         player.countOfPieces--;
-                        board[pressedField].pieces.pop();
                         unmarkPiece(pressedField);
+                        board[pressedField].pieces.pop();
                         dices.usedNumber(numbers[i]);
                         //alert(numbers)
                         return;
