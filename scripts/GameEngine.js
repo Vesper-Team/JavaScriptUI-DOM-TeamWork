@@ -107,7 +107,7 @@ var GameEngine = ( function () {
         }
         if (hasChosen) {
             indexOfTargetField = getIndexOfPossibleTargetFields(indexOfChosenField, currentPlayer, board, dices.numbers);
-
+            debugger;
             if (canExtract) {
                 if (pressedField === indexOfChosenField) {
                     currentPieces = currentPlayer.countOfPieces;
@@ -139,9 +139,9 @@ var GameEngine = ( function () {
                     return;
                 }
 
-                board.movePiece(indexOfChosenField, pressedField);
-
                 unmarkPiece(indexOfChosenField);
+
+                board.movePiece(indexOfChosenField, pressedField);
 
                 hasChosen = false;
 
@@ -160,7 +160,7 @@ var GameEngine = ( function () {
                     timer: 1500,
                     showConfirmButton: false
                 });
-                //alert('No more moves. ');
+
                 setAvailabilityOfFields(board);
                 GameDraw.updateDices();
                 updatePlayGround();
