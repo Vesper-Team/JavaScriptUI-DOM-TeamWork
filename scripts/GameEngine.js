@@ -9,6 +9,7 @@ var GameEngine = ( function () {
         hasChosen,
         indexOfChosenField,
         indexOfTargetField,
+        canExtract,
         diceSound = new Audio('Sounds/dice.wav');
 
     function start(playerOneName, playerTwoName) {
@@ -44,7 +45,8 @@ var GameEngine = ( function () {
             //dices.numbers = [6,6,6,6];
             currentPlayer = players[0].isOnTurn ? players[0] : players[1];
             var possibleStartPositions = getIndexOfFieldsWithMovesAvailable(currentPlayer, board, dices.numbers);
-            if (possibleStartPositions.length === 1) {
+            canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
+            if (possibleStartPositions.length === 1 && !canExtract) {
                 if (board[possibleStartPositions[0]].pieces.length >= 5) {
                     board[possibleStartPositions[0]].pieces[4].isChosen = true;
                 } else {
@@ -93,22 +95,29 @@ var GameEngine = ( function () {
         }
         if (dices.numbers.length === 0) { // because when clicked without dices checkIfPlayerCanExtractPieces throws
             swal({
-            	title: 'Roll dices first!',
-            	timer: 1500,
-            	showConfirmButton: false
+                title: 'Roll dices first!',
+                timer: 1500,
+                showConfirmButton: false
             });
             return;
         }
-        var canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
-
-        // alert(hasChosen +' ' + indexOfChosenField +' ' +  indexOfTargetField +' ' +  canExtract)
-        if (hasChosen) {
+        canExtract = checkIfPlayerCanExtractPieces(currentPlayer, board);
+        if (hasChosen) { // needed when escape is pressed
             verifyHasChosen();
         }
         if (hasChosen) {
+            if (!canExtract && pressedField === indexOfChosenField) { // when you want to deselect
+                board.forEach(function (gameField) {
+                    var currentGameField = gameField;
+                    currentGameField.pieces.forEach(function (piece) {
+                        piece.isChosen = false;
+                    })
+                });
+                updatePlayGround(board);
+                return;
+            }
             indexOfTargetField = getIndexOfPossibleTargetFields(indexOfChosenField, currentPlayer, board, dices.numbers);
             if (canExtract) {
-                debugger;
                 if (pressedField === indexOfChosenField) {
                     currentPieces = currentPlayer.countOfPieces;
 
@@ -145,10 +154,10 @@ var GameEngine = ( function () {
             }
 
             if (dices.numbers.length === 0) {
-            	if (!currentPlayer.countOfPieces) {
-            		checkForWin();
-            		return;
-            	}
+                if (!currentPlayer.countOfPieces) {
+                    checkForWin();
+                    return;
+                }
                 swal({
                     title: "Next player turn!",
                     timer: 1500,
@@ -180,13 +189,11 @@ var GameEngine = ( function () {
                     updatePlayGround();
                     setCurrentPlayerOnTurn();
                     return;
-                } else if (possibleStartPositions.length === 1) {
-                    // if (indexOfChosenField !== possibleStartPositions[0]) {
+                } else if (possibleStartPositions.length === 1 && !canExtract) {
                     markPiece(possibleStartPositions[0]);
                     hasChosen = true;
                     indexOfChosenField = possibleStartPositions[0];
                     updatePlayGround();
-                    // }
                 } else {
                     if (possibleStartPositions.indexOf(pressedField) > -1) {
                         markPiece(pressedField);
