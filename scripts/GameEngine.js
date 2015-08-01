@@ -86,6 +86,7 @@ var GameEngine = ( function () {
     }
 
     function update(pressedField) {
+    	var currentPieces;
 
     	if (dices.numbers['mustThrowAgain']) {
     		return;
@@ -105,17 +106,27 @@ var GameEngine = ( function () {
         	verifyHasChosen();
         }
         if (hasChosen) {
-
         	indexOfTargetField = getIndexOfPossibleTargetFields(indexOfChosenField, currentPlayer, board, dices.numbers);
 
         	if (canExtract) {
         		if (pressedField === indexOfChosenField ) {
-        			checkIfCanExtractPiece(currentPlayer, dices.numbers, board);
+        			currentPieces = currentPlayer.countOfPieces;
+
+        			checkIfCanExtractPiece(pressedField, currentPlayer, dices.numbers, board);
+
+        			if (currentPlayer.countOfPieces !== currentPieces) {
+        				checkForWin();
+        				unmarkPiece(indexOfChosenField);
+        				hasChosen = false;        				
+        			}
+
         		} else {        			
         			if (indexOfTargetField.indexOf(pressedField) < 0) {
         				return;
         			}
         			board.movePiece(indexOfChosenField, pressedField);
+
+        			unmarkPiece(indexOfChosenField);
 
         			hasChosen = false;
 
@@ -129,6 +140,8 @@ var GameEngine = ( function () {
         		}
 
         		board.movePiece(indexOfChosenField, pressedField);
+
+        		unmarkPiece(indexOfChosenField);
 
         		hasChosen = false;
 
@@ -170,23 +183,15 @@ var GameEngine = ( function () {
                     setCurrentPlayerOnTurn();
                     return;
                 } else if (possibleStartPositions.length === 1) {
-                	if (indexOfChosenField !== possibleStartPositions[0]) {
-                		if (board[possibleStartPositions[0]].pieces.length >= 5) {
-                			board[possibleStartPositions[0]].pieces[4].isChosen = true;
-                		} else {
-                			board[possibleStartPositions[0]].pieces[board[possibleStartPositions[0]].pieces.length - 1].isChosen = true;
-                		}
+                	// if (indexOfChosenField !== possibleStartPositions[0]) {
+                		markPiece(possibleStartPositions[0]);
                 		hasChosen = true;
                 		indexOfChosenField = possibleStartPositions[0];
                 		updatePlayGround();
-                	}
+                	// }
                 } else {
                 	if (possibleStartPositions.indexOf(pressedField) > -1) {
-                		if (board[pressedField].pieces.length >= 5) {
-                			board[pressedField].pieces[4].isChosen = true;
-                		} else {
-                			board[pressedField].pieces[board[pressedField].pieces.length - 1].isChosen = true;
-                		}
+                		markPiece(pressedField);
                 	} else {
                 		return;
                 	}
@@ -199,13 +204,9 @@ var GameEngine = ( function () {
             } else {
             	// not right but better than nothing - probably will allow to finish a game or two :) - to be done
             	if (board[pressedField].pieces.length) {
-            		if (board[pressedField].pieces.length >= 5) {
-            			board[pressedField].pieces[4].isChosen = true;
-            		} else {
-            			board[pressedField].pieces[board[pressedField].pieces.length - 1].isChosen = true;
-            		}
+            		markPiece(pressedField);
             		indexOfChosenField = pressedField;
-            		return;
+            		hasChosen = true;
             	} else {
             		return;
             	}
@@ -215,12 +216,29 @@ var GameEngine = ( function () {
         updatePlayGround();
         GameDraw.updateDices();
 
-        if (!currentPlayer.countOfPieces) {
-        	swal({
-        		title: "Congratulations",
-        		imageUrl: "images/trophy_image.jpg"
-        	});
-            // alert(currentPlayer.name + ' WINS!!!')
+        function checkForWin() {
+        	if (!currentPlayer.countOfPieces) {
+        		swal({
+        			title: "Congratulations",
+        			text: currentPlayer.name + " WINS!!!",
+        			imageUrl: "images/trophy_image.jpg"
+        		});
+        	}
+        }
+        
+
+        function markPiece(field) {
+        	if (board[field].pieces.length >= 5) {
+                board[field].pieces[4].isChosen = true;
+            } else {
+                board[field].pieces[board[field].pieces.length - 1].isChosen = true;
+            }
+        }
+
+        function unmarkPiece(field) {
+        	if (board[field].pieces.length > 5) {
+                board[field].pieces[4].isChosen = false;
+            } 
         }
 
 
@@ -240,57 +258,76 @@ var GameEngine = ( function () {
             }
         }
 
-        function checkIfCanExtractPiece (player, numbers, board) {
+        function checkIfCanExtractPiece (pressedField, player, numbers, board) {
         	var color = player.color,
         	i, j, k,
         	sum;
 
         	numbers.sort(function(a, b) {
-        		return b - a;
+        		return a - b;
         	});
+        	//alert(numbers)
 
         	if (color === 'white') {
         		for (i = 0; i < numbers.length; i++) {
-        			if (board[25 - i].pieces) {
+        			if (pressedField < 25 - numbers[i]) {
+        				continue;
+        			}
+        			if (pressedField === 25 - numbers[i]) {
         				player.countOfPieces--;
-        				board[25 - i].pieces.pop();
+        				//alert(board[pressedField].pieces.length)
+        				board[pressedField].pieces.pop();
+        				//unmarkPiece(pressedField);
+        				// alert(board[pressedField].pieces.length)
+        				dices.usedNumber(numbers[i]);
+        				//alert(numbers)
+        				return;
         			} else {
         				for (j = 19; j < 25 - i; j++) {
         					sum += board[j].pieces.length;
         				}
         				if (!sum) {
-        					for (k = 25 - i + 1; k < 25; k++) {
-        						if(board[k].pieces.length) {
-        							board[k].pieces.pop();
-        							player.countOfPieces--;
-        							break;
-        						}
-        					}
+        					player.countOfPieces--;
+        					board[pressedField].pieces.pop();
+        					//unmarkPiece(pressedField);
+        					dices.usedNumber(numbers[i]);
+        					//alert(numbers)
+        					return;
         				} 
         			}
         		}
         	} else {
+				//alert('in')
         		for (i = 0; i < numbers.length; i++) {
-        			if (board[i].pieces) {
+        			if (pressedField > numbers[i]) {
+        				continue;
+        			}
+        			if (pressedField === numbers[i]) {
         				player.countOfPieces--;
-        				board[i].pieces.pop();
+        				//alert(board[i].pieces.length)
+        				board[pressedField].pieces.pop();
+        				//unmarkPiece(pressedField);
+        				//alert(board[i].pieces.length)
+        				dices.usedNumber(numbers[i]);
+        				//alert(numbers);
         				return;
+
         			} else {
         				for (j = 6; j > i; j--) {
         					sum += board[j].pieces.length;
         				}
         				if (!sum) {
-        					for (k = i - 1; k > 0; k--) {
-        						if(board[k].pieces.length) {
-        							board[k].pieces.pop();
-        							player.countOfPieces--;
-        							return;
-        						}
-        					}
+        					player.countOfPieces--;
+        					board[pressedField].pieces.pop();
+        					//unmarkPiece(pressedField);
+        					dices.usedNumber(numbers[i]);
+        					//alert(numbers)
+        					return;
         				} 
         			}
         		}
         	}
+
         }
 
         function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {
