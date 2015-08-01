@@ -151,6 +151,10 @@ var GameEngine = ( function () {
             }
 
             if (dices.numbers.length === 0) {
+            	if (!currentPlayer.countOfPieces) {
+            		checkForWin();
+            		return;
+            	}
                 swal({
                     title: "Next player turn!",
                     timer: 1500,
