@@ -116,7 +116,6 @@ var GameEngine = ( function () {
 
                     if (currentPlayer.countOfPieces !== currentPieces) {
                         checkForWin();
-                        unmarkPiece(indexOfChosenField);
                         hasChosen = false;
                     }
 
@@ -125,8 +124,6 @@ var GameEngine = ( function () {
                         return;
                     }
                     board.movePiece(indexOfChosenField, pressedField);
-
-                    unmarkPiece(indexOfChosenField);
 
                     hasChosen = false;
 
@@ -138,9 +135,6 @@ var GameEngine = ( function () {
                 if (indexOfTargetField.indexOf(pressedField) < 0) {
                     return;
                 }
-
-                unmarkPiece(indexOfChosenField);
-
                 board.movePiece(indexOfChosenField, pressedField);
 
                 hasChosen = false;
@@ -269,13 +263,6 @@ var GameEngine = ( function () {
             }
         }
 
-        function unmarkPiece(field) {
-            if (board[field].pieces.length > 5) {
-                board[field].pieces[4].isChosen = false;
-            }
-        }
-
-
         function verifyHasChosen() {
             var j, lent,
                 k, kent; // escape purposes
@@ -297,6 +284,12 @@ var GameEngine = ( function () {
             i, j, k,
             sum;
 
+        function unmarkPiece(field) {
+            if (board[field].pieces.length > 5) {
+                board[field].pieces[4].isChosen = false;
+            }
+        }
+
         numbers.sort(function (a, b) {
             return a - b;
         });
@@ -311,7 +304,7 @@ var GameEngine = ( function () {
                     player.countOfPieces--;
                     //alert(board[pressedField].pieces.length)
                     board[pressedField].pieces.pop();
-                    //unmarkPiece(pressedField);
+                    unmarkPiece(pressedField);
                     // alert(board[pressedField].pieces.length)
                     dices.usedNumber(numbers[i]);
                     //alert(numbers)
@@ -323,7 +316,7 @@ var GameEngine = ( function () {
                     if (!sum) {
                         player.countOfPieces--;
                         board[pressedField].pieces.pop();
-                        //unmarkPiece(pressedField);
+                        unmarkPiece(pressedField);
                         dices.usedNumber(numbers[i]);
                         //alert(numbers)
                         return;
@@ -340,7 +333,7 @@ var GameEngine = ( function () {
                     player.countOfPieces--;
                     //alert(board[i].pieces.length)
                     board[pressedField].pieces.pop();
-                    //unmarkPiece(pressedField);
+                    unmarkPiece(pressedField);
                     //alert(board[i].pieces.length)
                     dices.usedNumber(numbers[i]);
                     //alert(numbers);
@@ -353,7 +346,7 @@ var GameEngine = ( function () {
                     if (!sum) {
                         player.countOfPieces--;
                         board[pressedField].pieces.pop();
-                        //unmarkPiece(pressedField);
+                        unmarkPiece(pressedField);
                         dices.usedNumber(numbers[i]);
                         //alert(numbers)
                         return;
@@ -361,7 +354,6 @@ var GameEngine = ( function () {
                 }
             }
         }
-
     }
 
     function getIndexOfFieldsWithMovesAvailable(player, board, numbers) {

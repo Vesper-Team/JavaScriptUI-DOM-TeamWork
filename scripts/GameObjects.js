@@ -82,9 +82,12 @@ var GameObjects = ( function () {
         // Called from update when moving. Ex.: gameBoard.movePiece({color:white}, 2, 5);
         Object.defineProperty(board, 'movePiece', {
             value: function (fromBoardField, toBoardField) {
+                if(this[fromBoardField].pieces.length > 5) {
+                    this[fromBoardField].pieces[4].isChosen = false;
+                }
                 var piece = this[fromBoardField].pieces.pop();
+                piece.isChosen = false;
                 this[toBoardField].pieces.push(piece);
-                piece.isChosen = false;                
                 return this;
             }
         });
