@@ -16,11 +16,9 @@
 | Еса Вехманен | Essobar      |    Essobar |
 | Кирил Колев | kiko81      |    kiko81  |
 
-Game story
-This is classical backgammon game that is played directly into your browser. It is a two player game. On welcome screen player can choose to start the game or quit and exit web page. 
-First of all each player rolls a dice and the player with bigger dice should throw first. Each player rolls a couple of dices. If a player rolls a pair he moves one more time and should roll the dices again.
- 
- Each player chooses checkers color (black or white) and has to move counterclockwise his checkers from the top right corner to the bottom left one and after that get out all of them. The checkers movement Is according to the picture above.
+Backgammon is one of the oldest board games for two players. The playing pieces are moved according to the roll of dice, and a player wins by removing all of their pieces from the board before their opponent. Backgammon is a member of the board games family, one of the oldest classes of board games in the world.
+  Backgammon involves a combination of strategy and luck (from rolling dice). While the dice may determine the outcome of a single game, over a series of many games, the better player will accumulate the better record. Thus, records of matches between players are good indicators of relative skill. With each roll of the dice, players must choose from numerous options for moving their checkers and anticipate possible counter-moves by the opponent. 
+
 
 
 
