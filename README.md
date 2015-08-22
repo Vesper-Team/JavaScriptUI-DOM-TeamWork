@@ -2,7 +2,7 @@
 
 # JavaScriptUI-DOM-TeamWork
 
-##### link to the Github repository [https://github.com/Vesper-Team/JavaScriptUI-DOM-TeamWork](https://github.com/Vesper-Team/JavaScriptUI-DOM-TeamWork)
+##### link to RawGit [Play Here](https://rawgit.com/Vesper-Team/JavaScriptUI-DOM-TeamWork/master/Backgammon.html)
 
 
 ## Classic Backgammon
