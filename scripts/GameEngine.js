@@ -490,15 +490,3 @@ var GameEngine = ( function () {
         dices: getDices
     };
 }());
-
-
-// // All events will call GameEngine.Update() and GameDraw.Update().
-
-
-//// Logic to add
-//// function checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves, maximumAllowedMovesInTurn) {
-////     if (currentPlayerMoves < maximumAllowedMovesInTurn && !currentActivePlayer.hasHitChecker && !currentActivePlayer.canTakeChecker) {
-////         return true;
-////     }
-////     return false;
-//// }
