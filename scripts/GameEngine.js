@@ -19,10 +19,7 @@ var GameEngine = ( function () {
         players.push(Object.create(GameObjects.Player).init(playerTwoName, 'black'));
 
         board = GameObjects.Board.init();
-
-        // dices.rollDices() ; dices.usedNumber(number) ; dices.clearNumbers()
         dices = GameObjects.Dices.init();
-
         firstDiceThrow = true;
 
         GameDraw.initGame(board, players);
@@ -132,24 +129,20 @@ var GameEngine = ( function () {
                     if (indexOfTargetField.indexOf(pressedField) < 0) {
                         return;
                     }
+                    
                     board.movePiece(indexOfChosenField, pressedField);
-
                     hasChosen = false;
-
                     dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
-
                     checkForPinnedPiece(pressedField);
                 }
             } else {
                 if (indexOfTargetField.indexOf(pressedField) < 0) {
                     return;
                 }
+                
                 board.movePiece(indexOfChosenField, pressedField);
-
                 hasChosen = false;
-
                 dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
-
                 checkForPinnedPiece(pressedField);
             }
 
@@ -182,7 +175,7 @@ var GameEngine = ( function () {
                         timer: 1500,
                         showConfirmButton: false
                     });
-                    //alert('No moves');
+                    
                     dices.clearNumbers();
                     setAvailabilityOfFields(board);
                     GameDraw.updateDices();
@@ -203,7 +196,6 @@ var GameEngine = ( function () {
 
                     hasChosen = true;
                     indexOfChosenField = pressedField;
-                    // alert(hasChosen + ' ' + indexOfChosenField)
                 }
 
             } else {
@@ -308,12 +300,9 @@ var GameEngine = ( function () {
                 }
                 if (pressedField === 25 - numbers[i]) {
                     player.countOfPieces--;
-                    //alert(board[pressedField].pieces.length)
                     unmarkPiece(pressedField);
                     board[pressedField].pieces.pop();
-                    // alert(board[pressedField].pieces.length)
                     dices.usedNumber(numbers[i]);
-                    //alert(numbers)
                     return;
                 } else {
                     for (j = 19; j < 25 - i; j++) {
@@ -324,7 +313,6 @@ var GameEngine = ( function () {
                         unmarkPiece(pressedField);
                         board[pressedField].pieces.pop();
                         dices.usedNumber(numbers[i]);
-                        //alert(numbers)
                         return;
                     }
                 }
@@ -337,12 +325,9 @@ var GameEngine = ( function () {
                 }
                 if (pressedField === numbers[i]) {
                     player.countOfPieces--;
-                    //alert(board[i].pieces.length)
                     unmarkPiece(pressedField);
                     board[pressedField].pieces.pop();
-                    //alert(board[i].pieces.length)
                     dices.usedNumber(numbers[i]);
-                    //alert(numbers);
                     return;
 
                 } else {
@@ -354,7 +339,6 @@ var GameEngine = ( function () {
                         unmarkPiece(pressedField);
                         board[pressedField].pieces.pop();
                         dices.usedNumber(numbers[i]);
-                        //alert(numbers)
                         return;
                     }
                 }
@@ -413,8 +397,6 @@ var GameEngine = ( function () {
     }
 
     function getIndexOfPossibleTargetFields(markedIndex, player, board, numbers) {
-        // alert('clicked position ' + markedIndex + '\n dices to play' + numbers)
-
         var color = player.color,
             i,
             result = [],
@@ -441,10 +423,6 @@ var GameEngine = ( function () {
     }
 
     function checkForPinnedPiece(pressedField) {
-        // var i,
-        //     len = board.length;
-
-        // for (i = 1; i < len - 1; i += 1) {
         if (board[pressedField].pieces.length === 2 && board[pressedField].pieces[0].color !== board[pressedField].pieces[1].color) {
             var shifted = board[pressedField].pieces.shift();
             if (shifted.color === 'white') {
@@ -457,7 +435,6 @@ var GameEngine = ( function () {
                 return;
             }
         }
-        // }
     }
 
     function checkIfPlayerCanExtractPieces(player, board) {
@@ -519,213 +496,9 @@ var GameEngine = ( function () {
 
 
 //// Logic to add
-function checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves, maximumAllowedMovesInTurn) {
-    if (currentPlayerMoves < maximumAllowedMovesInTurn && !currentActivePlayer.hasHitChecker && !currentActivePlayer.canTakeChecker) {
-        return true;
-    }
-    return false;
-}
-//
-//function play() {
-//
-//    var maximumAllowedMovesInTurn;
-//    var currentActivePlayer;
-//    var inactivePlayer;
-//    var currentPlayerMoves = 0;   // DA SE IZNESAT TEZI PROMENLIVI GORE POSLE
-//
-//    //FIRST DICE ROLL CHECK
-//    if (!checkIfDiceHaveBeenThrownBefore(firstDiceThrow)) {
-//        throwFirstDiceToDeterminePlayer();
-//    }
-//
-//    setCurrentPlayerOnTurn(firstPlayerOnTurn); //Will create the current player on turn
-//    //value,and have a inactivePlayer  value for the one that isnt  on turn at the moment
-//
-//    //IF NO MOVES AVAILABLE SWITCH PLAYERS WITHOUT THROWING DICE (player hit and all his 6 spaces are currently closed by enemy)
-//    if (!currentActivePlayer.hasMovesAvailable) {  //LOGIC NEEDS TO BE ADDED,WHEN  HAS MOVES AVAILABLE BECOMES FALSE- IT'S TRUE ON START,BUT CHANGES
-//        firstPlayerOnTurn = !firstPlayerOnTurn;
-//        play();
-//    }
-//
-//    //THROW DICE
-//    throwDiceAndCheckMaxMovesForTurn();
-//
-//
-//    //IF HAS HIT CHECKERS
-//    while (currentActivePlayer.hasHitChecker) {
-//
-//        if (!currentActivePlayer.hasHitChecker) {
-//            break;
-//        }
-//
-//        //WHITE PLAYER - player 1
-//        if (currentActivePlayer.color === 'white') {
-//            //check if first dice number field is available
-//            if (board.fields[firstDice.number].availableForWhite) {
-//                if (board.fields[firstDice.number].length > 0 && board.fields[firstDice.number][0].color === inactivePlayer.color) {
-//                    //HIT HIS CHECKER AND PLACE YOUR OWN
-//                }
-//                else {
-//                    //TODO JUST ADD YOUR CHECKER
-//                }
-//                //CHANGE THE STATE OF THAT BOARD SPOT
-//                currentPlayerMoves++;
-//                if (board.fields[25].length === 0) {
-//                    currentActivePlayer.hasHitChecker = false;
-//                    break;
-//                }
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    firstPlayerOnTurn = !firstPlayerOnTurn;
-//                    break;
-//                }
-//
-//            }
-//            else {
-//                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    firstPlayerOnTurn = !firstPlayerOnTurn;
-//                    break;
-//                }
-//            }
-//            if (board.fields[secondDice.number].availableForWhite) {
-//                if (board.fields[secondDice.number].length > 0 && board.fields[secondDice.number][0].color === inactivePlayer.color) {
-//                    //HIT HIS CHECKER AND PLACE YOUR OWN
-//                }
-//                else {
-//                    //TODO JUST ADD YOUR CHECKER
-//                }
-//                //CHANGE THE STATE OF THAT BOARD SPOT
-//                currentPlayerMoves++;
-//                if (board.fields[25].length === 0) {
-//                    currentActivePlayer.hasHitChecker = false;
-//                    break;
-//                }
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    firstPlayerOnTurn = !firstPlayerOnTurn;
-//                    break;
-//                }
-//
-//            }
-//            else {
-//                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    hasNoMoves = true;
-//                    break;
-//                }
-//            }
-//
-//        }
-//
-//
-//
-//        //IF BLACK PLAYER - player 2
-//
-//
-//        else {
-//            //check if first dice number field is available
-//            if (board.fields[firstDice.number].availableForBlack) {
-//                if (board.fields[firstDice.number].length > 0 && board.fields[firstDice.number][0].color === inactivePlayer.color) {
-//                    //HIT HIS CHECKER AND PLACE YOUR OWN
-//                }
-//                else {
-//                    //TODO JUST ADD YOUR CHECKER
-//                }
-//                //CHANGE THE STATE OF THAT BOARD SPOT
-//                currentPlayerMoves++;
-//                if (board.fields[0].length === 0) {
-//                    currentActivePlayer.hasHitChecker = false;
-//                    break;
-//                }
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    firstPlayerOnTurn = !firstPlayerOnTurn;
-//                    break;
-//                }
-//
-//            }
-//            else {
-//                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    firstPlayerOnTurn = !firstPlayerOnTurn;
-//                    break;
-//                }
-//            }
-//            if (board.fields[secondDice.number].availableForBlack) {
-//                if (board.fields[secondDice.number].length > 0 && board.fields[secondDice.number][0].color === inactivePlayer.color) {
-//                    //HIT HIS CHECKER AND PLACE YOUR OWN
-//                }
-//                else {
-//                    //TODO JUST ADD YOUR CHECKER
-//                }
-//                //CHANGE THE STATE OF THAT BOARD SPOT
-//                currentPlayerMoves++;
-//                if (board.fields[0].length === 0) {
-//                    currentActivePlayer.hasHitChecker = false;
-//                    break;
-//                }
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    firstPlayerOnTurn = !firstPlayerOnTurn;
-//                    break;
-//                }
-//
-//            }
-//            else {
-//                currentPlayerMoves++; //you lose a move,because u cant set your pull there
-//                if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//                    firstPlayerOnTurn = !firstPlayerOnTurn;
-//                    break;
-//                }
-//            }
-//
-//        }
-//
-//    }
-//
-//
-//    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//        play();
-//    }
-//
-//
-//    //CHECK IF PLAYER IS CURRENTLY TAKING CHECKERS
-//
-//
-//    if (currentPlayerMoves === maximumAllowedMovesInTurn) {
-//        play();
-//    }
-//
-//
-//    //JUST MOVE CHECKERS
-//    if (!checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves, maximumAllowedMovesInTurn)) { //CHECK IF PLAYER HAS TO END TURN
-//        firstPlayerOnTurn = !firstPlayerOnTurn;
-//        play();
-//    }
-//
-//    if (currentActivePlayer.color === 'white') {//white player - player1
-//
-//
-//        var isClickValidForStartPosition = false;
-//
-//        while (!isClickValidForStartPosition) {
-//            //wait for mouse click for start position
-//            //get X and Y of clicked position
-//            //determine which board.fields place it is
-//            //check if that position contains his checkers  (isAvailable for white/black)
-//            //if no -> leave ,the  while loop will repeat itself and await new click for start position
-//            // if yes =>  isClickValidForStartPosition = true;
-//            //highlight which board places the checker from the start position can move to
-//            //wait for click to determine end position
-//            //get X and Y of clicked position
-//            //determine which board.fields place it is
-//            //if it is one of the possible places,considering the start position -> make the move and draw ,
-//            //else keep highligted and wait correct click for end position
-//            //currentPlayerMoves++
-//            //check is all possible moves for this player,for this turn are made and change players if so
-//        }
-//
-//
-//    }
-//    else {  //black player - player 2
-//
-//    }
-//    draw();
-//}
+//// function checkIfPlayerIsMakingNormalMoves(currentActivePlayer, currentPlayerMoves, maximumAllowedMovesInTurn) {
+////     if (currentPlayerMoves < maximumAllowedMovesInTurn && !currentActivePlayer.hasHitChecker && !currentActivePlayer.canTakeChecker) {
+////         return true;
+////     }
+////     return false;
+//// }
