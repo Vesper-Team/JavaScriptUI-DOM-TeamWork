@@ -1,6 +1,6 @@
 /// <reference path="GameDraw.js" />
 /// <reference path="GameObjects.js" />
-var GameEngine = ( function () {
+var GameEngine = (function () {
     var board,
         players,
         dices,
@@ -24,6 +24,15 @@ var GameEngine = ( function () {
 
         GameDraw.initGame(board, players);
         setAvailabilityOfFields(board);
+    }
+
+    function isCurrentPlayerPieces(field) {
+        if (board[field].pieces.length > 0) {
+            var pieceColor = board[field].pieces[0].color;
+            var playerColor = currentPlayer.color;
+
+            return pieceColor === playerColor;
+        }
     }
 
     function clickedToRollDices() {
@@ -129,7 +138,7 @@ var GameEngine = ( function () {
                     if (indexOfTargetField.indexOf(pressedField) < 0) {
                         return;
                     }
-                    
+
                     board.movePiece(indexOfChosenField, pressedField);
                     hasChosen = false;
                     dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
@@ -139,7 +148,7 @@ var GameEngine = ( function () {
                 if (indexOfTargetField.indexOf(pressedField) < 0) {
                     return;
                 }
-                
+
                 board.movePiece(indexOfChosenField, pressedField);
                 hasChosen = false;
                 dices.usedNumber(Math.abs(pressedField - indexOfChosenField));
@@ -175,7 +184,7 @@ var GameEngine = ( function () {
                         timer: 1500,
                         showConfirmButton: false
                     });
-                    
+
                     dices.clearNumbers();
                     setAvailabilityOfFields(board);
                     GameDraw.updateDices();
@@ -199,6 +208,11 @@ var GameEngine = ( function () {
                 }
 
             } else {
+
+                if (!isCurrentPlayerPieces(pressedField)) {
+                    return;
+                }
+
                 // not right but better than nothing - probably will allow to finish a game or two :) - to be done
                 if (board[pressedField].pieces.length) {
                     markPiece(pressedField);
